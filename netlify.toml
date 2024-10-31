@@ -1,17 +1,7 @@
-# netlify.toml
-
 [build]
-  base = "."                     # Caminho base para o diretório do projeto
-  publish = "dist"               # Ajuste para o diretório de saída correto
-  command = "npm run build"      # Usa o script build definido no package.json
+  publish = "dist"
+  command = "npm run build"
 
-# Se você precisar de variáveis de ambiente
-[build.environment]
-  NODE_ENV = "production"        # Exemplo de variável de ambiente
-
-# Configuração adicional (opcional)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = true
+[dev]
+  command = "npm run dev"
+  port = 3000
