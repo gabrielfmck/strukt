@@ -2,8 +2,8 @@
 
 [build]
   base = "."                     # Caminho base para o diretório do projeto
-  publish = "build"              # Diretório de saída da build (ajuste se necessário)
-  command = "npm run build"      # Comando de build para o seu projeto
+  publish = "dist"               # Ajuste para o diretório de saída correto
+  command = "npm run build"      # Usa o script build definido no package.json
 
 # Se você precisar de variáveis de ambiente
 [build.environment]
