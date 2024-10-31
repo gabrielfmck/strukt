@@ -1,0 +1,10 @@
+# netlify.toml
+
+[build]
+  base = "/path/to/your/project" # Substitua pelo caminho correto
+  publish = "build"              # Diretório onde o site será publicado (ex.: build, dist, etc.)
+  command = "npm run build"      # Comando de build
+
+# Configuração de variáveis de ambiente, se necessário
+[build.environment]
+  NODE_ENV = "production"
