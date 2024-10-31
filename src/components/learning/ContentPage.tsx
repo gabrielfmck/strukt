@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 interface ContentPageProps {
   title: string;
-  content: string;
+  content: JSX.Element; // Ajuste: content agora aceita um JSX.Element
   nextModule?: string;
   duration: string;
 }
@@ -25,7 +25,7 @@ const ContentPage = ({ title, content, nextModule, duration }: ContentPageProps)
         </div>
 
         <div className="prose max-w-none mb-8">
-          {content}
+          {content}  {/* Exibe o conteúdo JSX passado para o componente */}
         </div>
 
         <div className="flex justify-between items-center mt-8 pt-6 border-t">

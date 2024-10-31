@@ -24,9 +24,7 @@ const WhatIsProgramming = () => {
           </ul>
 
           <h3>Conceitos Fundamentais</h3>
-          <p>
-            Na programação, trabalhamos com alguns conceitos básicos:
-          </p>
+          <p>Na programação, trabalhamos com alguns conceitos básicos:</p>
           <ul>
             <li><strong>Algoritmos:</strong> Sequência de passos para resolver um problema</li>
             <li><strong>Variáveis:</strong> Espaços na memória para armazenar dados</li>
