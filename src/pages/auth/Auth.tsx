@@ -1,31 +1,23 @@
-import React, { useState } from 'react';
-import Login from './Login';
-import Register from './Register';
+import { useState } from 'react';
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Lógica do componente...
 
   return (
     <div>
-      <div className="flex justify-center space-x-4 mb-8">
-        <button
-          onClick={() => setIsLogin(true)}
-          className={`py-2 px-4 font-semibold ${
-            isLogin ? 'bg-blue-600 text-white' : 'text-blue-600'
-          }`}
-        >
-          Login
-        </button>
-        <button
-          onClick={() => setIsLogin(false)}
-          className={`py-2 px-4 font-semibold ${
-            !isLogin ? 'bg-blue-600 text-white' : 'text-blue-600'
-          }`}
-        >
-          Cadastro
-        </button>
-      </div>
-      {isLogin ? <Login /> : <Register />}
+      <input 
+        type="text" 
+        value={username} 
+        onChange={(e) => setUsername(e.target.value)} 
+      />
+      <input 
+        type="password" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)} 
+      />
     </div>
   );
 };
