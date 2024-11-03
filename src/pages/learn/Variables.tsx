@@ -43,8 +43,8 @@ const Variables = () => {
             </ul>
 
             <h3>Exemplos de Uso</h3>
-            <pre className="bg-gray-100 p-4 rounded-lg">
-              <code>
+            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+              <code className="text-gray-100">
 {`// Declarando variáveis
 let idade = 25;
 let nome = "Maria";

@@ -239,11 +239,12 @@ const DataStructures = () => {
                   Implementação
                 </h3>
                 <CodeEditor
-                  initialCode={selectedStructure.initialCode}
-                  onRunCode={(code) => {
-                    console.log('Executando código:', code);
-                  }}
-                />
+  initialCode={selectedStructure.initialCode}
+  language="c"
+  onCodeChange={(code: string) => {
+    console.log('Código atualizado:', code);
+  }}
+/>
               </div>
             </motion.div>
           </div>

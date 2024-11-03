@@ -26,8 +26,8 @@ const ControlStructures = () => {
             </p>
 
             <h3>if/else</h3>
-            <pre className="bg-gray-100 p-4 rounded-lg">
-              <code>
+            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+              <code className="text-gray-100">
 {`if (idade >= 18) {
     console.log("Pode dirigir");
 } else {
@@ -38,8 +38,8 @@ const ControlStructures = () => {
 
             <h3>Loops (Estruturas de Repetição)</h3>
             <h4>for</h4>
-            <pre className="bg-gray-100 p-4 rounded-lg">
-              <code>
+            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+              <code className="text-gray-100">
 {`for (let i = 0; i < 5; i++) {
     console.log("Número:", i);
 }`}
@@ -47,8 +47,8 @@ const ControlStructures = () => {
             </pre>
 
             <h4>while</h4>
-            <pre className="bg-gray-100 p-4 rounded-lg">
-              <code>
+            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+              <code className="text-gray-100">
 {`let contador = 0;
 while (contador < 5) {
     console.log("Contador:", contador);
@@ -58,8 +58,8 @@ while (contador < 5) {
             </pre>
 
             <h3>switch/case</h3>
-            <pre className="bg-gray-100 p-4 rounded-lg">
-              <code>
+            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+              <code className="text-gray-100">
 {`switch (diaDaSemana) {
     case "Segunda":
         console.log("Início da semana");

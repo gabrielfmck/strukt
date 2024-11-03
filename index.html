@@ -4,7 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strukt - Aprenda Programação Visualmente</title>
+    <title>Strukt</title>
+    <!-- Adicione os scripts do compilador C -->
+    <script src="https://cdn.jsdelivr.net/gh/tbfleming/cib/cib.js"></script>
+    <script>
+      // Configurar o módulo WASM
+      var Module = {
+        preRun: [],
+        postRun: [],
+        print: function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          console.log(text);
+        },
+        printErr: function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          console.error(text);
+        },
+        setStatus: function(text) {
+          console.log('Status: ' + text);
+        },
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>

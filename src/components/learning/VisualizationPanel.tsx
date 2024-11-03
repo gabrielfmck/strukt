@@ -1,5 +1,5 @@
 // src/components/learning/VisualizationPanel.tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';  // Removido useRef
 import { motion } from 'framer-motion';
 
 interface ArrayElement {
@@ -10,35 +10,66 @@ interface ArrayElement {
 }
 
 interface VisualizationPanelProps {
-  type: 'array' | 'linkedList' | 'tree' | 'stack' | 'queue';
+  algorithm: 'bubble' | 'selection' | 'quick';
   data: number[];
-  speed?: number;
+  speed: number;
 }
 
 const VisualizationPanel = ({
-  type = 'array',
+  algorithm,
   data = [],
-  speed = 1000,
+  speed = 1000
 }: VisualizationPanelProps) => {
   const [elements, setElements] = useState<ArrayElement[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animationSpeed, setAnimationSpeed] = useState(speed);
+  const [currentSpeed, setCurrentSpeed] = useState(speed);
 
   useEffect(() => {
-    // Inicializa os elementos com os dados fornecidos
-    setElements(
-      data.map((value) => ({
-        value,
-        isActive: false,
-        isComparing: false,
-        isSorted: false,
-      }))
-    );
+    setElements(data.map(value => ({
+      value,
+      isActive: false,
+      isComparing: false,
+      isSorted: false
+    })));
   }, [data]);
 
-  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  
+    const bubbleSort = async () => {
+      if (isAnimating) return;
+      setIsAnimating(true);
+  
+      const arr = [...elements];
+      const n = arr.length;  // Mudado de let para const
+  
+      for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+          arr[j].isComparing = true;
+          arr[j + 1].isComparing = true;
+          setElements([...arr]);
+          await sleep(currentSpeed);
+  
+          if (arr[j].value > arr[j + 1].value) {
+            const temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+            setElements([...arr]);
+            await sleep(currentSpeed);
+          }
+  
+          arr[j].isComparing = false;
+          arr[j + 1].isComparing = false;
+        }
+        arr[n - i - 1].isSorted = true;
+        setElements([...arr]);
+      }
+      arr[0].isSorted = true;
+      setElements([...arr]);
+      setIsAnimating(false);
+    };
 
-  const bubbleSort = async () => {
+  // Selection Sort Implementation
+  const selectionSort = async () => {
     if (isAnimating) return;
     setIsAnimating(true);
 
@@ -46,31 +77,104 @@ const VisualizationPanel = ({
     const n = arr.length;
 
     for (let i = 0; i < n - 1; i++) {
-      for (let j = 0; j < n - i - 1; j++) {
-        // Marca os elementos que estão sendo comparados
-        arr[j].isComparing = true;
-        arr[j + 1].isComparing = true;
-        setElements([...arr]);
-        await sleep(animationSpeed);
+      let minIdx = i;
+      arr[i].isActive = true;
+      setElements([...arr]);
+      await sleep(currentSpeed);
 
-        if (arr[j].value > arr[j + 1].value) {
-          // Troca os elementos
-          [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-          setElements([...arr]);
-          await sleep(animationSpeed);
+      for (let j = i + 1; j < n; j++) {
+        arr[j].isComparing = true;
+        setElements([...arr]);
+        await sleep(currentSpeed);
+
+        if (arr[j].value < arr[minIdx].value) {
+          if (minIdx !== i) {
+            arr[minIdx].isActive = false;
+          }
+          minIdx = j;
+          arr[minIdx].isActive = true;
         }
 
-        // Remove a marcação de comparação
         arr[j].isComparing = false;
-        arr[j + 1].isComparing = false;
+        setElements([...arr]);
       }
-      // Marca o elemento como ordenado
-      arr[n - i - 1].isSorted = true;
+
+      if (minIdx !== i) {
+        // Swap elements
+        const temp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = temp;
+        arr[minIdx].isActive = false;
+      }
+
+      arr[i].isActive = false;
+      arr[i].isSorted = true;
       setElements([...arr]);
+      await sleep(currentSpeed);
     }
-    arr[0].isSorted = true;
+
+    arr[n - 1].isSorted = true;
     setElements([...arr]);
     setIsAnimating(false);
+  };
+
+  // Quick Sort Implementation
+  const quickSort = async () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+
+    const arr = [...elements];
+    await quickSortHelper(arr, 0, arr.length - 1);
+    setIsAnimating(false);
+  };
+
+  const quickSortHelper = async (arr: ArrayElement[], low: number, high: number) => {
+    if (low < high) {
+      const pi = await partition(arr, low, high);
+      await quickSortHelper(arr, low, pi - 1);
+      await quickSortHelper(arr, pi + 1, high);
+    } else if (low === high) {
+      arr[low].isSorted = true;
+      setElements([...arr]);
+    }
+  };
+
+  const partition = async (arr: ArrayElement[], low: number, high: number) => {
+    const pivot = arr[high].value;
+    arr[high].isActive = true;
+    setElements([...arr]);
+    await sleep(currentSpeed);
+
+    let i = low - 1;
+
+    for (let j = low; j < high; j++) {
+      arr[j].isComparing = true;
+      setElements([...arr]);
+      await sleep(currentSpeed);
+
+      if (arr[j].value < pivot) {
+        i++;
+        // Swap elements
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        setElements([...arr]);
+        await sleep(currentSpeed);
+      }
+
+      arr[j].isComparing = false;
+    }
+
+    // Swap pivot to its final position
+    const temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    arr[high].isActive = false;
+    arr[i + 1].isSorted = true;
+    setElements([...arr]);
+    await sleep(currentSpeed);
+
+    return i + 1;
   };
 
   const renderArray = () => (
@@ -79,62 +183,79 @@ const VisualizationPanel = ({
         <motion.div
           key={index}
           initial={{ height: 0 }}
-          animate={{
+          animate={{ 
             height: `${(element.value / Math.max(...data)) * 100}%`,
-            backgroundColor: element.isSorted
-              ? '#10B981'
-              : element.isComparing
-              ? '#F59E0B'
-              : '#3B82F6',
+            backgroundColor: element.isSorted 
+              ? '#10B981' // Green
+              : element.isActive
+                ? '#F59E0B' // Orange
+                : element.isComparing 
+                  ? '#EF4444' // Red
+                  : '#3B82F6' // Blue
           }}
           transition={{ duration: 0.3 }}
           className="w-8 rounded-t-lg flex items-center justify-center"
-          style={{
+          style={{ 
             minHeight: '24px',
           }}
         >
-          <span className="text-white text-sm font-medium">{element.value}</span>
+          <span className="text-white text-sm font-medium">
+            {element.value}
+          </span>
         </motion.div>
       ))}
     </div>
   );
 
+  const handleSort = () => {
+    switch (algorithm) {
+      case 'bubble':
+        bubbleSort();
+        break;
+      case 'selection':
+        selectionSort();
+        break;
+      case 'quick':
+        quickSort();
+        break;
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-gray-900">
-          Visualização - {type.charAt(0).toUpperCase() + type.slice(1)}
+          {algorithm.charAt(0).toUpperCase() + algorithm.slice(1)} Sort
         </h3>
-        <button
-          onClick={bubbleSort}
-          disabled={isAnimating}
-          className={`px-4 py-2 rounded-lg text-white text-sm font-medium ${
-            isAnimating ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'
-          }`}
-        >
-          {isAnimating ? 'Ordenando...' : 'Ordenar'}
-        </button>
-      </div>
-
-      <div className="border rounded-lg p-4 bg-gray-50">{type === 'array' && renderArray()}</div>
-
-      <div className="mt-4">
-        <h4 className="text-sm font-medium text-gray-700 mb-2">Controles</h4>
         <div className="flex items-center space-x-4">
-          <label className="text-sm text-gray-600">
-            Velocidade:
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-600">Velocidade:</span>
             <input
               type="range"
               min="100"
               max="2000"
               step="100"
-              value={animationSpeed}
-              onChange={(e) => setAnimationSpeed(parseInt(e.target.value))}
-              className="ml-2"
+              value={currentSpeed}
+              onChange={(e) => setCurrentSpeed(parseInt(e.target.value))}
+              className="w-32"
+              disabled={isAnimating}
             />
-          </label>
+          </div>
+          <button
+            onClick={handleSort}
+            disabled={isAnimating}
+            className={`px-4 py-2 rounded-lg text-white text-sm font-medium ${
+              isAnimating
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-primary-600 hover:bg-primary-700'
+            }`}
+          >
+            {isAnimating ? 'Ordenando...' : 'Ordenar'}
+          </button>
         </div>
       </div>
+
+      {renderArray()}
     </div>
   );
 };
