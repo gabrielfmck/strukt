@@ -25,10 +25,12 @@ const Algorithms = lazy(() => import('./pages/Algorithms'));
 const DataStructures = lazy(() => import('./pages/DataStructures'));
 const Practice = lazy(() => import('./pages/Practice'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 // Lazy loading das páginas de autenticação
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 
 // Lazy loading das páginas de aprendizado
 const WhatIsProgramming = lazy(() => import('./pages/learn/WhatIsProgramming'));
@@ -54,8 +56,17 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
                 {/* Rotas protegidas */}
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
                 <Route
                   path="/learn"
                   element={
@@ -170,7 +181,7 @@ function App() {
           </Layout>
         </AuthProvider>
       </Router>
-      
+
       <ToastContainer
         position="top-right"
         autoClose={3000}

@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
+import { handleAuthError } from '../../utils/auth-utils';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, currentUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { login, currentUser } = useAuth();
 
   // Redireciona se já estiver logado
   useEffect(() => {
@@ -36,9 +37,17 @@ const Login = () => {
       // Tentativa de login
       await login(email, password);
       
-      // Login bem sucedido
-      toast.success('Login realizado com sucesso!');
-      
+      // Login bem sucedido!
+      toast.success('Login realizado com sucesso! Bem-vindo de volta!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       // Redireciona para a página anterior ou home
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
@@ -47,27 +56,16 @@ const Login = () => {
       console.error('Erro no login:', error);
       
       if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-            setError('Email ou senha incorretos');
-            break;
-          case 'auth/too-many-requests':
-            setError('Muitas tentativas. Tente novamente mais tarde');
-            break;
-          case 'auth/invalid-email':
-            setError('Email inválido');
-            break;
-          default:
-            setError('Ocorreu um erro ao fazer login. Tente novamente.');
-        }
+        const errorMessage = handleAuthError(error);
+        setError(errorMessage);
+        toast.error(errorMessage);
       } else if (error instanceof Error) {
         setError(error.message);
+        toast.error(error.message);
       } else {
         setError('Ocorreu um erro inesperado');
+        toast.error('Ocorreu um erro inesperado');
       }
-      
-      toast.error(error instanceof Error ? error.message : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -85,8 +83,8 @@ const Login = () => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <span className="block sm:inline">{error}</span>
+              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in">
+                {error}
               </div>
             )}
 
@@ -104,8 +102,8 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
                   placeholder="seu@email.com"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
                 />
               </div>
             </div>
@@ -124,8 +122,8 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
-                  placeholder="••••••••"
+                  placeholder="Digite sua senha"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
                 />
               </div>
             </div>
@@ -144,12 +142,12 @@ const Login = () => {
               </div>
 
               <div className="text-sm">
-                <Link
-                  to="/forgot-password"
-                  className="font-medium text-primary-600 hover:text-primary-500"
-                >
-                  Esqueceu sua senha?
-                </Link>
+              <Link
+  to="/forgot-password"
+  className="font-medium text-primary-600 hover:text-primary-500"
+>
+  Esqueceu sua senha?
+</Link>
               </div>
             </div>
 
@@ -157,8 +155,8 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
-                  loading ? 'cursor-not-allowed' : 'cursor-pointer'
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors ${
+                  loading ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
                 {loading ? (

@@ -8,38 +8,54 @@ import {
   updateProfile,
   updateEmail,
   updatePassword,
-  type User,
-  setPersistence,
-  browserLocalPersistence
+  type User
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../../config/firebase';
 import { AuthContext } from './AuthContext';
 import type { AuthContextType } from '../../types/auth';
-import { handleAuthError } from '../../utils/auth-utils';
+import { toast } from 'react-toastify';
 
 interface AuthProviderProps {
   children: ReactNode;
 }
+
+const handleFirebaseError = (error: FirebaseError): string => {
+  switch (error.code) {
+    case 'auth/email-already-in-use':
+      return 'Este email já está sendo usado por outra conta.';
+    case 'auth/invalid-email':
+      return 'Email inválido.';
+    case 'auth/operation-not-allowed':
+      return 'Operação não permitida.';
+    case 'auth/weak-password':
+      return 'A senha é muito fraca. Use pelo menos 6 caracteres.';
+    case 'auth/user-disabled':
+      return 'Esta conta foi desativada.';
+    case 'auth/user-not-found':
+      return 'Não existe uma conta com este email.';
+    case 'auth/wrong-password':
+      return 'Senha incorreta.';
+    case 'auth/too-many-requests':
+      return 'Muitas tentativas. Tente novamente mais tarde.';
+    case 'auth/requires-recent-login':
+      return 'Esta operação é sensível e requer autenticação recente. Faça login novamente.';
+    default:
+      console.error('Erro Firebase:', error);
+      return 'Ocorreu um erro. Tente novamente.';
+  }
+};
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Configurar persistência local
-    setPersistence(auth, browserLocalPersistence)
-      .catch((error) => {
-        console.error('Erro ao configurar persistência:', error);
-      });
-
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
       if (user) {
         console.log('Usuário autenticado:', user.email);
-      } else {
-        console.log('Usuário não autenticado');
       }
     });
 
@@ -48,20 +64,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signUp = async (email: string, password: string, displayName?: string) => {
     try {
-      console.log('Iniciando cadastro para:', email);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
       if (displayName) {
         await updateProfile(userCredential.user, { displayName });
       }
 
-      setCurrentUser(userCredential.user);
-      console.log('Cadastro realizado com sucesso');
+      toast.success('Conta criada com sucesso! Bem-vindo ao Strukt!');
       return userCredential.user;
     } catch (error) {
-      console.error('Erro no cadastro:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -69,15 +84,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log('Iniciando login para:', email);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setCurrentUser(userCredential.user);
-      console.log('Login realizado com sucesso');
+      toast.success('Login realizado com sucesso!');
       return userCredential.user;
     } catch (error) {
-      console.error('Erro no login:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -85,14 +99,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      console.log('Iniciando logout');
       await signOut(auth);
-      setCurrentUser(null);
-      console.log('Logout realizado com sucesso');
+      toast.success('Logout realizado com sucesso!');
     } catch (error) {
-      console.error('Erro no logout:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -100,13 +113,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const resetPassword = async (email: string) => {
     try {
-      console.log('Iniciando recuperação de senha para:', email);
       await sendPasswordResetEmail(auth, email);
-      console.log('Email de recuperação enviado com sucesso');
+      toast.success('Email de recuperação enviado! Verifique sua caixa de entrada.');
     } catch (error) {
-      console.error('Erro na recuperação de senha:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -118,13 +131,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     try {
-      console.log('Iniciando atualização de email para:', newEmail);
       await updateEmail(currentUser, newEmail);
-      console.log('Email atualizado com sucesso');
+      toast.success('Email atualizado com sucesso!');
     } catch (error) {
-      console.error('Erro na atualização de email:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -136,13 +149,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     try {
-      console.log('Iniciando atualização de senha');
       await updatePassword(currentUser, newPassword);
-      console.log('Senha atualizada com sucesso');
+      toast.success('Senha atualizada com sucesso!');
     } catch (error) {
-      console.error('Erro na atualização de senha:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
@@ -154,15 +167,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     try {
-      console.log('Iniciando atualização de perfil');
       await updateProfile(currentUser, { displayName: newDisplayName });
-      // Atualizamos o usuário atual para refletir as mudanças
-      setCurrentUser(prev => prev ? { ...prev } : null);
-      console.log('Perfil atualizado com sucesso');
+      setCurrentUser({ ...currentUser, displayName: newDisplayName });
+      toast.success('Perfil atualizado com sucesso!');
     } catch (error) {
-      console.error('Erro na atualização do perfil:', error);
       if (error instanceof FirebaseError) {
-        throw new Error(handleAuthError(error));
+        const message = handleFirebaseError(error);
+        toast.error(message);
+        throw new Error(message);
       }
       throw error;
     }
