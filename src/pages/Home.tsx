@@ -27,30 +27,31 @@ const features = [
 
 const Home = () => {
   const { currentUser } = useAuth();
+  const displayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || '';
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section - Ajustado para melhor visualização mobile */}
+      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white min-h-screen flex items-center py-16 px-4">
+        <div className="w-full max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center"
+            className="text-center px-4 sm:px-6 lg:px-8"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               {currentUser ? (
-                <>Bem-vindo de volta, {currentUser.email?.split('@')[0]}!</>
+                <>Bem-vindo de volta, <br className="sm:hidden" />{displayName}!</>
               ) : (
-                <>Aprenda Programação de Forma Visual</>
+                <>Aprenda Programação <br className="sm:hidden" />de Forma Visual</>
               )}
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-primary-100">
+            <p className="text-lg sm:text-xl md:text-2xl mb-8 text-primary-100 max-w-3xl mx-auto">
               {currentUser ? (
-                <>Continue sua jornada de aprendizado</>
+                'Continue sua jornada de aprendizado'
               ) : (
-                <>Domine lógica, algoritmos e estruturas de dados através de visualizações interativas</>
+                'Domine lógica, algoritmos e estruturas de dados através de visualizações interativas'
               )}
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
@@ -58,13 +59,13 @@ const Home = () => {
                 <>
                   <Link
                     to="/learn"
-                    className="bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors text-lg"
+                    className="bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
                   >
                     Continuar Aprendendo
                   </Link>
                   <Link
                     to="/practice"
-                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors text-lg"
+                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors text-base sm:text-lg w-full sm:w-auto"
                   >
                     Praticar Agora
                   </Link>
@@ -73,13 +74,13 @@ const Home = () => {
                 <>
                   <Link
                     to="/register"
-                    className="bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors text-lg"
+                    className="bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
                   >
                     Começar Agora
                   </Link>
                   <Link
                     to="/about"
-                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors text-lg"
+                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors text-base sm:text-lg w-full sm:w-auto"
                   >
                     Saiba Mais
                   </Link>
@@ -91,7 +92,7 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.h2
@@ -99,7 +100,7 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6"
             >
               Por que escolher o Strukt?
             </motion.h2>
@@ -108,13 +109,13 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
+              className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto"
             >
               Uma plataforma completa para seu aprendizado em programação
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -122,13 +123,13 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="text-5xl mb-6">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">
+                <div className="text-4xl sm:text-5xl mb-4 sm:mb-6">{feature.icon}</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gray-900">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
@@ -138,7 +139,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-primary-50 py-24">
+      <section className="bg-primary-50 py-16 sm:py-24 px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -149,22 +150,22 @@ const Home = () => {
           >
             {currentUser ? (
               <>
-                <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
                   Pronto para continuar aprendendo?
                 </h2>
-                <p className="text-xl text-gray-600 mb-12">
+                <p className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12">
                   Continue sua jornada de aprendizado com o Strukt
                 </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
                   <Link
                     to="/learn"
-                    className="inline-block bg-primary-600 text-white px-10 py-4 rounded-lg font-medium hover:bg-primary-700 transition-all duration-300 text-lg hover:scale-105"
+                    className="w-full sm:w-auto bg-primary-600 text-white px-8 py-4 rounded-lg font-medium hover:bg-primary-700 transition-all duration-300 text-base sm:text-lg hover:scale-105"
                   >
                     Continuar Aprendendo
                   </Link>
                   <Link
                     to="/algorithms"
-                    className="inline-block bg-white border-2 border-primary-600 text-primary-600 px-10 py-4 rounded-lg font-medium hover:bg-primary-50 transition-all duration-300 text-lg hover:scale-105"
+                    className="w-full sm:w-auto bg-white border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-all duration-300 text-base sm:text-lg hover:scale-105"
                   >
                     Explorar Algoritmos
                   </Link>
@@ -172,22 +173,22 @@ const Home = () => {
               </>
             ) : (
               <>
-                <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
                   Pronto para começar sua jornada?
                 </h2>
-                <p className="text-xl text-gray-600 mb-12">
+                <p className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12">
                   Junte-se a milhares de estudantes que já estão aprendendo com o Strukt
                 </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
                   <Link
                     to="/register"
-                    className="inline-block bg-primary-600 text-white px-10 py-4 rounded-lg font-medium hover:bg-primary-700 transition-all duration-300 text-lg hover:scale-105"
+                    className="w-full sm:w-auto bg-primary-600 text-white px-8 py-4 rounded-lg font-medium hover:bg-primary-700 transition-all duration-300 text-base sm:text-lg hover:scale-105"
                   >
                     Criar Conta Gratuita
                   </Link>
                   <Link
                     to="/login"
-                    className="inline-block bg-white border-2 border-primary-600 text-primary-600 px-10 py-4 rounded-lg font-medium hover:bg-primary-50 transition-all duration-300 text-lg hover:scale-105"
+                    className="w-full sm:w-auto bg-white border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-all duration-300 text-base sm:text-lg hover:scale-105"
                   >
                     Já tenho uma conta
                   </Link>
