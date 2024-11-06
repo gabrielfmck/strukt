@@ -12,7 +12,7 @@ interface VisualizationPanelProps {
   algorithm: 'bubble' | 'selection' | 'quick';
   data: number[];
   speed: number;
-  onSpeedChange: (speed: number) => void;
+  onSpeedChange?: (speed: number) => void; // onSpeedChange agora é opcional
 }
 
 const VisualizationPanel = ({
@@ -37,6 +37,13 @@ const VisualizationPanel = ({
   }, [data]);
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleSpeedChange = (newSpeed: number) => {
+    setCurrentSpeed(newSpeed);
+    if (onSpeedChange) {
+      onSpeedChange(newSpeed); // Verifica se onSpeedChange está definido antes de chamar
+    }
+  };
 
   const bubbleSort = async () => {
     if (isAnimating) return;
@@ -174,12 +181,12 @@ const VisualizationPanel = ({
           animate={{
             height: `${(element.value / Math.max(...data)) * 100}%`,
             backgroundColor: element.isSorted
-              ? '#10B981' // Green for sorted
+              ? '#10B981'
               : element.isActive
-              ? '#FBBF24' // Yellow for active
+              ? '#FBBF24'
               : element.isComparing
-              ? '#EF4444' // Red for comparing
-              : '#3B82F6', // Blue for unsorted
+              ? '#EF4444'
+              : '#3B82F6',
           }}
           transition={{ duration: 0.3 }}
           className="w-8 rounded-t-lg flex items-center justify-center"
@@ -222,11 +229,7 @@ const VisualizationPanel = ({
               max="2000"
               step="100"
               value={2100 - currentSpeed}
-              onChange={(e) => {
-                const newSpeed = 2100 - parseInt(e.target.value);
-                setCurrentSpeed(newSpeed);
-                onSpeedChange(newSpeed);
-              }}
+              onChange={(e) => handleSpeedChange(2100 - parseInt(e.target.value))}
               className="w-32"
               disabled={isAnimating}
             />
