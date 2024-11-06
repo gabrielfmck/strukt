@@ -1,14 +1,19 @@
-// src/App.tsx
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth/AuthProvider';
+import { ToastContainer } from 'react-toastify';
 import Layout from './components/layout/Layout';
 import PrivateRoute from './components/common/PrivateRoute';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 // Componente de loading
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+    <div className="flex flex-col items-center space-y-4">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      <p className="text-gray-600">Carregando...</p>
+    </div>
   </div>
 );
 
@@ -38,132 +43,147 @@ const QuickSort = lazy(() => import('./pages/learn/QuickSort'));
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Layout>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Routes>
-              {/* Rotas públicas */}
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+    <>
+      <Router>
+        <AuthProvider>
+          <Layout>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                {/* Rotas públicas */}
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              {/* Rotas protegidas */}
-              <Route 
-                path="/learn" 
-                element={
-                  <PrivateRoute>
-                    <Learn />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/algorithms" 
-                element={
-                  <PrivateRoute>
-                    <Algorithms />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/data-structures" 
-                element={
-                  <PrivateRoute>
-                    <DataStructures />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/practice" 
-                element={
-                  <PrivateRoute>
-                    <Practice />
-                  </PrivateRoute>
-                } 
-              />
+                {/* Rotas protegidas */}
+                <Route
+                  path="/learn"
+                  element={
+                    <PrivateRoute>
+                      <Learn />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/algorithms"
+                  element={
+                    <PrivateRoute>
+                      <Algorithms />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/data-structures"
+                  element={
+                    <PrivateRoute>
+                      <DataStructures />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/practice"
+                  element={
+                    <PrivateRoute>
+                      <Practice />
+                    </PrivateRoute>
+                  }
+                />
 
-              {/* Rotas de aprendizado protegidas */}
-              <Route 
-                path="/learn/what-is-programming" 
-                element={
-                  <PrivateRoute>
-                    <WhatIsProgramming />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/variables" 
-                element={
-                  <PrivateRoute>
-                    <Variables />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/control-structures" 
-                element={
-                  <PrivateRoute>
-                    <ControlStructures />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/arrays" 
-                element={
-                  <PrivateRoute>
-                    <Arrays />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/linked-lists" 
-                element={
-                  <PrivateRoute>
-                    <LinkedLists />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/stacks-queues" 
-                element={
-                  <PrivateRoute>
-                    <StacksQueues />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/bubble-sort" 
-                element={
-                  <PrivateRoute>
-                    <BubbleSort />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/selection-sort" 
-                element={
-                  <PrivateRoute>
-                    <SelectionSort />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/learn/quick-sort" 
-                element={
-                  <PrivateRoute>
-                    <QuickSort />
-                  </PrivateRoute>
-                } 
-              />
+                {/* Rotas de aprendizado protegidas */}
+                <Route
+                  path="/learn/what-is-programming"
+                  element={
+                    <PrivateRoute>
+                      <WhatIsProgramming />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/variables"
+                  element={
+                    <PrivateRoute>
+                      <Variables />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/control-structures"
+                  element={
+                    <PrivateRoute>
+                      <ControlStructures />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/arrays"
+                  element={
+                    <PrivateRoute>
+                      <Arrays />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/linked-lists"
+                  element={
+                    <PrivateRoute>
+                      <LinkedLists />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/stacks-queues"
+                  element={
+                    <PrivateRoute>
+                      <StacksQueues />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/bubble-sort"
+                  element={
+                    <PrivateRoute>
+                      <BubbleSort />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/selection-sort"
+                  element={
+                    <PrivateRoute>
+                      <SelectionSort />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learn/quick-sort"
+                  element={
+                    <PrivateRoute>
+                      <QuickSort />
+                    </PrivateRoute>
+                  }
+                />
 
-              {/* Rota 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </Layout>
-      </AuthProvider>
-    </Router>
+                {/* Rota 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+        </AuthProvider>
+      </Router>
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 

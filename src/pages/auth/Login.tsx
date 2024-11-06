@@ -1,17 +1,25 @@
-// src/pages/auth/Login.tsx
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { handleAuthError } from '../../utils/auth-utils';
-import type { FirebaseAuthError } from '../../types/firebase-errors';
+import { toast } from 'react-toastify';
+import { FirebaseError } from 'firebase/app';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login, currentUser } = useAuth();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const location = useLocation();
+
+  // Redireciona se já estiver logado
+  useEffect(() => {
+    if (currentUser) {
+      const from = location.state?.from?.pathname || '/';
+      navigate(from, { replace: true });
+    }
+  }, [currentUser, navigate, location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,14 +27,47 @@ const Login = () => {
     try {
       setError('');
       setLoading(true);
+
+      // Validações básicas
+      if (!email.trim() || !password.trim()) {
+        throw new Error('Por favor, preencha todos os campos');
+      }
+
+      // Tentativa de login
       await login(email, password);
-      navigate('/');
+      
+      // Login bem sucedido
+      toast.success('Login realizado com sucesso!');
+      
+      // Redireciona para a página anterior ou home
+      const from = location.state?.from?.pathname || '/';
+      navigate(from, { replace: true });
+      
     } catch (error) {
-      if (error instanceof Error) {
-        setError(handleAuthError(error as FirebaseAuthError));
+      console.error('Erro no login:', error);
+      
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            setError('Email ou senha incorretos');
+            break;
+          case 'auth/too-many-requests':
+            setError('Muitas tentativas. Tente novamente mais tarde');
+            break;
+          case 'auth/invalid-email':
+            setError('Email inválido');
+            break;
+          default:
+            setError('Ocorreu um erro ao fazer login. Tente novamente.');
+        }
+      } else if (error instanceof Error) {
+        setError(error.message);
       } else {
         setError('Ocorreu um erro inesperado');
       }
+      
+      toast.error(error instanceof Error ? error.message : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -44,8 +85,8 @@ const Login = () => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                {error}
+              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
               </div>
             )}
 
@@ -63,7 +104,8 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+                  placeholder="seu@email.com"
                 />
               </div>
             </div>
@@ -82,8 +124,32 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+                  placeholder="••••••••"
                 />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Lembrar-me
+                </label>
+              </div>
+
+              <div className="text-sm">
+                <Link
+                  to="/forgot-password"
+                  className="font-medium text-primary-600 hover:text-primary-500"
+                >
+                  Esqueceu sua senha?
+                </Link>
               </div>
             </div>
 
@@ -91,11 +157,21 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors ${
-                  loading ? 'opacity-50 cursor-not-allowed' : ''
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+                  loading ? 'cursor-not-allowed' : 'cursor-pointer'
                 }`}
               >
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? (
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Entrando...
+                  </div>
+                ) : (
+                  'Entrar'
+                )}
               </button>
             </div>
           </form>
@@ -115,7 +191,7 @@ const Login = () => {
             <div className="mt-6">
               <Link
                 to="/register"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
               >
                 Criar nova conta
               </Link>

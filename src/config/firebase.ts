@@ -1,33 +1,42 @@
-// src/config/firebase.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import type { FirebaseOptions } from 'firebase/app';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
-const firebaseConfig: FirebaseOptions = {
-  apiKey: "AIzaSyDuJR8_MYGFj2vqpMZiSF0v3UqpmS_ezms",
+const firebaseConfig = {
+  apiKey: "AIzaSyDujRB_MYGFj2vqpMZiSF0v3UqpmS_ezms",
   authDomain: "strukt-tcc.firebaseapp.com",
   projectId: "strukt-tcc",
   storageBucket: "strukt-tcc.firebasestorage.app",
   messagingSenderId: "892023344275",
-  appId: "1:892023344275:web:6a1b665e915a60250091f66",
-  measurementId: "G-J896SFLEJZ"
+  appId: "1:892023344275:web:6a1b665e915a6025009166",
+  measurementId: "G-J8965FLEJZ"
 };
 
-// Inicializa Firebase com verificação
-let app;
-try {
-  app = initializeApp(firebaseConfig);
-  console.log('Firebase inicializado com sucesso');
-} catch (error) {
-  console.error('Erro ao inicializar Firebase:', error);
-  throw error;
-}
-
-// Inicializa Auth com verificação
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Log para debug
-console.log('Firebase App:', app);
-console.log('Firebase Auth:', auth);
+// Initialize Analytics conditionally
+const initAnalytics = async () => {
+  try {
+    if (await isSupported()) {
+      const analytics = await getAnalytics(app);
+      console.log('Analytics initialized successfully');
+      return analytics;
+    }
+    console.log('Analytics not supported in this environment');
+    return null;
+  } catch {
+    // Log sem o parâmetro error não utilizado
+    console.log('Failed to initialize analytics');
+    return null;
+  }
+};
 
-export { app, auth };
+// Initialize analytics and export what we need
+initAnalytics().catch(() => {
+  console.log('Failed to initialize analytics');
+});
+
+export { auth };
+export default app;
