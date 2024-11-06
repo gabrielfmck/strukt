@@ -12,27 +12,31 @@ interface VisualizationPanelProps {
   algorithm: 'bubble' | 'selection' | 'quick';
   data: number[];
   speed: number;
+  onSpeedChange: (speed: number) => void;
 }
 
 const VisualizationPanel = ({
   algorithm,
   data = [],
-  speed = 1000
+  speed = 1000,
+  onSpeedChange,
 }: VisualizationPanelProps) => {
   const [elements, setElements] = useState<ArrayElement[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(speed);
 
   useEffect(() => {
-    setElements(data.map(value => ({
-      value,
-      isActive: false,
-      isComparing: false,
-      isSorted: false
-    })));
+    setElements(
+      data.map((value) => ({
+        value,
+        isActive: false,
+        isComparing: false,
+        isSorted: false,
+      }))
+    );
   }, [data]);
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const bubbleSort = async () => {
     if (isAnimating) return;
@@ -49,9 +53,7 @@ const VisualizationPanel = ({
         await sleep(currentSpeed);
 
         if (arr[j].value > arr[j + 1].value) {
-          const temp = arr[j];
-          arr[j] = arr[j + 1];
-          arr[j + 1] = temp;
+          [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
           setElements([...arr]);
           await sleep(currentSpeed);
         }
@@ -86,9 +88,7 @@ const VisualizationPanel = ({
         await sleep(currentSpeed);
 
         if (arr[j].value < arr[minIdx].value) {
-          if (minIdx !== i) {
-            arr[minIdx].isActive = false;
-          }
+          if (minIdx !== i) arr[minIdx].isActive = false;
           minIdx = j;
           arr[minIdx].isActive = true;
         }
@@ -98,10 +98,7 @@ const VisualizationPanel = ({
       }
 
       if (minIdx !== i) {
-        const temp = arr[i];
-        arr[i] = arr[minIdx];
-        arr[minIdx] = temp;
-        arr[minIdx].isActive = false;
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
       }
 
       arr[i].isActive = false;
@@ -121,6 +118,7 @@ const VisualizationPanel = ({
 
     const arr = [...elements];
     await quickSortHelper(arr, 0, arr.length - 1);
+    setElements(arr.map((el) => ({ ...el, isSorted: true })));
     setIsAnimating(false);
   };
 
@@ -150,9 +148,7 @@ const VisualizationPanel = ({
 
       if (arr[j].value < pivot) {
         i++;
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
         setElements([...arr]);
         await sleep(currentSpeed);
       }
@@ -160,9 +156,7 @@ const VisualizationPanel = ({
       arr[j].isComparing = false;
     }
 
-    const temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     arr[high].isActive = false;
     arr[i + 1].isSorted = true;
     setElements([...arr]);
@@ -177,19 +171,19 @@ const VisualizationPanel = ({
         <motion.div
           key={index}
           initial={{ height: 0 }}
-          animate={{ 
+          animate={{
             height: `${(element.value / Math.max(...data)) * 100}%`,
-            backgroundColor: element.isSorted 
-              ? '#10B981' // Verde para Ordenado
+            backgroundColor: element.isSorted
+              ? '#10B981' // Green for sorted
               : element.isActive
-                ? '#FBBF24' // Amarelo para Comparando
-                : element.isComparing 
-                  ? '#EF4444' // Vermelho para Trocando
-                  : '#3B82F6' // Azul para Não visitado
+              ? '#FBBF24' // Yellow for active
+              : element.isComparing
+              ? '#EF4444' // Red for comparing
+              : '#3B82F6', // Blue for unsorted
           }}
           transition={{ duration: 0.3 }}
           className="w-8 rounded-t-lg flex items-center justify-center"
-          style={{ 
+          style={{
             minHeight: '24px',
           }}
         >
@@ -218,9 +212,7 @@ const VisualizationPanel = ({
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">
-          Visualização do Algoritmo
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900">Visualização do Algoritmo</h3>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Velocidade:</span>
@@ -230,7 +222,11 @@ const VisualizationPanel = ({
               max="2000"
               step="100"
               value={2100 - currentSpeed}
-              onChange={(e) => setCurrentSpeed(2100 - parseInt(e.target.value))}
+              onChange={(e) => {
+                const newSpeed = 2100 - parseInt(e.target.value);
+                setCurrentSpeed(newSpeed);
+                onSpeedChange(newSpeed);
+              }}
               className="w-32"
               disabled={isAnimating}
             />
@@ -239,9 +235,7 @@ const VisualizationPanel = ({
             onClick={handleSort}
             disabled={isAnimating}
             className={`px-4 py-2 rounded-lg text-white text-sm font-medium ${
-              isAnimating
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-primary-600 hover:bg-primary-700'
+              isAnimating ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'
             }`}
           >
             {isAnimating ? 'Ordenando...' : 'Ordenar'}
