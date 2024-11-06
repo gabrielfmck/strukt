@@ -12,7 +12,7 @@ interface VisualizationPanelProps {
   algorithm: 'bubble' | 'selection' | 'quick';
   data: number[];
   speed: number;
-  onSpeedChange?: (speed: number) => void; // onSpeedChange agora é opcional
+  onSpeedChange?: (speed: number) => void;
 }
 
 const VisualizationPanel = ({
@@ -41,7 +41,7 @@ const VisualizationPanel = ({
   const handleSpeedChange = (newSpeed: number) => {
     setCurrentSpeed(newSpeed);
     if (onSpeedChange) {
-      onSpeedChange(newSpeed); // Verifica se onSpeedChange está definido antes de chamar
+      onSpeedChange(newSpeed);
     }
   };
 
@@ -173,7 +173,7 @@ const VisualizationPanel = ({
   };
 
   const renderArray = () => (
-    <div className="flex items-end justify-center space-x-1 h-64">
+    <div className="flex flex-wrap items-end justify-center space-x-1 h-64">
       {elements.map((element, index) => (
         <motion.div
           key={index}
@@ -189,7 +189,7 @@ const VisualizationPanel = ({
               : '#3B82F6',
           }}
           transition={{ duration: 0.3 }}
-          className="w-8 rounded-t-lg flex items-center justify-center"
+          className="rounded-t-lg flex items-center justify-center sm:w-4 md:w-6 lg:w-8"
           style={{
             minHeight: '24px',
           }}
@@ -218,9 +218,9 @@ const VisualizationPanel = ({
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Visualização do Algoritmo</h3>
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-0">Visualização do Algoritmo</h3>
+        <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">Velocidade:</span>
             <input
@@ -230,7 +230,7 @@ const VisualizationPanel = ({
               step="100"
               value={2100 - currentSpeed}
               onChange={(e) => handleSpeedChange(2100 - parseInt(e.target.value))}
-              className="w-32"
+              className="w-full sm:w-32"
               disabled={isAnimating}
             />
           </div>
@@ -248,7 +248,7 @@ const VisualizationPanel = ({
 
       {renderArray()}
 
-      <div className="mt-4 flex justify-center space-x-6 text-sm">
+      <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
         <div className="flex items-center">
           <div className="w-4 h-4 rounded bg-blue-500 mr-2"></div>
           <span>Não visitado</span>
