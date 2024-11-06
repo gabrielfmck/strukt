@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import Layout from './components/layout/Layout';
 import PrivateRoute from './components/common/PrivateRoute';
-import { TestFirebase } from './components/TestFirebase'; // Componente de teste
 
 // Componente de loading
 const LoadingSpinner = () => (
@@ -41,9 +40,6 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        {/* Componente temporário de teste do Firebase */}
-        <TestFirebase />
-        
         <Layout>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>

@@ -9,22 +9,19 @@ import {
   updateProfile,
   updateEmail,
   updatePassword,
-  type User,
-  type UserCredential,
-  type AuthError,
 } from 'firebase/auth';
-import { FirebaseError } from 'firebase/app';
 import { auth } from '../../config/firebase';
 import { AuthContext } from './AuthContext';
 import type { AuthContextType } from '../../types/auth';
 import { handleAuthError } from '../../utils/auth-utils';
+import type { FirebaseAuthError } from '../../types/firebase-errors';
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthContextType['currentUser']>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,37 +33,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, displayName?: string): Promise<void> => {
-    console.log('Tentando criar usuário:', { email, displayName });
-    
+  const signUp = async (email: string, password: string, displayName?: string) => {
     try {
-      const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('Usuário criado com sucesso:', userCredential.user.uid);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
       if (displayName) {
         await updateProfile(userCredential.user, { displayName });
-        console.log('Perfil atualizado com displayName:', displayName);
       }
 
       setCurrentUser(userCredential.user);
     } catch (error) {
-      console.error('Erro ao criar usuário:', error);
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
   };
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (email: string, password: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setCurrentUser(userCredential.user);
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
@@ -77,9 +67,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await signOut(auth);
       setCurrentUser(null);
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
@@ -89,9 +78,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
@@ -102,9 +90,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await updateEmail(currentUser, newEmail);
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
@@ -115,9 +102,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await updatePassword(currentUser, newPassword);
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
@@ -129,9 +115,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await updateProfile(currentUser, { displayName: newDisplayName });
       setCurrentUser({ ...currentUser });
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
-        throw new Error(errorMessage);
+      if (error instanceof Error) {
+        throw new Error(handleAuthError(error as FirebaseAuthError));
       }
       throw error;
     }
