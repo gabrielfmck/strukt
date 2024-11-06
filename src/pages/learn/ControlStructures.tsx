@@ -90,12 +90,6 @@ while (contador < 5) {
             >
               ← Aula Anterior
             </Link>
-            <Link
-              to="/learn/arrays"
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Próxima Aula →
-            </Link>
           </div>
         </motion.div>
       </div>

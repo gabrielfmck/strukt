@@ -13,18 +13,68 @@ const algorithms = [
       time: 'O(n²)',
       space: 'O(1)',
     },
-    initialCode: `void bubbleSort(int arr[], int n) {
-    int i, j;
-    for (i = 0; i < n-1; i++) {
-        for (j = 0; j < n-i-1; j++) {
-            if (arr[j] > arr[j+1]) {
-                // Troca os elementos
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
+    initialCode: `#include <stdio.h>
+
+// Função para realizar o Bubble Sort
+void bubbleSort(int arr[], int n) {
+    int i, j, temp;
+    int swapped;
+
+    // Percorrer todos os elementos do array
+    for (i = 0; i < n - 1; i++) {
+        swapped = 0; // Inicializa a variável swapped como 0
+
+        // Últimos i elementos já estão em ordem
+        for (j = 0; j < n - i - 1; j++) {
+            // Se o elemento atual é maior que o próximo, troca
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = 1; // Define swapped como 1 para indicar que houve troca
             }
         }
+
+        // Se não houve troca na passagem, o array já está ordenado
+        if (swapped == 0) {
+            break;
+        }
     }
+}
+
+// Função para imprimir o array
+void printArray(int arr[], int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+}
+
+// Função principal
+int main() {
+    int n, i;
+
+    // Solicita o tamanho do array
+    printf("Digite o número de elementos: ");
+    scanf("%d", &n);
+
+    int arr[n]; // Cria um array com o tamanho fornecido
+
+    // Solicita os elementos do array
+    printf("Digite os elementos do array: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("Array original: ");
+    printArray(arr, n);
+
+    bubbleSort(arr, n);
+
+    printf("Array ordenado: ");
+    printArray(arr, n);
+
+    return 0;
 }`,
   },
   {
@@ -35,22 +85,53 @@ const algorithms = [
       time: 'O(n²)',
       space: 'O(1)',
     },
-    initialCode: `void selectionSort(int arr[], int n) {
-    int i, j, min_idx;
-    for (i = 0; i < n-1; i++) {
+    initialCode: `#include <stdio.h>
+
+// Função para realizar a ordenação por seleção
+void selectionSort(int arr[], int n) {
+    int i, j, min_idx, temp;
+
+    // Passo para cada elemento do array
+    for (i = 0; i < n - 1; i++) {
+        // Assume que o primeiro elemento da parte não ordenada é o menor
         min_idx = i;
-        for (j = i+1; j < n; j++) {
-            if (arr[j] < arr[min_idx])
+
+        // Busca pelo menor elemento na parte não ordenada
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
                 min_idx = j;
+            }
         }
-        // Troca o elemento encontrado com o primeiro elemento
-        if (min_idx != i) {
-            int temp = arr[i];
-            arr[i] = arr[min_idx];
-            arr[min_idx] = temp;
-        }
+
+        // Troca o menor elemento encontrado com o primeiro elemento da parte não ordenada
+        temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
     }
-}`,
+}
+
+// Função para imprimir o array
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+}
+
+int main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Array original: ");
+    printArray(arr, n);
+
+    selectionSort(arr, n);
+
+    printf("Array ordenado: ");
+    printArray(arr, n);
+
+    return 0;
+}
+`,
   },
   {
     id: 'quick',
@@ -60,33 +141,65 @@ const algorithms = [
       time: 'O(n log n)',
       space: 'O(log n)',
     },
-    initialCode: `void quickSort(int arr[], int low, int high) {
+    initialCode: `#include <stdio.h>
+
+// Função para trocar dois elementos
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Função de partição para dividir o array com base no pivô
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; // Escolhe o último elemento como pivô
+    int i = (low - 1); // Índice do menor elemento
+
+    for (int j = low; j <= high - 1; j++) {
+        // Se o elemento atual é menor ou igual ao pivô
+        if (arr[j] <= pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+// Função recursiva do Quick Sort
+void quickSort(int arr[], int low, int high) {
     if (low < high) {
+        // Encontra o índice de partição
         int pi = partition(arr, low, high);
+
+        // Ordena os elementos antes e depois da partição
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
     }
 }
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            // Troca arr[i] e arr[j]
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
+// Função para imprimir o array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
     }
-    // Troca arr[i + 1] e arr[high] (pivot)
-    int temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
-    return (i + 1);
-}`,
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Array original: ");
+    printArray(arr, n);
+
+    quickSort(arr, 0, n - 1);
+
+    printf("Array ordenado: ");
+    printArray(arr, n);
+
+    return 0;
+}
+`,
   },
 ];
 
@@ -188,21 +301,6 @@ const Algorithms = () => {
         data={array}
         speed={speed}
       />
-
-      {/* Adicione um controle de velocidade global */}
-      <div className="flex items-center space-x-4 mb-4">
-        <span className="text-sm text-gray-600">Velocidade de Animação:</span>
-        <input
-          type="range"
-          min="100"
-          max="2000"
-          step="100"
-          value={speed}
-          onChange={(e) => handleSpeedChange(Number(e.target.value))}
-          className="w-32"
-        />
-        <span className="text-sm text-gray-600">{speed}ms</span>
-      </div>
 
               {/* Editor de código */}
               <div className="bg-white rounded-lg shadow-lg p-6">

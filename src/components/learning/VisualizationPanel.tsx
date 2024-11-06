@@ -33,7 +33,8 @@ const VisualizationPanel = ({
     })));
   }, [data]);
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, 2000 - ms));
+
   
     const bubbleSort = async () => {
       if (isAnimating) return;

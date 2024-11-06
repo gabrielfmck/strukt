@@ -10,9 +10,10 @@ interface PaizaResponse {
 
 const PAIZA_API_KEY = 'guest';
 
-export const compileAndExecute = async (code: string): Promise<string> => {
+export const compileAndExecute = async (code: string, input: string = ''): Promise<string> => {
   try {
     console.log('Enviando código para compilação...', code);
+    console.log('Entrada fornecida:', input);
 
     // Criar sessão de compilação
     const createResponse = await fetch('https://api.paiza.io/runners/create', {
@@ -24,6 +25,7 @@ export const compileAndExecute = async (code: string): Promise<string> => {
       body: JSON.stringify({
         source_code: code,
         language: 'c',
+        input: input,  // Adicionando a entrada do usuário
         longpoll: true,
         api_key: PAIZA_API_KEY,
       })
