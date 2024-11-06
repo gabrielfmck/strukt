@@ -6,7 +6,7 @@ const features = [
   {
     title: 'Aprendizado Interativo',
     description: 'Aprenda programação através de visualizações dinâmicas e exercícios práticos.',
-    icon: '💡',
+    icon: '',
   },
   {
     title: 'Estruturas de Dados',
