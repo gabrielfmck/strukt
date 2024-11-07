@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/auth/AuthProvider';
 import { ToastContainer } from 'react-toastify';
 import Layout from './components/layout/Layout';
 import PrivateRoute from './components/common/PrivateRoute';
+import 'react-toastify/dist/ReactToastify.css';
 
 import 'react-toastify/dist/ReactToastify.css';
 

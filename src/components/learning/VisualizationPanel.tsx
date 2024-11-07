@@ -186,7 +186,7 @@ const VisualizationPanel = ({
               ? '#FBBF24'
               : element.isComparing
               ? '#EF4444'
-              : '#3B82F6',
+              : '#0284c7',
           }}
           transition={{ duration: 0.3 }}
           className="rounded-t-lg flex items-center justify-center sm:w-4 md:w-6 lg:w-8"
@@ -250,7 +250,7 @@ const VisualizationPanel = ({
 
       <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
         <div className="flex items-center">
-          <div className="w-4 h-4 rounded bg-blue-500 mr-2"></div>
+          <div className="w-4 h-4 rounded bg-primary-600 mr-2"></div>
           <span>Não visitado</span>
         </div>
         <div className="flex items-center">

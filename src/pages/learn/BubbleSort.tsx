@@ -1,21 +1,8 @@
 // src/pages/learn/BubbleSort.tsx
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import CodeEditor from '../../components/learning/CodeEditor';
-import VisualizationPanel from '../../components/learning/VisualizationPanel';
 
 const BubbleSort = () => {
-  const [array, setArray] = useState([64, 34, 25, 12, 22, 11, 90]);
-  const [speed, setSpeed] = useState(1000);
-
-  const generateRandomArray = () => {
-    const newArray = Array.from({ length: 8 }, () => 
-      Math.floor(Math.random() * 100)
-    );
-    setArray(newArray);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,66 +25,6 @@ const BubbleSort = () => {
               pares de elementos adjacentes e os troca se estiverem na ordem errada.
               O algoritmo percorre a lista várias vezes até que nenhuma troca seja necessária.
             </p>
-
-            <h3>Visualização</h3>
-            <div className="my-8">
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="text-lg font-semibold">Demonstração Interativa</h4>
-                <button
-                  onClick={generateRandomArray}
-                  className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-primary-700 transition-colors"
-                >
-                  Gerar Novo Array
-                </button>
-              </div>
-              <VisualizationPanel
-                algorithm="bubble"
-                data={array}
-                speed={speed}
-              />
-              <div className="flex items-center mt-4">
-                <span className="text-sm text-gray-600 mr-4">Velocidade:</span>
-                <input
-                  type="range"
-                  min="100"
-                  max="2000"
-                  step="100"
-                  value={speed}
-                  onChange={(e) => setSpeed(parseInt(e.target.value))}
-                  className="w-48"
-                />
-                <span className="text-sm text-gray-600 ml-4">{speed}ms</span>
-              </div>
-            </div>
-
-            <h3>Implementação em C</h3>
-            <CodeEditor
-              initialCode={`void bubbleSort(int arr[], int n) {
-    int i, j;
-    bool swapped;
-    
-    for (i = 0; i < n-1; i++) {
-        swapped = false;
-        // Últimos i elementos já estão no lugar
-        for (j = 0; j < n-i-1; j++) {
-            // Compara elementos adjacentes
-            if (arr[j] > arr[j+1]) {
-                // Troca arr[j] e arr[j+1]
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
-                swapped = true;
-            }
-        }
-        // Se nenhuma troca ocorreu no passe interno
-        // o array já está ordenado
-        if (!swapped) {
-            break;
-        }
-    }
-}`}
-              language="c"
-            />
 
             <h3>Análise de Complexidade</h3>
             <div className="grid grid-cols-2 gap-4 my-4">

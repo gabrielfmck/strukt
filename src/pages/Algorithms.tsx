@@ -39,7 +39,7 @@ void printArray(int arr[], int n) {
 }
 
 int main() {
-    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int arr[] = {64, 34, 26, 12, 22, 11, 90};
     int n = sizeof(arr)/sizeof(arr[0]);
     
     printf("Array original: ");
@@ -87,7 +87,7 @@ void printArray(int arr[], int n) {
 }
 
 int main() {
-    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int arr[] = {28, 30, 45, 55, 13, 17, 22};
     int n = sizeof(arr)/sizeof(arr[0]);
     
     printf("Array original: ");
@@ -110,56 +110,46 @@ int main() {
       space: 'O(log n)',
     },
     initialCode: `#include <stdio.h>
+#include <stdlib.h>
 
-void swap(int* a, int* b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
+// Estrutura do nó
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Inserir nó no início
+struct Node* insertAtBegin(struct Node* head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = head;
+    return newNode;
 }
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    
-    for (int j = low; j <= high - 1; j++) {
-        if (arr[j] <= pivot) {
-            i++;
-            swap(&arr[i], &arr[j]);
-        }
+// Imprimir lista
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
     }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+    printf("NULL\n");
 }
 
-void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}
-
-void printArray(int arr[], int size) {
-    for (int i = 0; i < size; i++) {
-        printf("%d ", arr[i]);
-    }
-}
-
+// Função principal
 int main() {
-    int arr[] = {64, 34, 25, 12, 22, 11, 90};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    
-    printf("Array original: ");
-    printArray(arr, n);
-    
-    quickSort(arr, 0, n-1);
-    
-    printf("\\nArray ordenado: ");
-    printArray(arr, n);
-    
+    struct Node* head = NULL;
+
+    // Inserir elementos
+    head = insertAtBegin(head, 10);
+    head = insertAtBegin(head, 20);
+    head = insertAtBegin(head, 30);
+
+    // Imprimir lista
+    printList(head);
+
     return 0;
-}`
+}
+`
   }
 ];
 

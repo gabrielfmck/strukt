@@ -1,7 +1,6 @@
 // src/pages/learn/SelectionSort.tsx
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import CodeEditor from '../../components/learning/CodeEditor';
 
 const SelectionSort = () => {
   return (
@@ -26,30 +25,6 @@ const SelectionSort = () => {
               ordenada e outra não ordenada, selecionando repetidamente o menor elemento
               da parte não ordenada e o colocando no final da parte ordenada.
             </p>
-
-            <h3>Implementação</h3>
-            <CodeEditor
-              initialCode={`void selectionSort(int arr[], int n) {
-    int i, j, min_idx;
-    
-    for (i = 0; i < n-1; i++) {
-        // Encontra o menor elemento no array não ordenado
-        min_idx = i;
-        for (j = i+1; j < n; j++) {
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-        }
-        
-        // Troca o elemento encontrado com o primeiro elemento
-        if (min_idx != i) {
-            int temp = arr[i];
-            arr[i] = arr[min_idx];
-            arr[min_idx] = temp;
-        }
-    }
-}`}
-              language="c"
-            />
 
             <h3>Complexidade</h3>
             <ul>

@@ -38,34 +38,45 @@ const LinkedLists = () => {
 
             <h3>Implementação</h3>
             <CodeEditor
-              initialCode={`struct Node {
+              initialCode={`#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura do nó
+struct Node {
     int data;
     struct Node* next;
 };
 
-// Criar novo nó
-struct Node* createNode(int data) {
+// Inserir nó no início
+struct Node* insertAtBegin(struct Node* head, int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
-}
-
-// Inserir no início
-struct Node* insertAtBegin(struct Node* head, int data) {
-    struct Node* newNode = createNode(data);
     newNode->next = head;
     return newNode;
 }
 
 // Imprimir lista
 void printList(struct Node* head) {
-    struct Node* temp = head;
-    while (temp != NULL) {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
     }
-    printf("NULL\\n");
+    printf("NULL");
+}
+
+// Função principal
+int main() {
+    struct Node* head = NULL;
+
+    // Inserir elementos
+    head = insertAtBegin(head, 10);
+    head = insertAtBegin(head, 20);
+    head = insertAtBegin(head, 30);
+
+    // Imprimir lista
+    printList(head);
+
+    return 0;
 }`}
               language="c"
             />

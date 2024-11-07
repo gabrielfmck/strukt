@@ -28,44 +28,65 @@ const StacksQueues = () => {
 
             <h3>Implementação de Pilha</h3>
             <CodeEditor
-              initialCode={`#define MAX 100
+              initialCode={`#include <stdio.h>
+#include <stdlib.h>
 
-struct Stack {
-    int items[MAX];
-    int top;
+// Estrutura do nó
+struct Node {
+    int data;
+    struct Node* next;
 };
 
-void initStack(struct Stack* s) {
-    s->top = -1;
+// Função para empilhar (push)
+struct Node* push(struct Node* top, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = top;
+    return newNode;
 }
 
-int isEmpty(struct Stack* s) {
-    return s->top == -1;
-}
-
-int isFull(struct Stack* s) {
-    return s->top == MAX - 1;
-}
-
-void push(struct Stack* s, int value) {
-    if (!isFull(s)) {
-        s->items[++s->top] = value;
+// Função para desempilhar (pop)
+struct Node* pop(struct Node* top) {
+    if (top == NULL) {
+        printf("A pilha está vazia.");
+        return NULL;
     }
+    struct Node* temp = top;
+    top = top->next;
+    free(temp);
+    return top;
 }
 
-int pop(struct Stack* s) {
-    if (!isEmpty(s)) {
-        return s->items[s->top--];
+// Função para imprimir a pilha
+void printStack(struct Node* top) {
+    while (top != NULL) {
+        printf("%d -> ", top->data);
+        top = top->next;
     }
-    return -1;
+    printf("NULL");
 }
 
-int peek(struct Stack* s) {
-    if (!isEmpty(s)) {
-        return s->items[s->top];
-    }
-    return -1;
-}`}
+// Função principal para teste
+int main() {
+    struct Node* top = NULL;
+
+    // Empilhar elementos
+    top = push(top, 10);
+    top = push(top, 20);
+    top = push(top, 30);
+
+    // Imprimir a pilha
+    printf("Pilha atual: ");
+    printStack(top);
+
+    // Desempilhar um elemento
+    top = pop(top);
+    printf("Pilha após pop: ");
+    printStack(top);
+
+    return 0;
+}
+`}
               language="c"
             />
 
@@ -77,45 +98,84 @@ int peek(struct Stack* s) {
 
             <h3>Implementação de Fila</h3>
             <CodeEditor
-              initialCode={`struct Queue {
-    int items[MAX];
-    int front;
-    int rear;
+              initialCode={`#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura do nó
+struct Node {
+    int data;
+    struct Node* next;
 };
 
-void initQueue(struct Queue* q) {
-    q->front = -1;
-    q->rear = -1;
+// Estrutura da fila
+struct Queue {
+    struct Node* front;
+    struct Node* rear;
+};
+
+// Função para criar uma fila vazia
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->front = queue->rear = NULL;
+    return queue;
 }
 
-int isQueueEmpty(struct Queue* q) {
-    return q->front == -1;
-}
-
-int isQueueFull(struct Queue* q) {
-    return (q->rear + 1) % MAX == q->front;
-}
-
-void enqueue(struct Queue* q, int value) {
-    if (!isQueueFull(q)) {
-        if (isQueueEmpty(q))
-            q->front = 0;
-        q->rear = (q->rear + 1) % MAX;
-        q->items[q->rear] = value;
+// Função para enfileirar (enqueue)
+void enqueue(struct Queue* queue, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    if (queue->rear == NULL) {
+        queue->front = queue->rear = newNode;
+        return;
     }
+    queue->rear->next = newNode;
+    queue->rear = newNode;
 }
 
-int dequeue(struct Queue* q) {
-    if (!isQueueEmpty(q)) {
-        int value = q->items[q->front];
-        if (q->front == q->rear)
-            q->front = q->rear = -1;
-        else
-            q->front = (q->front + 1) % MAX;
-        return value;
+// Função para desenfileirar (dequeue)
+void dequeue(struct Queue* queue) {
+    if (queue->front == NULL) {
+        printf("A fila está vazia.");
+        return;
     }
-    return -1;
-}`}
+    struct Node* temp = queue->front;
+    queue->front = queue->front->next;
+    if (queue->front == NULL) queue->rear = NULL;
+    free(temp);
+}
+
+// Função para imprimir a fila
+void printQueue(struct Queue* queue) {
+    struct Node* temp = queue->front;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL");
+}
+
+// Função principal para teste
+int main() {
+    struct Queue* queue = createQueue();
+
+    // Enfileirar elementos
+    enqueue(queue, 10);
+    enqueue(queue, 20);
+    enqueue(queue, 30);
+
+    // Imprimir a fila
+    printf("Fila atual: ");
+    printQueue(queue);
+
+    // Desenfileirar um elemento
+    dequeue(queue);
+    printf("Fila após dequeue: ");
+    printQueue(queue);
+
+    return 0;
+}
+`}
               language="c"
             />
 

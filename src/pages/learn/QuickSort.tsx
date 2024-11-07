@@ -1,7 +1,6 @@
 // src/pages/learn/QuickSort.tsx
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import CodeEditor from '../../components/learning/CodeEditor';
 
 const QuickSort = () => {
   return (
@@ -26,42 +25,6 @@ const QuickSort = () => {
               "dividir para conquistar". Ele escolhe um elemento como pivô e particiona
               o array ao redor deste pivô.
             </p>
-
-            <h3>Implementação</h3>
-            <CodeEditor
-              initialCode={`// Função para trocar dois elementos
-void swap(int* a, int* b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-// Função para particionar o array
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-
-    for (int j = low; j <= high - 1; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(&arr[i], &arr[j]);
-        }
-    }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
-}
-
-// Função principal do QuickSort
-void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}`}
-              language="c"
-            />
 
             <h3>Complexidade</h3>
             <ul>
