@@ -1,7 +1,6 @@
+// src/components/common/Navbar.tsx
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Transition } from '@headlessui/react';
-import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { Menu } from '@headlessui/react';
 import { toast } from 'react-toastify';
@@ -57,34 +56,28 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Navbar principal */}
         <div className="flex justify-between h-16">
-          {/* Logo e Nome */}
+          {/* Logo */}
           <div className="flex items-center">
-            <Link 
-              to="/" 
-              className="flex items-center group"
-            >
-              <motion.span 
-                className={`text-2xl font-bold transition-colors ${
-                  isHomePage && !isScrolled
-                    ? 'text-white'
-                    : 'text-primary-600'
+            <Link to="/" className="flex items-center">
+              <span 
+                className={`text-2xl font-bold transition-all duration-300 hover:scale-105 ${
+                  isHomePage && !isScrolled ? 'text-white' : 'text-primary-600'
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 Strukt
-              </motion.span>
+              </span>
             </Link>
           </div>
 
-          {/* Links de Navegação - Desktop */}
+          {/* Links Desktop */}
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   location.pathname === item.href
                     ? isHomePage && !isScrolled
                       ? 'text-white bg-white/20'
@@ -98,62 +91,60 @@ const Navbar = () => {
               </Link>
             ))}
 
-            {/* Autenticação */}
+            {/* Autenticação Desktop */}
             {currentUser ? (
               <Menu as="div" className="relative ml-3">
-                <Menu.Button className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium ${
-                  isHomePage && !isScrolled
-                    ? 'text-white hover:bg-white/20'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}>
-                  <span>{currentUser.displayName || currentUser.email?.split('@')[0]}</span>
+                <Menu.Button 
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                    isHomePage && !isScrolled
+                      ? 'text-white hover:bg-white/20'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {currentUser.displayName || currentUser.email?.split('@')[0]}
                   <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                   </svg>
                 </Menu.Button>
-                <Transition
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            to="/profile"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } block px-4 py-2 text-sm text-gray-700`}
-                          >
-                            Perfil
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={handleLogout}
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } block w-full text-left px-4 py-2 text-sm text-gray-700`}
-                          >
-                            Sair
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
+
+                <Menu.Items className="absolute right-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/profile"
+                          className={`block px-4 py-2 text-sm ${
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          Perfil
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={handleLogout}
+                          className={`w-full text-left px-4 py-2 text-sm ${
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          Sair
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
               </Menu>
             ) : (
               <div className="flex items-center space-x-4">
                 <Link
                   to="/login"
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                     isHomePage && !isScrolled
                       ? 'text-white hover:bg-white/20'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -163,7 +154,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                     isHomePage && !isScrolled
                       ? 'bg-white text-primary-600 hover:bg-white/90'
                       : 'bg-primary-600 text-white hover:bg-primary-700'
@@ -175,52 +166,117 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Botão do Menu Mobile */}
-          <div className="flex items-center sm:hidden">
+          {/* Botão Menu Mobile */}
+          <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`inline-flex items-center justify-center p-2 rounded-md ${
+              className={`p-2 rounded-md transition-all duration-300 ${
                 isHomePage && !isScrolled
-                  ? 'text-white hover:text-white hover:bg-white/20'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-white hover:bg-white/20'
+                  : 'text-gray-600 hover:bg-gray-100'
               }`}
-              aria-expanded="false"
             >
-              <span className="sr-only">Abrir menu principal</span>
+              <span className="sr-only">Menu</span>
               {isMobileMenuOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
+                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
             </button>
           </div>
         </div>
+
+        {/* Menu Mobile */}
+        {isMobileMenuOpen && (
+          <div className="sm:hidden">
+            <div className={`z-50 px-2 pb-3 pt-2 space-y-1 shadow-lg transition-all duration-300 ${
+              isHomePage && !isScrolled ? 'bg-primary-600' : 'bg-white'
+            }`}>
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                    location.pathname === item.href
+                      ? isHomePage && !isScrolled
+                        ? 'bg-white/20 text-white'
+                        : 'bg-primary-50 text-primary-600'
+                      : isHomePage && !isScrolled
+                      ? 'text-white hover:bg-white/20'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+              {/* Autenticação Mobile */}
+              {currentUser ? (
+                <div className="border-t border-gray-200/20 mt-2 pt-2">
+                  <div className={`px-3 py-2 text-sm font-medium ${
+                    isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
+                  }`}>
+                    {currentUser.displayName || currentUser.email?.split('@')[0]}
+                  </div>
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                      isHomePage && !isScrolled
+                        ? 'text-white hover:bg-white/20'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Perfil
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                      isHomePage && !isScrolled
+                        ? 'text-white hover:bg-white/20'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Sair
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t border-gray-200/20 mt-2 pt-2 space-y-1">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                      isHomePage && !isScrolled
+                        ? 'text-white hover:bg-white/20'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                      isHomePage && !isScrolled
+                        ? 'bg-white text-primary-600'
+                        : 'bg-primary-600 text-white'
+                    }`}
+                  >
+                    Criar Conta
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
