@@ -6,8 +6,6 @@ import Layout from './components/layout/Layout';
 import PrivateRoute from './components/common/PrivateRoute';
 import 'react-toastify/dist/ReactToastify.css';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 // Componente de loading
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -32,6 +30,7 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword')); // Adicionada
 
 // Lazy loading das páginas de aprendizado
 const WhatIsProgramming = lazy(() => import('./pages/learn/WhatIsProgramming'));
@@ -58,6 +57,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                
+                {/* Rota de redefinição de senha */}
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Rotas protegidas */}
                 <Route
