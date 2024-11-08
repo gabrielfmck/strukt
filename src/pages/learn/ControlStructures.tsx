@@ -18,14 +18,25 @@ const ControlStructures = () => {
         <h4 className="font-semibold text-primary-600 mb-3">if/else</h4>
         <p className="mb-4">Usado para executar código baseado em uma condição:</p>
         <CodeEditor
-          initialCode={`// Exemplo de if/else
-int idade = 18;
+          initialCode={`#include <stdio.h>
 
-if (idade >= 18) {
-    printf("Pode dirigir\\n");
-} else {
-    printf("Não pode dirigir\\n");
-}`}
+int main() {
+    int numero;
+
+    printf("Digite um número: ");
+    scanf("%d", &numero);
+
+    if (numero > 0) {
+        printf("O número é positivo.\n");
+    } else if (numero < 0) {
+        printf("O número é negativo.\n");
+    } else {
+        printf("O número é zero.\n");
+    }
+
+    return 0;
+}
+`}
           language="c"
         />
       </div>
@@ -38,9 +49,14 @@ if (idade >= 18) {
         <h4 className="font-semibold text-primary-600 mb-3">for</h4>
         <p className="mb-4">Usado quando sabemos quantas vezes queremos repetir algo:</p>
         <CodeEditor
-          initialCode={`// Exemplo de loop for
-for (int i = 0; i < 5; i++) {
-    printf("Número: %d\\n", i);
+          initialCode={`#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d\n", i);
+    }
+
+    return 0;
 }`}
           language="c"
         />
@@ -51,11 +67,19 @@ for (int i = 0; i < 5; i++) {
         <h4 className="font-semibold text-primary-600 mb-3">while</h4>
         <p className="mb-4">Usado quando queremos repetir algo enquanto uma condição for verdadeira:</p>
         <CodeEditor
-          initialCode={`// Exemplo de loop while
-int contador = 0;
-while (contador < 5) {
-    printf("Contador: %d\\n", contador);
-    contador++;
+          initialCode={`#include <stdio.h>
+
+int main() {
+    int numero = 0;
+
+    while (numero <= 10) {
+        printf("Digite um número maior que 10: ");
+        scanf("%d", &numero);
+    }
+
+    printf("Número válido!\n");
+
+    return 0;
 }`}
           language="c"
         />
@@ -66,21 +90,41 @@ while (contador < 5) {
         <h4 className="font-semibold text-primary-600 mb-3">switch/case</h4>
         <p className="mb-4">Usado para múltiplas condições sobre uma mesma variável:</p>
         <CodeEditor
-          initialCode={`// Exemplo de switch/case
-char nota = 'A';
+          initialCode={`#include <stdio.h>
 
-switch (nota) {
-    case 'A':
-        printf("Excelente!\\n");
-        break;
-    case 'B':
-        printf("Muito bom!\\n");
-        break;
-    case 'C':
-        printf("Regular\\n");
-        break;
-    default:
-        printf("Nota inválida\\n");
+int main() {
+    int dia;
+
+    printf("Digite um número de 1 a 7 para o dia da semana: ");
+    scanf("%d", &dia);
+
+    switch (dia) {
+        case 1:
+            printf("Domingo\n");
+            break;
+        case 2:
+            printf("Segunda-feira\n");
+            break;
+        case 3:
+            printf("Terça-feira\n");
+            break;
+        case 4:
+            printf("Quarta-feira\n");
+            break;
+        case 5:
+            printf("Quinta-feira\n");
+            break;
+        case 6:
+            printf("Sexta-feira\n");
+            break;
+        case 7:
+            printf("Sábado\n");
+            break;
+        default:
+            printf("Número inválido! Digite um valor entre 1 e 7.\n");
+    }
+
+    return 0;
 }`}
           language="c"
         />

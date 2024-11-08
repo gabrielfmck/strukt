@@ -39,7 +39,7 @@ void printArray(int arr[], int n) {
 }
 
 int main() {
-    int arr[] = {64, 34, 26, 12, 22, 11, 90};
+    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
     int n = sizeof(arr)/sizeof(arr[0]);
     
     printf("Array original: ");
@@ -87,7 +87,7 @@ void printArray(int arr[], int n) {
 }
 
 int main() {
-    int arr[] = {28, 30, 45, 55, 13, 17, 22};
+    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
     int n = sizeof(arr)/sizeof(arr[0]);
     
     printf("Array original: ");
@@ -110,43 +110,62 @@ int main() {
       space: 'O(log n)',
     },
     initialCode: `#include <stdio.h>
-#include <stdlib.h>
 
-// Estrutura do nó
-struct Node {
-    int data;
-    struct Node* next;
-};
-
-// Inserir nó no início
-struct Node* insertAtBegin(struct Node* head, int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->next = head;
-    return newNode;
+// Função para trocar dois elementos
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-// Imprimir lista
-void printList(struct Node* head) {
-    while (head != NULL) {
-        printf("%d -> ", head->data);
-        head = head->next;
+// Função que encontra o pivô e o coloca na posição correta
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];  // Escolhe o último elemento como pivô
+    int i = (low - 1);      // Índice do menor elemento
+    
+    for (int j = low; j <= high - 1; j++) {
+        // Se o elemento atual é menor que o pivô
+        if (arr[j] < pivot) {
+            i++;    // Incrementa o índice do menor elemento
+            swap(&arr[i], &arr[j]);
+        }
     }
-    printf("NULL\\n");
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
 }
 
-// Função principal
+// Função principal do Quick Sort
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        // pi é o índice de particionamento
+        int pi = partition(arr, low, high);
+        
+        // Ordena os elementos separadamente antes
+        // e depois do particionamento
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// Função auxiliar para imprimir o array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++)
+        printf("%d ", arr[i]);
+}
+
+// Função principal para teste
 int main() {
-    struct Node* head = NULL;
-
-    // Inserir elementos
-    head = insertAtBegin(head, 10);
-    head = insertAtBegin(head, 20);
-    head = insertAtBegin(head, 30);
-
-    // Imprimir lista
-    printList(head);
-
+    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    
+    printf("Array original: ");
+    printArray(arr, n);
+    
+    quickSort(arr, 0, n-1);
+    
+    printf("Array ordenado: ");
+    printArray(arr, n);
+    
     return 0;
 }
 `
@@ -155,7 +174,7 @@ int main() {
 
 const Algorithms = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[0]);
-  const [array, setArray] = useState([64, 34, 25, 12, 22, 11, 90]);
+  const [array, setArray] = useState([64, 34, 89, 12, 45, 10, 56, 35, 48 , 98]);
   const [speed, setSpeed] = useState(1000);
 
   const getSpeedLabel = (value: number) => {

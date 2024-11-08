@@ -27,7 +27,7 @@ export const compileAndExecute = async (code: string, input: string = ''): Promi
       headers,
       body: JSON.stringify({
         source_code: code,
-        language_id: 50, // C (GCC 9.2.0)
+        language_id: 52, // C (GCC 9.2.0)
         stdin: input,
         cpu_time_limit: 5, // 5 segundos
         memory_limit: 128000, // 128MB

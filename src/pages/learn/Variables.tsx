@@ -48,15 +48,22 @@ const Variables = () => {
 
       <h3 className="text-xl font-semibold mb-4">Exemplos de Uso</h3>
       <CodeEditor
-        initialCode={`// Declarando variáveis
-let idade = 25;
-let nome = "Maria";
-let altura = 1.65;
-let estudante = true;
+        initialCode={`#include <stdio.h>
 
-// Usando variáveis
-console.log("Nome:", nome);
-console.log("Idade:", idade);`}
+int main() {
+    // Declarando variáveis de diferentes tipos
+    int idade = 25; // Variável do tipo inteiro
+    char nome[] = "Maria"; // Variável do tipo string (array de caracteres)
+    float altura = 1.65; // Variável do tipo float (número decimal)
+
+    // Usando variáveis
+    printf("Nome: %s | ", nome);
+    printf("Idade: %d | ", idade);
+    printf("Altura: %.2f | ", altura);
+
+    return 0;
+}
+`}
         language="javascript"
       />
 
