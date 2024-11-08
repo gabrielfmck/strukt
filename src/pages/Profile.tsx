@@ -1,23 +1,45 @@
-import { useState } from 'react';
+// src/pages/Profile.tsx
+import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Profile = () => {
-  const { currentUser, updateUserEmail, updateUserPassword, updateUserProfile } = useAuth();
+  const { currentUser, updateUserProfile, updateUserEmail, updateUserPassword } = useAuth();
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
   const [email, setEmail] = useState(currentUser?.email || '');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [photoURL, setPhotoURL] = useState(currentUser?.photoURL || '');
+
+  // useEffect para atualizar os dados iniciais
+  useEffect(() => {
+    if (currentUser) {
+      setDisplayName(currentUser.displayName || '');
+      setEmail(currentUser.email || '');
+      setPhotoURL(currentUser.photoURL || '');
+    }
+  }, [currentUser]);
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const profileData: { displayName?: string; photoURL?: string } = {};
+
       if (displayName !== currentUser?.displayName) {
-        await updateUserProfile(displayName);
+        profileData.displayName = displayName;
+      }
+
+      if (photoURL && photoURL !== currentUser?.photoURL) {
+        profileData.photoURL = photoURL;
+      }
+
+      if (Object.keys(profileData).length > 0) {
+        await updateUserProfile(profileData);
       }
 
       if (email !== currentUser?.email) {
@@ -27,21 +49,43 @@ const Profile = () => {
       if (newPassword) {
         if (newPassword !== confirmPassword) {
           toast.error('As senhas não coincidem');
-          return;
-        }
-        if (newPassword.length < 6) {
-          toast.error('A senha deve ter pelo menos 6 caracteres');
+          setLoading(false);
           return;
         }
         await updateUserPassword(newPassword);
         setNewPassword('');
         setConfirmPassword('');
       }
-    } catch {
-      // Removido o parâmetro 'error' não utilizado
+
+      toast.success('Perfil atualizado com sucesso!');
+    } catch (error) {
+      console.error(error);
       toast.error('Erro ao atualizar perfil. Tente novamente.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !currentUser) return;
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `profile_pictures/${currentUser.uid}/${file.name}`);
+
+    try {
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      setPhotoURL(`${url}?timestamp=${Date.now()}`); // Força o recarregamento usando o timestamp
+
+      // Atualiza o photoURL no Firebase Authentication
+      await updateUserProfile({ photoURL: url });
+
+      toast.success('Foto de perfil atualizada com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao enviar foto de perfil. Tente novamente.');
+      console.error(error);
     }
   };
 
@@ -110,6 +154,34 @@ const Profile = () => {
                   />
                 </div>
 
+                {/* Foto de Perfil */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Foto de Perfil
+                  </label>
+                  <div className="mt-1 flex items-center">
+                    {photoURL ? (
+                      <img
+                        src={photoURL} // URL com timestamp para forçar atualização
+                        alt="Foto de perfil"
+                        className="h-16 w-16 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-3xl text-gray-600 font-medium">
+                          {displayName?.charAt(0) || email?.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="ml-4"
+                    />
+                  </div>
+                </div>
+
                 {/* Botão de Salvar */}
                 <div>
                   <button
@@ -133,27 +205,6 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
-
-              {/* Estatísticas */}
-              <div className="mt-8 border-t pt-6">
-                <h4 className="text-lg font-medium text-gray-900 mb-4">
-                  Suas Estatísticas
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-500">Exercícios Completados</p>
-                    <p className="text-2xl font-bold text-primary-600">0</p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-500">Dias Consecutivos</p>
-                    <p className="text-2xl font-bold text-primary-600">0</p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-500">Pontuação Total</p>
-                    <p className="text-2xl font-bold text-primary-600">0</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </motion.div>

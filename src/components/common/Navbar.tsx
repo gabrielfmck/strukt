@@ -94,18 +94,38 @@ const Navbar = () => {
             {/* Autenticação Desktop */}
             {currentUser ? (
               <Menu as="div" className="relative ml-3">
-                <Menu.Button 
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
-                    isHomePage && !isScrolled
-                      ? 'text-white hover:bg-white/20'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  {currentUser.displayName || currentUser.email?.split('@')[0]}
-                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                  </svg>
-                </Menu.Button>
+                <Menu.Button className="flex items-center gap-2">
+  {currentUser.photoURL ? (
+    <img
+      src={currentUser.photoURL}
+      alt="Foto de perfil"
+      className="h-8 w-8 rounded-full object-cover"
+    />
+  ) : (
+    <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+      <span className="text-gray-600 font-medium">
+        {currentUser.displayName?.charAt(0) || currentUser.email?.charAt(0)}
+      </span>
+    </div>
+  )}
+  <span
+    className={`${
+      isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
+    }`}
+  >
+    {currentUser.displayName || currentUser.email?.split('@')[0]}
+  </span>
+  <svg
+    className={`h-5 w-5 transition-all duration-300 ${
+      isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
+    }`}
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+  </svg>
+</Menu.Button>
+
 
                 <Menu.Items className="absolute right-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
@@ -192,89 +212,87 @@ const Navbar = () => {
 
         {/* Menu Mobile */}
         {isMobileMenuOpen && (
-          <div className="sm:hidden">
-            <div className={`z-50 px-2 pb-3 pt-2 space-y-1 shadow-lg transition-all duration-300 ${
-              isHomePage && !isScrolled ? 'bg-primary-600' : 'bg-white'
-            }`}>
-              {navigation.map((item) => (
+          <div className={`sm:hidden z-50 px-2 pb-3 pt-2 space-y-1 shadow-lg transition-all duration-300 ${
+            isHomePage && !isScrolled ? 'bg-primary-600' : 'bg-white'
+          }`}>
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                  location.pathname === item.href
+                    ? isHomePage && !isScrolled
+                      ? 'bg-white/20 text-white'
+                      : 'bg-primary-50 text-primary-600'
+                    : isHomePage && !isScrolled
+                    ? 'text-white hover:bg-white/20'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            {/* Autenticação Mobile */}
+            {currentUser ? (
+              <div className="border-t border-gray-200/20 mt-2 pt-2">
+                <div className={`px-3 py-2 text-sm font-medium ${
+                  isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
+                }`}>
+                  {currentUser.displayName || currentUser.email?.split('@')[0]}
+                </div>
                 <Link
-                  key={item.name}
-                  to={item.href}
+                  to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                    location.pathname === item.href
-                      ? isHomePage && !isScrolled
-                        ? 'bg-white/20 text-white'
-                        : 'bg-primary-50 text-primary-600'
-                      : isHomePage && !isScrolled
+                    isHomePage && !isScrolled
                       ? 'text-white hover:bg-white/20'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  {item.name}
+                  Perfil
                 </Link>
-              ))}
-
-              {/* Autenticação Mobile */}
-              {currentUser ? (
-                <div className="border-t border-gray-200/20 mt-2 pt-2">
-                  <div className={`px-3 py-2 text-sm font-medium ${
-                    isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
-                  }`}>
-                    {currentUser.displayName || currentUser.email?.split('@')[0]}
-                  </div>
-                  <Link
-                    to="/profile"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                      isHomePage && !isScrolled
-                        ? 'text-white hover:bg-white/20'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    Perfil
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                      isHomePage && !isScrolled
-                        ? 'text-white hover:bg-white/20'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    Sair
-                  </button>
-                </div>
-              ) : (
-                <div className="border-t border-gray-200/20 mt-2 pt-2 space-y-1">
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                      isHomePage && !isScrolled
-                        ? 'text-white hover:bg-white/20'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    Entrar
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                      isHomePage && !isScrolled
-                        ? 'bg-white text-primary-600'
-                        : 'bg-primary-600 text-white'
-                    }`}
-                  >
-                    Criar Conta
-                  </Link>
-                </div>
-              )}
-            </div>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                    isHomePage && !isScrolled
+                      ? 'text-white hover:bg-white/20'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Sair
+                </button>
+              </div>
+            ) : (
+              <div className="border-t border-gray-200/20 mt-2 pt-2 space-y-1">
+                <Link
+                  to="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                    isHomePage && !isScrolled
+                      ? 'text-white hover:bg-white/20'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Entrar
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                    isHomePage && !isScrolled
+                      ? 'bg-white text-primary-600'
+                      : 'bg-primary-600 text-white'
+                  }`}
+                >
+                  Criar Conta
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>

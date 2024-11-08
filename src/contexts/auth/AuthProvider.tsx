@@ -15,36 +15,11 @@ import { auth } from '../../config/firebase';
 import { AuthContext } from './AuthContext';
 import type { AuthContextType } from '../../types/auth';
 import { toast } from 'react-toastify';
+import { handleFirebaseError } from '../../utils/auth-utils';
 
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-const handleFirebaseError = (error: FirebaseError): string => {
-  switch (error.code) {
-    case 'auth/email-already-in-use':
-      return 'Este email já está sendo usado por outra conta.';
-    case 'auth/invalid-email':
-      return 'Email inválido.';
-    case 'auth/operation-not-allowed':
-      return 'Operação não permitida.';
-    case 'auth/weak-password':
-      return 'A senha é muito fraca. Use pelo menos 6 caracteres.';
-    case 'auth/user-disabled':
-      return 'Esta conta foi desativada.';
-    case 'auth/user-not-found':
-      return 'Não existe uma conta com este email.';
-    case 'auth/wrong-password':
-      return 'Senha incorreta.';
-    case 'auth/too-many-requests':
-      return 'Muitas tentativas. Tente novamente mais tarde.';
-    case 'auth/requires-recent-login':
-      return 'Esta operação é sensível e requer autenticação recente. Faça login novamente.';
-    default:
-      console.error('Erro Firebase:', error);
-      return 'Ocorreu um erro. Tente novamente.';
-  }
-};
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -161,14 +136,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const updateUserProfile = async (newDisplayName: string) => {
+  const updateUserProfile = async (profileData: { displayName?: string; photoURL?: string }) => {
     if (!currentUser) {
       throw new Error('Nenhum usuário autenticado');
     }
 
     try {
-      await updateProfile(currentUser, { displayName: newDisplayName });
-      setCurrentUser({ ...currentUser, displayName: newDisplayName });
+      await updateProfile(currentUser, profileData);
+      setCurrentUser({ ...currentUser, ...profileData });
       toast.success('Perfil atualizado com sucesso!');
     } catch (error) {
       if (error instanceof FirebaseError) {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { handleAuthError } from '../../utils/auth-utils';
+import { handleFirebaseError } from '../../utils/auth-utils';
 import { FirebaseError } from 'firebase/app';
 import { toast } from 'react-toastify';
 
@@ -59,7 +59,7 @@ const Register = () => {
     } catch (error) {
       console.error('Erro no registro:', error);
       if (error instanceof FirebaseError) {
-        const errorMessage = handleAuthError(error);
+        const errorMessage = handleFirebaseError(error);
         setError(errorMessage);
         toast.error(errorMessage);
       } else {

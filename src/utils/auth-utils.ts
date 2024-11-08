@@ -1,27 +1,27 @@
-// src/utils/auth-utils.ts
 import { FirebaseError } from 'firebase/app';
 
-export function handleAuthError(error: FirebaseError): string {
+export function handleFirebaseError(error: FirebaseError): string {
   switch (error.code) {
     case 'auth/email-already-in-use':
-      return 'Este email já está em uso';
+      return 'Este email já está sendo usado por outra conta.';
     case 'auth/invalid-email':
-      return 'Email inválido';
+      return 'Email inválido.';
     case 'auth/operation-not-allowed':
-      return 'Operação não permitida';
+      return 'Operação não permitida.';
     case 'auth/weak-password':
-      return 'Senha muito fraca';
+      return 'A senha é muito fraca. Use pelo menos 6 caracteres.';
     case 'auth/user-disabled':
-      return 'Usuário desabilitado';
+      return 'Esta conta foi desativada.';
     case 'auth/user-not-found':
-      return 'Usuário não encontrado';
+      return 'Não existe uma conta com este email.';
     case 'auth/wrong-password':
-      return 'Senha incorreta';
+      return 'Senha incorreta.';
     case 'auth/too-many-requests':
-      return 'Muitas tentativas. Tente novamente mais tarde';
-    case 'auth/api-key-not-valid':
-      return 'Erro de configuração do Firebase. Contate o suporte';
+      return 'Muitas tentativas. Tente novamente mais tarde.';
+    case 'auth/requires-recent-login':
+      return 'Esta operação é sensível e requer autenticação recente. Faça login novamente.';
     default:
-      return 'Ocorreu um erro inesperado';
+      console.error('Erro Firebase:', error);
+      return 'Ocorreu um erro. Tente novamente.';
   }
 }

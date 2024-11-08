@@ -1,4 +1,4 @@
-import type { User } from 'firebase/auth';
+import { User } from 'firebase/auth';
 
 export interface AuthContextType {
   currentUser: User | null;
@@ -7,7 +7,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  updateUserEmail: (email: string) => Promise<void>;
-  updateUserPassword: (password: string) => Promise<void>;
-  updateUserProfile: (displayName: string) => Promise<void>;
+  updateUserEmail: (newEmail: string) => Promise<void>;
+  updateUserPassword: (newPassword: string) => Promise<void>;
+  updateUserProfile: (profileData: { displayName?: string; photoURL?: string }) => Promise<void>;
 }
