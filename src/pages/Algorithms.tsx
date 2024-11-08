@@ -132,7 +132,7 @@ void printList(struct Node* head) {
         printf("%d -> ", head->data);
         head = head->next;
     }
-    printf("NULL\n");
+    printf("NULL\\n");
 }
 
 // Função principal
@@ -157,6 +157,14 @@ const Algorithms = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[0]);
   const [array, setArray] = useState([64, 34, 25, 12, 22, 11, 90]);
   const [speed, setSpeed] = useState(1000);
+
+  const getSpeedLabel = (value: number) => {
+    if (value < 500) return 'Muito Rápido';
+    if (value < 1000) return 'Rápido';
+    if (value < 1500) return 'Médio';
+    if (value < 2000) return 'Lento';
+    return 'Muito Lento';
+  };
 
   const generateRandomArray = () => {
     const newArray = Array.from({ length: 10 }, () => 
@@ -241,13 +249,40 @@ const Algorithms = () => {
                 </div>
               </div>
 
-              {/* Visualização */}
-              <VisualizationPanel
-                algorithm={selectedAlgorithm.id as 'bubble' | 'selection' | 'quick'}
-                data={array}
-                speed={speed}
-                onSpeedChange={setSpeed}
-              />
+              {/* Bloco de visualização com controle de velocidade */}
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                {/* Controle de Velocidade */}
+                <label 
+                  htmlFor="speed" 
+                  className="block text-sm font-medium text-gray-700 mb-2 flex justify-between"
+                >
+                  <span>Velocidade da Animação</span>
+                  <span className="text-primary-600 font-semibold">
+                    {getSpeedLabel(speed)}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  id="speed"
+                  min="100"
+                  max="2000"
+                  step="100"
+                  value={speed}
+                  onChange={(e) => setSpeed(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1 mb-6">
+                  <span>Mais Rápido</span>
+                  <span>Mais Lento</span>
+                </div>
+
+                {/* Visualização */}
+                <VisualizationPanel
+                  algorithm={selectedAlgorithm.id as 'bubble' | 'selection' | 'quick'}
+                  data={array}
+                  speed={speed}
+                />
+              </div>
 
               {/* Editor de código */}
               <div className="bg-white rounded-lg shadow-lg p-6">

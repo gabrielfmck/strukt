@@ -1,51 +1,54 @@
 // src/pages/learn/Variables.tsx
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import ContentPage from '../../components/learning/ContentPage';
+import CodeEditor from '../../components/learning/CodeEditor';
 
 const Variables = () => {
-  return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-lg p-8"
-        >
-          {/* Cabeçalho */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Variáveis e Tipos de Dados</h1>
-            <span className="text-sm text-gray-500">Duração: 15 min</span>
-          </div>
+  const content = (
+    <div>
+      <h2>O que são variáveis?</h2>
+      <p className="mb-6">
+        Variáveis são espaços na memória do computador que armazenam dados. 
+        Pense nelas como caixas onde você pode guardar diferentes tipos de informação.
+      </p>
 
-          {/* Conteúdo */}
-          <div className="prose max-w-none mb-8">
-            <h2>O que são variáveis?</h2>
-            <p>
-              Variáveis são espaços na memória do computador que armazenam dados. 
-              Pense nelas como caixas onde você pode guardar diferentes tipos de informação.
-            </p>
+      <h3 className="text-xl font-semibold mb-4">Tipos de Dados Básicos</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h4 className="font-semibold text-primary-600 mb-3">Números</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start">
+              <span className="font-mono bg-gray-200 px-2 py-1 rounded mr-2">int</span>
+              <span>1, 2, 3, -1, -2, -3</span>
+            </li>
+            <li className="flex items-start">
+              <span className="font-mono bg-gray-200 px-2 py-1 rounded mr-2">float</span>
+              <span>1.5, 3.14, -2.8</span>
+            </li>
+          </ul>
+        </div>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h4 className="font-semibold text-primary-600 mb-3">Texto</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start">
+              <span className="font-mono bg-gray-200 px-2 py-1 rounded mr-2">string</span>
+              <span>"Olá, mundo!", "Programação"</span>
+            </li>
+          </ul>
+        </div>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h4 className="font-semibold text-primary-600 mb-3">Booleano</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start">
+              <span className="font-mono bg-gray-200 px-2 py-1 rounded mr-2">bool</span>
+              <span>true, false</span>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-            <h3>Tipos de Dados Básicos</h3>
-            <ul>
-              <li>
-                <strong>Números:</strong>
-                <ul>
-                  <li>Inteiros (int): 1, 2, 3, -1, -2, -3</li>
-                  <li>Decimais (float/double): 1.5, 3.14, -2.8</li>
-                </ul>
-              </li>
-              <li>
-                <strong>Texto (string):</strong> "Olá, mundo!", "Programação"
-              </li>
-              <li>
-                <strong>Booleano (bool):</strong> true, false
-              </li>
-            </ul>
-
-            <h3>Exemplos de Uso</h3>
-            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
-              <code className="text-gray-100">
-{`// Declarando variáveis
+      <h3 className="text-xl font-semibold mb-4">Exemplos de Uso</h3>
+      <CodeEditor
+        initialCode={`// Declarando variáveis
 let idade = 25;
 let nome = "Maria";
 let altura = 1.65;
@@ -54,36 +57,45 @@ let estudante = true;
 // Usando variáveis
 console.log("Nome:", nome);
 console.log("Idade:", idade);`}
-              </code>
-            </pre>
+        language="javascript"
+      />
 
-            <h3>Boas Práticas</h3>
-            <ul>
-              <li>Use nomes descritivos para suas variáveis</li>
-              <li>Comece com letra minúscula</li>
-              <li>Evite caracteres especiais</li>
-              <li>Use camelCase para nomes compostos (ex: idadeUsuario)</li>
-            </ul>
-          </div>
-
-          {/* Navegação */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t">
-            <Link
-              to="/learn/what-is-programming"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              ← Aula Anterior
-            </Link>
-            <Link
-              to="/learn/control-structures"
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Próxima Aula →
-            </Link>
-          </div>
-        </motion.div>
+      <h3 className="text-xl font-semibold mt-8 mb-4">Boas Práticas</h3>
+      <div className="bg-green-50 p-6 rounded-lg space-y-3">
+        <div>
+          <h4 className="font-semibold text-green-700">Use nomes descritivos</h4>
+          <p className="text-green-600">
+            Em vez de <code className="text-red-500">x</code>, use <code className="text-green-500">idade</code>
+          </p>
+        </div>
+        <div>
+          <h4 className="font-semibold text-green-700">Comece com letra minúscula</h4>
+          <p className="text-green-600">
+            Use <code className="text-green-500">nomeCompleto</code> em vez de <code className="text-red-500">NomeCompleto</code>
+          </p>
+        </div>
+        <div>
+          <h4 className="font-semibold text-green-700">Evite caracteres especiais</h4>
+          <p className="text-green-600">
+            Use <code className="text-green-500">mediaFinal</code> em vez de <code className="text-red-500">média_final</code>
+          </p>
+        </div>
+        <div>
+          <h4 className="font-semibold text-green-700">Use camelCase</h4>
+          <p className="text-green-600">
+            Use <code className="text-green-500">idadeUsuario</code> em vez de <code className="text-red-500">idade_usuario</code>
+          </p>
+        </div>
       </div>
     </div>
+  );
+
+  return (
+    <ContentPage
+      title="Variáveis e Tipos de Dados"
+      content={content}
+      duration="15 min"
+    />
   );
 };
 

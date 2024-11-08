@@ -1,99 +1,138 @@
 // src/pages/learn/ControlStructures.tsx
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import ContentPage from '../../components/learning/ContentPage';
+import CodeEditor from '../../components/learning/CodeEditor';
 
 const ControlStructures = () => {
-  return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-lg p-8"
-        >
-          {/* Cabeçalho */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Estruturas de Controle</h1>
-            <span className="text-sm text-gray-500">Duração: 20 min</span>
-          </div>
+  const content = (
+    <div>
+      <h2>Estruturas de Controle</h2>
+      <p className="mb-6">
+        Estruturas de controle permitem que seu programa tome decisões e execute 
+        diferentes blocos de código baseados em condições.
+      </p>
 
-          {/* Conteúdo */}
-          <div className="prose max-w-none mb-8">
-            <h2>Estruturas Condicionais</h2>
-            <p>
-              Estruturas de controle permitem que seu programa tome decisões e execute 
-              diferentes blocos de código baseados em condições.
-            </p>
+      <h3 className="text-xl font-semibold mb-4">Estruturas Condicionais</h3>
+      
+      {/* if/else */}
+      <div className="bg-gray-50 p-6 rounded-lg mb-8">
+        <h4 className="font-semibold text-primary-600 mb-3">if/else</h4>
+        <p className="mb-4">Usado para executar código baseado em uma condição:</p>
+        <CodeEditor
+          initialCode={`// Exemplo de if/else
+int idade = 18;
 
-            <h3>if/else</h3>
-            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
-              <code className="text-gray-100">
-{`if (idade >= 18) {
-    console.log("Pode dirigir");
+if (idade >= 18) {
+    printf("Pode dirigir\\n");
 } else {
-    console.log("Não pode dirigir");
+    printf("Não pode dirigir\\n");
 }`}
-              </code>
-            </pre>
+          language="c"
+        />
+      </div>
 
-            <h3>Loops (Estruturas de Repetição)</h3>
-            <h4>for</h4>
-            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
-              <code className="text-gray-100">
-{`for (let i = 0; i < 5; i++) {
-    console.log("Número:", i);
+      {/* Loops */}
+      <h3 className="text-xl font-semibold mb-4">Loops (Estruturas de Repetição)</h3>
+      
+      {/* for */}
+      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <h4 className="font-semibold text-primary-600 mb-3">for</h4>
+        <p className="mb-4">Usado quando sabemos quantas vezes queremos repetir algo:</p>
+        <CodeEditor
+          initialCode={`// Exemplo de loop for
+for (int i = 0; i < 5; i++) {
+    printf("Número: %d\\n", i);
 }`}
-              </code>
-            </pre>
+          language="c"
+        />
+      </div>
 
-            <h4>while</h4>
-            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
-              <code className="text-gray-100">
-{`let contador = 0;
+      {/* while */}
+      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <h4 className="font-semibold text-primary-600 mb-3">while</h4>
+        <p className="mb-4">Usado quando queremos repetir algo enquanto uma condição for verdadeira:</p>
+        <CodeEditor
+          initialCode={`// Exemplo de loop while
+int contador = 0;
 while (contador < 5) {
-    console.log("Contador:", contador);
+    printf("Contador: %d\\n", contador);
     contador++;
 }`}
-              </code>
-            </pre>
+          language="c"
+        />
+      </div>
 
-            <h3>switch/case</h3>
-            <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
-              <code className="text-gray-100">
-{`switch (diaDaSemana) {
-    case "Segunda":
-        console.log("Início da semana");
+      {/* switch/case */}
+      <div className="bg-gray-50 p-6 rounded-lg mb-8">
+        <h4 className="font-semibold text-primary-600 mb-3">switch/case</h4>
+        <p className="mb-4">Usado para múltiplas condições sobre uma mesma variável:</p>
+        <CodeEditor
+          initialCode={`// Exemplo de switch/case
+char nota = 'A';
+
+switch (nota) {
+    case 'A':
+        printf("Excelente!\\n");
         break;
-    case "Sexta":
-        console.log("Quase fim de semana");
+    case 'B':
+        printf("Muito bom!\\n");
+        break;
+    case 'C':
+        printf("Regular\\n");
         break;
     default:
-        console.log("Outro dia");
+        printf("Nota inválida\\n");
 }`}
-              </code>
-            </pre>
+          language="c"
+        />
+      </div>
 
-            <h3>Dicas Importantes</h3>
-            <ul>
-              <li>Sempre use chaves {} para delimitar blocos de código</li>
-              <li>Indente seu código para melhor legibilidade</li>
-              <li>Não esqueça do break no switch/case</li>
-              <li>Cuidado com loops infinitos</li>
-            </ul>
-          </div>
+      {/* Dicas */}
+      <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+        <h4 className="text-lg font-semibold text-yellow-800 mb-4">Dicas Importantes</h4>
+        <ul className="space-y-3 text-yellow-700">
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Sempre use chaves {} para delimitar blocos de código, mesmo que seja apenas uma linha</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Indente seu código para melhor legibilidade</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Não esqueça do break no switch/case</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Cuidado com loops infinitos - sempre garanta que a condição de parada será alcançada</span>
+          </li>
+        </ul>
+      </div>
 
-          {/* Navegação */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t">
-            <Link
-              to="/learn/variables"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              ← Aula Anterior
-            </Link>
-          </div>
-        </motion.div>
+      {/* Exercícios Práticos */}
+      <h3 className="text-xl font-semibold mt-8 mb-4">Exercícios Práticos</h3>
+      <div className="bg-green-50 p-6 rounded-lg">
+        <ol className="list-decimal list-inside space-y-4">
+          <li className="text-green-800">
+            Escreva um programa que imprima todos os números pares de 0 a 10
+          </li>
+          <li className="text-green-800">
+            Crie um programa que determine se um número é positivo, negativo ou zero
+          </li>
+          <li className="text-green-800">
+            Faça um programa que calcule a média de 3 notas e imprima "Aprovado" se a média for maior ou igual a 7
+          </li>
+        </ol>
       </div>
     </div>
+  );
+
+  return (
+    <ContentPage
+      title="Estruturas de Controle"
+      content={content}
+      duration="20 min"
+    />
   );
 };
 

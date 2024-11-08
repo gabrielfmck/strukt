@@ -1,34 +1,23 @@
 // src/pages/learn/StacksQueues.tsx
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import ContentPage from '../../components/learning/ContentPage';
 import CodeEditor from '../../components/learning/CodeEditor';
 
 const StacksQueues = () => {
-  return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-lg p-8"
-        >
-          {/* Cabeçalho */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Pilhas e Filas</h1>
-            <span className="text-sm text-gray-500">Duração: 25 min</span>
-          </div>
+  const content = (
+    <div>
+      {/* Pilhas (Stacks) */}
+      <section>
+        <h2 className="text-2xl font-bold mb-6">Pilhas (Stacks)</h2>
+        <p className="mb-6">
+          Pilhas são estruturas de dados do tipo LIFO (Last In, First Out),
+          onde o último elemento inserido é o primeiro a ser removido. Pense em uma
+          pilha de pratos: você sempre coloca e retira pratos do topo.
+        </p>
 
-          {/* Conteúdo */}
-          <div className="prose max-w-none mb-8">
-            <h2>Pilhas (Stacks)</h2>
-            <p>
-              Pilhas são estruturas de dados do tipo LIFO (Last In, First Out),
-              onde o último elemento inserido é o primeiro a ser removido.
-            </p>
-
-            <h3>Implementação de Pilha</h3>
-            <CodeEditor
-              initialCode={`#include <stdio.h>
+        <div className="bg-gray-50 p-6 rounded-lg mb-8">
+          <h3 className="text-xl font-bold mb-4">Implementação de Pilha</h3>
+          <CodeEditor
+            initialCode={`#include <stdio.h>
 #include <stdlib.h>
 
 // Estrutura do nó
@@ -37,68 +26,107 @@ struct Node {
     struct Node* next;
 };
 
-// Função para empilhar (push)
-struct Node* push(struct Node* top, int data) {
+// Estrutura da pilha
+struct Stack {
+    struct Node* top;
+};
+
+// Criar pilha vazia
+struct Stack* createStack() {
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    stack->top = NULL;
+    return stack;
+}
+
+// Verificar se está vazia
+int isEmpty(struct Stack* stack) {
+    return stack->top == NULL;
+}
+
+// Empilhar (push)
+void push(struct Stack* stack, int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
-    newNode->next = top;
-    return newNode;
+    newNode->next = stack->top;
+    stack->top = newNode;
+    printf("%d empilhado\\n", data);
 }
 
-// Função para desempilhar (pop)
-struct Node* pop(struct Node* top) {
-    if (top == NULL) {
-        printf("A pilha está vazia.");
-        return NULL;
+// Desempilhar (pop)
+int pop(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Pilha vazia\\n");
+        return -1;
     }
-    struct Node* temp = top;
-    top = top->next;
+    struct Node* temp = stack->top;
+    int popped = temp->data;
+    stack->top = stack->top->next;
     free(temp);
-    return top;
+    return popped;
 }
 
-// Função para imprimir a pilha
-void printStack(struct Node* top) {
-    while (top != NULL) {
-        printf("%d -> ", top->data);
-        top = top->next;
+// Visualizar topo (peek)
+int peek(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Pilha vazia\\n");
+        return -1;
     }
-    printf("NULL");
+    return stack->top->data;
 }
 
-// Função principal para teste
-int main() {
-    struct Node* top = NULL;
+// Imprimir pilha
+void printStack(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Pilha vazia\\n");
+        return;
+    }
+    struct Node* temp = stack->top;
+    printf("Pilha: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\\n");
+}`}
+            language="c"
+          />
+        </div>
 
-    // Empilhar elementos
-    top = push(top, 10);
-    top = push(top, 20);
-    top = push(top, 30);
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-green-50 p-6 rounded-lg">
+            <h4 className="font-semibold text-green-700 mb-3">Principais Operações</h4>
+            <ul className="space-y-2 text-green-600">
+              <li>• push(): Adiciona elemento no topo</li>
+              <li>• pop(): Remove elemento do topo</li>
+              <li>• peek(): Visualiza elemento do topo</li>
+              <li>• isEmpty(): Verifica se está vazia</li>
+            </ul>
+          </div>
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <h4 className="font-semibold text-blue-700 mb-3">Aplicações</h4>
+            <ul className="space-y-2 text-blue-600">
+              <li>• Desfazer/Refazer em editores</li>
+              <li>• Navegação em browsers</li>
+              <li>• Avaliação de expressões</li>
+              <li>• Chamadas de funções</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-    // Imprimir a pilha
-    printf("Pilha atual: ");
-    printStack(top);
+      {/* Filas (Queues) */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">Filas (Queues)</h2>
+        <p className="mb-6">
+          Filas são estruturas de dados do tipo FIFO (First In, First Out),
+          onde o primeiro elemento inserido é o primeiro a ser removido. Similar
+          a uma fila de banco: a primeira pessoa a chegar é a primeira a ser atendida.
+        </p>
 
-    // Desempilhar um elemento
-    top = pop(top);
-    printf("Pilha após pop: ");
-    printStack(top);
-
-    return 0;
-}
-`}
-              language="c"
-            />
-
-            <h2>Filas (Queues)</h2>
-            <p>
-              Filas são estruturas de dados do tipo FIFO (First In, First Out),
-              onde o primeiro elemento inserido é o primeiro a ser removido.
-            </p>
-
-            <h3>Implementação de Fila</h3>
-            <CodeEditor
-              initialCode={`#include <stdio.h>
+        <div className="bg-gray-50 p-6 rounded-lg mb-8">
+          <h3 className="text-xl font-bold mb-4">Implementação de Fila</h3>
+          <CodeEditor
+            initialCode={`#include <stdio.h>
 #include <stdlib.h>
 
 // Estrutura do nó
@@ -109,123 +137,173 @@ struct Node {
 
 // Estrutura da fila
 struct Queue {
-    struct Node* front;
-    struct Node* rear;
+    struct Node *front, *rear;
 };
 
-// Função para criar uma fila vazia
+// Criar fila vazia
 struct Queue* createQueue() {
     struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
     queue->front = queue->rear = NULL;
     return queue;
 }
 
-// Função para enfileirar (enqueue)
+// Verificar se está vazia
+int isEmpty(struct Queue* queue) {
+    return queue->front == NULL;
+}
+
+// Enfileirar (enqueue)
 void enqueue(struct Queue* queue, int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
     newNode->next = NULL;
-    if (queue->rear == NULL) {
+
+    if (isEmpty(queue)) {
         queue->front = queue->rear = newNode;
         return;
     }
+
     queue->rear->next = newNode;
     queue->rear = newNode;
+    printf("%d enfileirado\\n", data);
 }
 
-// Função para desenfileirar (dequeue)
-void dequeue(struct Queue* queue) {
-    if (queue->front == NULL) {
-        printf("A fila está vazia.");
+// Desenfileirar (dequeue)
+int dequeue(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Fila vazia\\n");
+        return -1;
+    }
+
+    struct Node* temp = queue->front;
+    int item = temp->data;
+    queue->front = queue->front->next;
+
+    if (queue->front == NULL)
+        queue->rear = NULL;
+
+    free(temp);
+    return item;
+}
+
+// Visualizar primeiro elemento
+int peek(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Fila vazia\\n");
+        return -1;
+    }
+    return queue->front->data;
+}
+
+// Imprimir fila
+void printQueue(struct Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Fila vazia\\n");
         return;
     }
     struct Node* temp = queue->front;
-    queue->front = queue->front->next;
-    if (queue->front == NULL) queue->rear = NULL;
-    free(temp);
-}
-
-// Função para imprimir a fila
-void printQueue(struct Queue* queue) {
-    struct Node* temp = queue->front;
+    printf("Fila: ");
     while (temp != NULL) {
-        printf("%d -> ", temp->data);
+        printf("%d ", temp->data);
         temp = temp->next;
     }
-    printf("NULL");
-}
+    printf("\\n");
+}`}
+            language="c"
+          />
+        </div>
 
-// Função principal para teste
-int main() {
-    struct Queue* queue = createQueue();
-
-    // Enfileirar elementos
-    enqueue(queue, 10);
-    enqueue(queue, 20);
-    enqueue(queue, 30);
-
-    // Imprimir a fila
-    printf("Fila atual: ");
-    printQueue(queue);
-
-    // Desenfileirar um elemento
-    dequeue(queue);
-    printf("Fila após dequeue: ");
-    printQueue(queue);
-
-    return 0;
-}
-`}
-              language="c"
-            />
-
-            <h3>Comparação entre Pilhas e Filas</h3>
-            <table className="min-w-full">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2">Característica</th>
-                  <th className="px-4 py-2">Pilha</th>
-                  <th className="px-4 py-2">Fila</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border px-4 py-2">Ordem de acesso</td>
-                  <td className="border px-4 py-2">LIFO</td>
-                  <td className="border px-4 py-2">FIFO</td>
-                </tr>
-                <tr>
-                  <td className="border px-4 py-2">Inserção</td>
-                  <td className="border px-4 py-2">push (topo)</td>
-                  <td className="border px-4 py-2">enqueue (final)</td>
-                </tr>
-                <tr>
-                  <td className="border px-4 py-2">Remoção</td>
-                  <td className="border px-4 py-2">pop (topo)</td>
-                  <td className="border px-4 py-2">dequeue (início)</td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-green-50 p-6 rounded-lg">
+            <h4 className="font-semibold text-green-700 mb-3">Principais Operações</h4>
+            <ul className="space-y-2 text-green-600">
+              <li>• enqueue(): Adiciona elemento no final</li>
+              <li>• dequeue(): Remove elemento do início</li>
+              <li>• peek(): Visualiza primeiro elemento</li>
+              <li>• isEmpty(): Verifica se está vazia</li>
+            </ul>
           </div>
-
-          {/* Navegação */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t">
-            <Link
-              to="/learn/linked-lists"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              ← Aula Anterior
-            </Link>
-            <Link
-              to="/learn/bubble-sort"
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Próxima Aula →
-            </Link>
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <h4 className="font-semibold text-blue-700 mb-3">Aplicações</h4>
+            <ul className="space-y-2 text-blue-600">
+              <li>• Processos em sistemas operacionais</li>
+              <li>• Buffers de impressão</li>
+              <li>• Gestão de eventos</li>
+              <li>• Simulações</li>
+            </ul>
           </div>
-        </motion.div>
+        </div>
+      </section>
+
+      {/* Comparação */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">Comparação</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Característica</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pilha</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fila</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Ordem de acesso</td>
+                <td className="px-6 py-4">LIFO</td>
+                <td className="px-6 py-4">FIFO</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Inserção</td>
+                <td className="px-6 py-4">push (topo)</td>
+                <td className="px-6 py-4">enqueue (final)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Remoção</td>
+                <td className="px-6 py-4">pop (topo)</td>
+                <td className="px-6 py-4">dequeue (início)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Complexidade</td>
+                <td className="px-6 py-4">O(1) todas operações</td>
+                <td className="px-6 py-4">O(1) todas operações</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Dicas */}
+      <div className="bg-yellow-50 p-6 rounded-lg mt-8 border-l-4 border-yellow-500">
+        <h4 className="text-lg font-semibold text-yellow-800 mb-4">Dicas de Implementação</h4>
+        <ul className="space-y-3 text-yellow-700">
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Sempre verifique se a estrutura está vazia antes de remover elementos</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Mantenha referências tanto para o início quanto para o fim em filas</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Libere a memória corretamente ao remover elementos</span>
+          </li>
+          <li className="flex items-start">
+            <span className="font-bold mr-2">•</span>
+            <span>Considere usar arrays circulares para implementações mais eficientes</span>
+          </li>
+        </ul>
       </div>
     </div>
+  );
+
+  return (
+    <ContentPage
+      title="Pilhas e Filas"
+      content={content}
+      duration="25 min"
+    />
   );
 };
 
