@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/strukt.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strukt - Aprenda Programação Visual</title>
-    <meta name="description" content="Domine lógica, algoritmos e estruturas de dados através de visualizações interativas.">
-
+    <title>Strukt</title>
     <!-- Adicione os scripts do compilador C -->
     <script src="https://cdn.jsdelivr.net/gh/tbfleming/cib/cib.js"></script>
     <script>
@@ -27,44 +25,13 @@
         },
       };
     </script>
-
     <!-- Adicione o cabeçalho Cache-Control -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
-    <!-- Adicione atributos alt para as imagens -->
-    <link rel="icon" type="image/svg+xml" href="/strukt.svg" alt="Ícone do site Strukt">
   </head>
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Aprender</a></li>
-          <li><a href="#">Algoritmos</a></li>
-          <li><a href="#">Estruturas de Dados</a></li>
-          <li><a href="#">Praticar</a></li>
-          <li><a href="#">Sobre</a></li>
-          <li><a href="#">Entrar</a></li>
-        </ul>
-      </nav>
-    </header>
-
-    <main>
-      <section>
-        <h1>Aprenda Programação de Forma Visual</h1>
-        <p>Domine lógica, algoritmos e estruturas de dados através de visualizações interativas.</p>
-        <button>Começar Agora</button>
-      </section>
-
-      <!-- Mais seções do conteúdo principal -->
-    </main>
-
-    <footer>
-      <p>&copy; 2023 Strukt. Todos os direitos reservados.</p>
-    </footer>
-
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
