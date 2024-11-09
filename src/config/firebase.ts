@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getAnalytics, isSupported } from 'firebase/analytics';
+import { getStorage } from 'firebase/storage'; // Adiciona essa importação
 
 const firebaseConfig = {
   apiKey: "AIzaSyDujRB_MYGFj2vqpMZiSF0v3UqpmS_ezms",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const storage = getStorage(app); // Inicializa o Storage aqui
 
 // Initialize Analytics conditionally
 const initAnalytics = async () => {
@@ -38,5 +40,5 @@ initAnalytics().catch(() => {
   console.log('Failed to initialize analytics');
 });
 
-export { auth };
+export { auth, storage };
 export default app;

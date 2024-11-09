@@ -14,7 +14,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState(currentUser?.photoURL || '');
 
-  // useEffect para atualizar os dados iniciais
   useEffect(() => {
     if (currentUser) {
       setDisplayName(currentUser.displayName || '');
@@ -107,7 +106,36 @@ const Profile = () => {
               </div>
 
               <form onSubmit={handleProfileUpdate} className="space-y-6">
-                {/* Nome */}
+                {/* Foto de Perfil */}
+                <div className="flex items-center">
+                  {photoURL ? (
+                    <img
+                      src={photoURL}
+                      alt="Foto de perfil"
+                      className="h-16 w-16 rounded-full object-cover mr-4"
+                    />
+                  ) : (
+                    <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center mr-4">
+                      <span className="text-3xl text-gray-600 font-medium">
+                        {displayName?.charAt(0) || email?.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                  <div>
+                    <label htmlFor="file-upload" className="cursor-pointer text-primary-600 font-medium hover:underline">
+                      Alterar foto
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                {/* Nome de exibição */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Nome de exibição
@@ -152,34 +180,6 @@ const Profile = () => {
                     placeholder="Confirme a nova senha"
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                   />
-                </div>
-
-                {/* Foto de Perfil */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Foto de Perfil
-                  </label>
-                  <div className="mt-1 flex items-center">
-                    {photoURL ? (
-                      <img
-                        src={photoURL} // URL com timestamp para forçar atualização
-                        alt="Foto de perfil"
-                        className="h-16 w-16 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-3xl text-gray-600 font-medium">
-                          {displayName?.charAt(0) || email?.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePhotoUpload}
-                      className="ml-4"
-                    />
-                  </div>
                 </div>
 
                 {/* Botão de Salvar */}
