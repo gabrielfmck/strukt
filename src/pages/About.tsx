@@ -116,7 +116,7 @@ const About = () => {
             <div className="md:w-1/3 mb-8 md:mb-0">
               <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg mx-auto">
                 <motion.img 
-                  src="src\assets\images\gabriel.jpeg"
+                  src="https://i.imgur.com/2JQn4Qf.jpeg"
                   alt="Gabriel Fernandes"
                   className="w-full h-full object-cover"
                   initial={{ opacity: 0, scale: 1.1 }}
