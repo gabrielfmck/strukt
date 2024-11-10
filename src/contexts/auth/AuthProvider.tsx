@@ -1,3 +1,4 @@
+// src/contexts/auth/AuthProvider.tsx
 import { useState, useEffect, type ReactNode } from 'react';
 import {
   createUserWithEmailAndPassword,
@@ -13,9 +14,7 @@ import {
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../../config/firebase';
 import { AuthContext } from './AuthContext';
-import type { AuthContextType } from '../../types/auth';
 import { toast } from 'react-toastify';
-import { handleFirebaseError } from '../../utils/auth-utils';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -29,13 +28,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
-      if (user) {
-        console.log('Usuário autenticado:', user.email);
-      }
     });
 
     return () => unsubscribe();
   }, []);
+
+  const handleError = (error: FirebaseError) => {
+    console.error('Firebase error:', error);
+    let message = 'Ocorreu um erro. Tente novamente.';
+
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        message = 'Este email já está em uso.';
+        break;
+      case 'auth/weak-password':
+        message = 'A senha deve ter pelo menos 6 caracteres.';
+        break;
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        message = 'Email ou senha incorretos.';
+        break;
+      case 'auth/requires-recent-login':
+        message = 'Por favor, faça login novamente para realizar esta ação.';
+        break;
+      case 'auth/invalid-email':
+        message = 'Email inválido.';
+        break;
+      case 'auth/email-already-exists':
+        message = 'Este email já está em uso por outra conta.';
+        break;
+    }
+
+    toast.error(message);
+    throw new Error(message);
+  };
 
   const signUp = async (email: string, password: string, displayName?: string) => {
     try {
@@ -45,13 +71,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         await updateProfile(userCredential.user, { displayName });
       }
 
-      toast.success('Conta criada com sucesso! Bem-vindo ao Strukt!');
+      toast.success('Conta criada com sucesso!');
       return userCredential.user;
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -64,9 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return userCredential.user;
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -78,9 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Logout realizado com sucesso!');
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -92,9 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Email de recuperação enviado! Verifique sua caixa de entrada.');
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -110,9 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Email atualizado com sucesso!');
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -128,9 +144,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Senha atualizada com sucesso!');
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
@@ -143,19 +157,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     try {
       await updateProfile(currentUser, profileData);
-      setCurrentUser({ ...currentUser, ...profileData });
+      // Atualiza o estado do usuário com os novos dados
+      setCurrentUser(prev => prev ? Object.assign(Object.create(Object.getPrototypeOf(prev)), { ...prev, ...profileData }) : null);
       toast.success('Perfil atualizado com sucesso!');
     } catch (error) {
       if (error instanceof FirebaseError) {
-        const message = handleFirebaseError(error);
-        toast.error(message);
-        throw new Error(message);
+        handleError(error);
       }
       throw error;
     }
   };
 
-  const value: AuthContextType = {
+  const value = {
     currentUser,
     loading,
     signUp,
@@ -167,20 +180,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     updateUserProfile
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-          <p className="text-gray-600">Carregando...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 }

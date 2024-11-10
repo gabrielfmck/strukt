@@ -1,3 +1,4 @@
+// src/types/auth.ts
 import { User } from 'firebase/auth';
 
 export interface AuthContextType {
@@ -7,7 +8,23 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  updateUserEmail: (newEmail: string) => Promise<void>;
-  updateUserPassword: (newPassword: string) => Promise<void>;
-  updateUserProfile: (profileData: { displayName?: string; photoURL?: string }) => Promise<void>;
+  updateUserEmail: (email: string) => Promise<void>;
+  updateUserPassword: (password: string) => Promise<void>;
+  updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>;
+}
+
+export interface UserPreferences {
+  theme: 'light' | 'dark' | 'system';
+  preferredLanguage: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  notifications: boolean;
+}
+
+export interface UserStats {
+  exercisesCompleted: number;
+  studyHours: number;
+  studyStreak: number;
+  level: number;
+  badges: number;
+  currentModule: string;
 }
