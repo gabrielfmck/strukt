@@ -1,11 +1,12 @@
-// src/pages/Profile.tsx
+// src/pages/Profile.tsx - Part 1
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../contexts/theme/ThemeContext';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Camera, Trophy, Code, Clock, Award } from 'lucide-react';
 import type { UserStats, UserPreferences } from '../types/auth';
+import { Camera, Trophy, Code, Clock, Award } from 'lucide-react';
 
 interface ProfileData {
   displayName?: string;
@@ -22,7 +23,7 @@ const defaultStats: UserStats = {
 };
 
 const defaultPreferences: UserPreferences = {
-  theme: 'light',
+  theme: 'system',
   preferredLanguage: 'javascript',
   difficulty: 'intermediate',
   notifications: true
@@ -30,6 +31,7 @@ const defaultPreferences: UserPreferences = {
 
 const Profile = () => {
   const { currentUser, updateUserProfile, updateUserEmail, updateUserPassword } = useAuth();
+  const { theme } = useTheme();
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
   const [email, setEmail] = useState(currentUser?.email || '');
   const [newPassword, setNewPassword] = useState('');
@@ -44,9 +46,6 @@ const Profile = () => {
       setDisplayName(currentUser.displayName || '');
       setEmail(currentUser.email || '');
       setPhotoURL(currentUser.photoURL || '');
-      // Em produção, você buscaria as preferências e estatísticas do usuário do backend
-      // fetchUserPreferences(currentUser.uid);
-      // fetchUserStats(currentUser.uid);
     }
   }, [currentUser]);
 
@@ -75,20 +74,15 @@ const Profile = () => {
 
       if (newPassword) {
         if (newPassword !== confirmPassword) {
-          toast.error('As senhas não coincidem');
-          return;
+          throw new Error('As senhas não coincidem');
         }
         if (newPassword.length < 6) {
-          toast.error('A senha deve ter pelo menos 6 caracteres');
-          return;
+          throw new Error('A senha deve ter pelo menos 6 caracteres');
         }
         await updateUserPassword(newPassword);
         setNewPassword('');
         setConfirmPassword('');
       }
-
-      // Em produção, você atualizaria as preferências no backend
-      // await updateUserPreferences(preferences);
 
       toast.success('Perfil atualizado com sucesso!');
     } catch (error) {
@@ -107,7 +101,6 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file || !currentUser) return;
 
-    // Validações do arquivo
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
       toast.error('A imagem deve ter no máximo 5MB');
@@ -138,21 +131,27 @@ const Profile = () => {
     }
   };
 
-  // ... continuação do Profile.tsx
+  // src/pages/Profile.tsx - Part 2
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className={`min-h-screen py-12 ${
+      theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
       >
         {/* Card Principal */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div className={`rounded-2xl shadow-xl overflow-hidden mb-8 ${
+          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}>
           {/* Header com Banner e Foto */}
           <div className="relative h-48 bg-gradient-to-r from-primary-600 to-primary-800">
             <div className="absolute left-8 -bottom-16">
               <div className="relative">
-                <div className="w-32 h-32 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
+                <div className={`w-32 h-32 rounded-full overflow-hidden shadow-lg ${
+                  theme === 'dark' ? 'border-4 border-gray-800' : 'border-4 border-white'
+                }`}>
                   {photoURL ? (
                     <img
                       src={photoURL}
@@ -160,8 +159,12 @@ const Profile = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <span className="text-4xl font-medium text-gray-600">
+                    <div className={`w-full h-full flex items-center justify-center ${
+                      theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
+                    }`}>
+                      <span className={`text-4xl font-medium ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
                         {displayName?.charAt(0) || email?.charAt(0)}
                       </span>
                     </div>
@@ -189,71 +192,112 @@ const Profile = () => {
             <form onSubmit={handleProfileUpdate} className="space-y-6">
               {/* Informações Básicas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Nome */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
                     Nome de exibição
                   </label>
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Seu nome"
                   />
                 </div>
 
+                {/* Email */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
                     Email
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="seu@email.com"
                   />
                 </div>
 
+                {/* Nova Senha */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
                     Nova Senha
                   </label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Digite a nova senha"
                   />
                 </div>
 
+                {/* Confirmar Senha */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
                     Confirmar Senha
                   </label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Confirme a nova senha"
                   />
                 </div>
               </div>
 
               {/* Preferências */}
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Preferências</h3>
+              <div className={`border-t pt-6 ${
+                theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                <h3 className={`text-lg font-medium mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  Preferências
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Tema */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={`block text-sm font-medium mb-1 ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Tema
                     </label>
                     <select
                       value={preferences.theme}
                       onChange={(e) => setPreferences(prev => ({ ...prev, theme: e.target.value as 'light' | 'dark' | 'system' }))}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                        theme === 'dark'
+                          ? 'bg-gray-700 border-gray-600 text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
                     >
                       <option value="light">Claro</option>
                       <option value="dark">Escuro</option>
@@ -261,14 +305,21 @@ const Profile = () => {
                     </select>
                   </div>
 
+                  {/* Linguagem Principal */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={`block text-sm font-medium mb-1 ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Linguagem Principal
                     </label>
                     <select
                       value={preferences.preferredLanguage}
                       onChange={(e) => setPreferences(prev => ({ ...prev, preferredLanguage: e.target.value }))}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                        theme === 'dark'
+                          ? 'bg-gray-700 border-gray-600 text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
                     >
                       <option value="javascript">JavaScript</option>
                       <option value="python">Python</option>
@@ -277,14 +328,21 @@ const Profile = () => {
                     </select>
                   </div>
 
+                  {/* Nível de Dificuldade */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={`block text-sm font-medium mb-1 ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Nível de Dificuldade
                     </label>
                     <select
                       value={preferences.difficulty}
                       onChange={(e) => setPreferences(prev => ({ ...prev, difficulty: e.target.value as 'beginner' | 'intermediate' | 'advanced' }))}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                        theme === 'dark'
+                          ? 'bg-gray-700 border-gray-600 text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
                     >
                       <option value="beginner">Iniciante</option>
                       <option value="intermediate">Intermediário</option>
@@ -292,12 +350,15 @@ const Profile = () => {
                     </select>
                   </div>
 
+                  {/* Notificações */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className={`block text-sm font-medium ${
+                        theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                      }`}>
                         Notificações
                       </label>
-                      <p className="text-sm text-gray-500">
+                      <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
                         Receba lembretes e atualizações
                       </p>
                     </div>
@@ -305,7 +366,7 @@ const Profile = () => {
                       type="button"
                       onClick={() => setPreferences(prev => ({ ...prev, notifications: !prev.notifications }))}
                       className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                        preferences.notifications ? 'bg-primary-600' : 'bg-gray-200'
+                        preferences.notifications ? 'bg-primary-600' : theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200'
                       }`}
                     >
                       <span
@@ -343,96 +404,150 @@ const Profile = () => {
         </div>
 
         {/* Card de Estatísticas */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Progresso
-          </h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {/* Exercícios e Nível */}
-            <div className="bg-primary-50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <Trophy className="w-5 h-5 text-primary-600 mr-2" />
-                  <h4 className="font-medium text-gray-900">Exercícios</h4>
-                </div>
-                <span className="text-sm text-primary-600 font-medium">
-                  Nível {stats.level}
-                </span>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Completados</span>
-                  <span className="font-medium text-gray-900">{stats.exercisesCompleted}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-primary-600 rounded-full h-2"
-                    style={{ width: `${(stats.exercisesCompleted % 50) * 2}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Tempo de Estudo */}
-            <div className="bg-green-50 rounded-lg p-4">
-              <div className="flex items-center mb-4">
-                <Clock className="w-5 h-5 text-green-600 mr-2" />
-                <h4 className="font-medium text-gray-900">Tempo de Estudo</h4>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Horas Totais</span>
-                  <span className="font-medium text-gray-900">{stats.studyHours}h</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Sequência</span>
-                  <span className="font-medium text-gray-900">{stats.studyStreak} dias</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Conquistas */}
-            <div className="bg-purple-50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <Award className="w-5 h-5 text-purple-600 mr-2" />
-                  <h4 className="font-medium text-gray-900">Conquistas</h4>
-                </div>
-                <span className="text-sm text-purple-600 font-medium">
-                  {stats.badges} badges
-                </span>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {[...Array(8)].map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      i < stats.badges ? 'bg-purple-200' : 'bg-gray-200'
-                    }`}
-                  >
-                    <Award 
-                      className={`w-4 h-4 ${
-                        i < stats.badges ? 'text-purple-600' : 'text-gray-400'
-                      }`} 
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Módulo Atual */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Code className="w-5 h-5 text-gray-400 mr-2" />
-                <span className="text-gray-600">Módulo Atual</span>
-              </div>
-              <span className="text-primary-600 font-medium">{stats.currentModule}</span>
-            </div>
-          </div>
+<div className={`rounded-lg shadow-lg p-6 ${
+  theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+}`}>
+  <h3 className={`text-lg font-semibold mb-6 ${
+    theme === 'dark' ? 'text-white' : 'text-gray-900'
+  }`}>
+    Progresso
+  </h3>
+  
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    {/* Exercícios e Nível */}
+    <div className={`rounded-lg p-4 ${
+      theme === 'dark' ? 'bg-primary-900/50' : 'bg-primary-50'
+    }`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <Trophy className={`w-5 h-5 mr-2 ${
+            theme === 'dark' ? 'text-primary-400' : 'text-primary-600'
+          }`} />
+          <h4 className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>Exercícios</h4>
         </div>
+        <span className={`text-sm font-medium ${
+          theme === 'dark' ? 'text-primary-400' : 'text-primary-600'
+        }`}>
+          Nível {stats.level}
+        </span>
+      </div>
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm">
+          <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
+            Completados
+          </span>
+          <span className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            {stats.exercisesCompleted}
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div 
+            className="bg-primary-600 rounded-full h-2"
+            style={{ width: `${(stats.exercisesCompleted % 50) * 2}%` }}
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Tempo de Estudo */}
+    <div className={`rounded-lg p-4 ${
+      theme === 'dark' ? 'bg-green-900/50' : 'bg-green-50'
+    }`}>
+      <div className="flex items-center mb-4">
+        <Clock className={`w-5 h-5 mr-2 ${
+          theme === 'dark' ? 'text-green-400' : 'text-green-600'
+        }`} />
+        <h4 className={`font-medium ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>Tempo de Estudo</h4>
+      </div>
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm">
+          <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
+            Horas Totais
+          </span>
+          <span className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            {stats.studyHours}h
+          </span>
+        </div>
+        <div className="flex justify-between text-sm">
+          <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
+            Sequência
+          </span>
+          <span className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            {stats.studyStreak} dias
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {/* Conquistas */}
+    <div className={`rounded-lg p-4 ${
+      theme === 'dark' ? 'bg-purple-900/50' : 'bg-purple-50'
+    }`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <Award className={`w-5 h-5 mr-2 ${
+            theme === 'dark' ? 'text-purple-400' : 'text-purple-600'
+          }`} />
+          <h4 className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>Conquistas</h4>
+        </div>
+        <span className={`text-sm font-medium ${
+          theme === 'dark' ? 'text-purple-400' : 'text-purple-600'
+        }`}>
+          {stats.badges} badges
+        </span>
+      </div>
+      <div className="grid grid-cols-4 gap-2">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              i < stats.badges 
+                ? theme === 'dark' ? 'bg-purple-700' : 'bg-purple-200'
+                : theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}
+          >
+            <Award className={`w-4 h-4 ${
+              i < stats.badges 
+                ? theme === 'dark' ? 'text-purple-400' : 'text-purple-600'
+                : theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+            }`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* Módulo Atual */}
+  <div className={`mt-6 pt-6 border-t ${
+    theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+  }`}>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <Code className={`w-5 h-5 mr-2 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`} />
+        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
+          Módulo Atual
+        </span>
+      </div>
+      <span className={theme === 'dark' ? 'text-primary-400' : 'text-primary-600'}>
+        {stats.currentModule}
+      </span>
+    </div>
+  </div>
+</div>
       </motion.div>
     </div>
   );

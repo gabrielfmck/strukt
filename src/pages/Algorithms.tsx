@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../contexts/theme/ThemeContext';
 import VisualizationPanel from '../components/learning/VisualizationPanel';
 import CodeEditor from '../components/learning/CodeEditor';
 
@@ -173,8 +174,9 @@ int main() {
 ];
 
 const Algorithms = () => {
+  const { theme } = useTheme();
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[0]);
-  const [array, setArray] = useState([64, 34, 89, 12, 45, 10, 56, 35, 48 , 98]);
+  const [array, setArray] = useState([64, 34, 89, 12, 45, 10, 56, 35, 48, 98]);
   const [speed, setSpeed] = useState(1000);
 
   const getSpeedLabel = (value: number) => {
@@ -193,13 +195,19 @@ const Algorithms = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className={`min-h-screen py-12 ${
+      theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className={`text-4xl font-bold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             Algoritmos de Ordenação
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className={`text-xl ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Visualize e aprenda como funcionam diferentes algoritmos de ordenação
           </p>
         </div>
@@ -207,9 +215,13 @@ const Algorithms = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Sidebar com algoritmos */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className={`rounded-lg shadow-lg overflow-hidden ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            }`}>
               <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <h2 className={`text-lg font-semibold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   Algoritmos Disponíveis
                 </h2>
                 <nav className="space-y-2">
@@ -219,16 +231,20 @@ const Algorithms = () => {
                       onClick={() => setSelectedAlgorithm(algorithm)}
                       className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                         selectedAlgorithm.id === algorithm.id
-                          ? 'bg-primary-50 text-primary-600'
-                          : 'text-gray-600 hover:bg-gray-50'
+                          ? theme === 'dark'
+                            ? 'bg-primary-900/50 text-primary-400'
+                            : 'bg-primary-50 text-primary-600'
+                          : theme === 'dark'
+                            ? 'text-gray-300 hover:bg-gray-700'
+                            : 'text-gray-600 hover:bg-gray-50'
                       }`}
                     >
                       <h3 className="font-medium">{algorithm.name}</h3>
                       <div className="mt-1 text-sm">
-                        <p className="text-gray-500">
+                        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
                           Tempo: {algorithm.complexity.time}
                         </p>
-                        <p className="text-gray-500">
+                        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
                           Espaço: {algorithm.complexity.space}
                         </p>
                       </div>
@@ -249,11 +265,17 @@ const Algorithms = () => {
               className="space-y-8"
             >
               {/* Informações do algoritmo */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <div className={`rounded-lg shadow-lg p-6 ${
+                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              }`}>
+                <h2 className={`text-2xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   {selectedAlgorithm.name}
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className={`mb-6 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   {selectedAlgorithm.description}
                 </p>
 
@@ -269,30 +291,36 @@ const Algorithms = () => {
               </div>
 
               {/* Bloco de visualização com controle de velocidade */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
+              <div className={`rounded-lg shadow-lg p-6 ${
+                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              }`}>
                 {/* Controle de Velocidade */}
-                <label 
-                  htmlFor="speed" 
-                  className="block text-sm font-medium text-gray-700 mb-2 flex justify-between"
-                >
-                  <span>Velocidade da Animação</span>
+                <div className="flex justify-between items-center mb-2">
+                  <label className={`text-sm font-medium ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
+                    Velocidade da Animação
+                  </label>
                   <span className="text-primary-600 font-semibold">
                     {getSpeedLabel(speed)}
                   </span>
-                </label>
+                </div>
                 <input
                   type="range"
-                  id="speed"
                   min="100"
                   max="2000"
                   step="100"
                   value={speed}
                   onChange={(e) => setSpeed(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600 dark:bg-gray-700"
                 />
-                <div className="flex justify-between text-xs text-gray-500 mt-1 mb-6">
-                  <span>Mais Rápido</span>
-                  <span>Mais Lento</span>
+                <div className="flex justify-between text-xs mt-1 mb-6">
+                  <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
+                    Mais Rápido
+                  </span>
+                  <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
+                    Mais Lento
+                  </span>
                 </div>
 
                 {/* Visualização */}
@@ -304,8 +332,12 @@ const Algorithms = () => {
               </div>
 
               {/* Editor de código */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className={`rounded-lg shadow-lg p-6 ${
+                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              }`}>
+                <h3 className={`text-lg font-semibold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   Implementação em C
                 </h3>
                 <CodeEditor

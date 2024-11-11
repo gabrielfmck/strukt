@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../contexts/theme/ThemeContext';
 
 const topics = [
   {
@@ -82,16 +83,23 @@ const topics = [
 ];
 
 const Learn = () => {
+  const { theme } = useTheme();
   const [selectedTopic, setSelectedTopic] = useState(topics[0]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className={`min-h-screen py-12 ${
+      theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className={`text-4xl font-bold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             Trilha de Aprendizado
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className={`text-xl ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Escolha um tópico para começar sua jornada de aprendizado
           </p>
         </div>
@@ -99,9 +107,13 @@ const Learn = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Sidebar com tópicos */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className={`rounded-lg shadow-lg overflow-hidden ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            }`}>
               <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <h2 className={`text-lg font-semibold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   Tópicos
                 </h2>
                 <nav className="space-y-2">
@@ -111,12 +123,20 @@ const Learn = () => {
                       onClick={() => setSelectedTopic(topic)}
                       className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                         selectedTopic.id === topic.id
-                          ? 'bg-primary-50 text-primary-600'
-                          : 'text-gray-600 hover:bg-gray-50'
+                          ? theme === 'dark'
+                            ? 'bg-primary-900/50 text-primary-400'
+                            : 'bg-primary-50 text-primary-600'
+                          : theme === 'dark'
+                            ? 'text-gray-300 hover:bg-gray-700'
+                            : 'text-gray-600 hover:bg-gray-50'
                       }`}
                     >
                       <h3 className="font-medium">{topic.title}</h3>
-                      <p className="text-sm text-gray-500">{topic.description}</p>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
+                        {topic.description}
+                      </p>
                     </button>
                   ))}
                 </nav>
@@ -131,26 +151,42 @@ const Learn = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-lg shadow-lg"
+              className={`rounded-lg shadow-lg ${
+                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              }`}
             >
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <h2 className={`text-2xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   {selectedTopic.title}
                 </h2>
-                <p className="text-gray-600 mb-6">{selectedTopic.description}</p>
+                <p className={`mb-6 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {selectedTopic.description}
+                </p>
 
                 <div className="space-y-4">
                   {selectedTopic.modules.map((module) => (
                     <div
                       key={module.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-primary-300 transition-colors"
+                      className={`border rounded-lg p-4 transition-colors ${
+                        theme === 'dark'
+                          ? 'border-gray-700 hover:border-primary-500'
+                          : 'border-gray-200 hover:border-primary-300'
+                      }`}
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium text-gray-900">
+                          <h3 className={`font-medium ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`}>
                             {module.title}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>
                             Duração: {module.duration}
                           </p>
                         </div>

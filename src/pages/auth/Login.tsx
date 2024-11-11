@@ -1,8 +1,11 @@
+// src/pages/Login.tsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,10 +13,10 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, currentUser } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redireciona se já estiver logado
   useEffect(() => {
     if (currentUser) {
       const from = location.state?.from?.pathname || '/';
@@ -28,18 +31,13 @@ const Login = () => {
       setError('');
       setLoading(true);
 
-      // Validações básicas
       if (!email.trim() || !password.trim()) {
         throw new Error('Por favor, preencha todos os campos');
       }
 
-      // Tentativa de login
       await login(email, password);
-      
-      // Login bem sucedido
       toast.success('Login realizado com sucesso!');
       
-      // Redireciona para a página anterior ou home
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
       
@@ -74,24 +72,54 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <div className={`min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${
+      theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="sm:mx-auto sm:w-full sm:max-w-md"
+      >
+        <h2 className={`mt-6 text-center text-3xl font-extrabold ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           Entre na sua conta
         </h2>
-      </div>
+      </motion.div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
+      >
+        <div className={`py-8 px-4 shadow sm:rounded-lg sm:px-10 ${
+          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}>
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className={`border px-4 py-3 rounded relative ${
+                  theme === 'dark' 
+                    ? 'bg-red-900/50 border-red-700 text-red-200' 
+                    : 'bg-red-50 border-red-400 text-red-700'
+                }`}
+                role="alert"
+              >
                 <span className="block sm:inline">{error}</span>
-              </div>
+              </motion.div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label 
+                htmlFor="email" 
+                className={`block text-sm font-medium ${
+                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                }`}
+              >
                 Email
               </label>
               <div className="mt-1">
@@ -104,14 +132,23 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:cursor-not-allowed sm:text-sm ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white disabled:bg-gray-800'
+                      : 'bg-white border-gray-300 text-gray-900 disabled:bg-gray-100'
+                  }`}
                   placeholder="seu@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label 
+                htmlFor="password" 
+                className={`block text-sm font-medium ${
+                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                }`}
+              >
                 Senha
               </label>
               <div className="mt-1">
@@ -124,7 +161,11 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed sm:text-sm"
+                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:cursor-not-allowed sm:text-sm ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white disabled:bg-gray-800'
+                      : 'bg-white border-gray-300 text-gray-900 disabled:bg-gray-100'
+                  }`}
                   placeholder="••••••••"
                 />
               </div>
@@ -138,7 +179,12 @@ const Login = () => {
                   type="checkbox"
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                <label 
+                  htmlFor="remember-me" 
+                  className={`ml-2 block text-sm ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-900'
+                  }`}
+                >
                   Lembrar-me
                 </label>
               </div>
@@ -179,10 +225,16 @@ const Login = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className={`w-full border-t ${
+                  theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+                }`} />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
+                <span className={`px-2 ${
+                  theme === 'dark' 
+                    ? 'bg-gray-800 text-gray-400' 
+                    : 'bg-white text-gray-500'
+                }`}>
                   Não tem uma conta?
                 </span>
               </div>
@@ -191,14 +243,18 @@ const Login = () => {
             <div className="mt-6">
               <Link
                 to="/register"
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                className={`w-full inline-flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors ${
+                  theme === 'dark'
+                    ? 'border-gray-600 bg-gray-700 text-gray-200 hover:bg-gray-600'
+                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                }`}
               >
                 Criar nova conta
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

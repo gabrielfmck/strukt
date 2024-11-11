@@ -4,6 +4,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Habilita o modo escuro
   theme: {
     extend: {
       colors: {
@@ -31,6 +32,16 @@ module.exports = {
           800: '#1e293b',
           900: '#0f172a',
         },
+        dark: {
+          bg: '#111827',
+          card: '#1F2937',
+          border: '#374151',
+          text: {
+            primary: '#F9FAFB',
+            secondary: '#D1D5DB',
+            muted: '#9CA3AF'
+          }
+        }
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -57,6 +68,10 @@ module.exports = {
       },
       height: {
         'screen-90': '90vh',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-dark': 'linear-gradient(to bottom right, #1F2937, #111827)',
       },
     },
   },

@@ -1,6 +1,8 @@
+// src/App.tsx
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/auth/AuthProvider';
+import { ThemeProvider } from './contexts/theme/ThemeContext';
 import { ToastContainer } from 'react-toastify';
 import Layout from './components/layout/Layout';
 import PrivateRoute from './components/common/PrivateRoute';
@@ -8,10 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Componente de loading
 const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
+  <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
     <div className="flex flex-col items-center space-y-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-      <p className="text-gray-600">Carregando...</p>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 dark:border-primary-400"></div>
+      <p className="text-gray-600 dark:text-gray-400">Carregando...</p>
     </div>
   </div>
 );
@@ -30,7 +32,7 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
-const ResetPassword = lazy(() => import('./pages/auth/ResetPassword')); // Adicionada
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword')); 
 
 // Lazy loading das páginas de aprendizado
 const WhatIsProgramming = lazy(() => import('./pages/learn/WhatIsProgramming'));
@@ -45,8 +47,8 @@ const QuickSort = lazy(() => import('./pages/learn/QuickSort'));
 
 function App() {
   return (
-    <>
-      <Router>
+    <Router>
+      <ThemeProvider>
         <AuthProvider>
           <Layout>
             <Suspense fallback={<LoadingSpinner />}>
@@ -57,8 +59,6 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                
-                {/* Rota de redefinição de senha */}
                 <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Rotas protegidas */}
@@ -182,22 +182,49 @@ function App() {
               </Routes>
             </Suspense>
           </Layout>
-        </AuthProvider>
-      </Router>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            toastClassName={context => {
+              const { type } = context || { type: 'default' };
+              const classes = [
+                'relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer',
+                'dark:border dark:border-gray-700 dark:bg-gray-800',
+              ];
+              
+              // Adiciona classes baseadas no tipo de toast
+              switch (type) {
+                case 'success':
+                  classes.push('bg-green-500 dark:bg-green-600 text-white');
+                  break;
+                case 'error':
+                  classes.push('bg-red-500 dark:bg-red-600 text-white');
+                  break;
+                case 'info':
+                  classes.push('bg-blue-500 dark:bg-blue-600 text-white');
+                  break;
+                case 'warning':
+                  classes.push('bg-yellow-500 dark:bg-yellow-600 text-white');
+                  break;
+                default:
+                  classes.push('bg-gray-500 dark:bg-gray-600 text-white');
+              }
+              
+              return classes.join(' ');
+            }}
+          />
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
   );
 }
 

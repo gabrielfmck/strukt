@@ -1,74 +1,72 @@
-// src/components/layout/Footer.tsx
 import React from 'react';
 import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 const Footer: React.FC = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
+  const baseStyles = {
+    bg: isDark ? 'bg-gray-800' : 'bg-gray-900',
+    border: isDark ? 'border-gray-700' : 'border-gray-800',
+    text: isDark ? 'text-gray-300' : 'text-white',
+    subtext: isDark ? 'text-gray-400' : 'text-gray-400',
+    hover: isDark ? 'hover:text-white' : 'hover:text-white',
+  };
+
   return (
-    <footer className="bg-gray-900 text-white py-8">
+    <footer className={`${baseStyles.bg} ${baseStyles.text} py-8 transition-colors duration-200`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h2 className="text-xl font-semibold mb-4">Sobre o Strukt</h2>
-            <p className="text-gray-400">
+            <h2 className={`text-xl font-semibold mb-4 ${baseStyles.text}`}>Sobre o Strukt</h2>
+            <p className={baseStyles.subtext}>
               Strukt é uma plataforma de aprendizado interativo para programação, com foco em algoritmos e estruturas de dados.
             </p>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-4">Links</h2>
+            <h2 className={`text-xl font-semibold mb-4 ${baseStyles.text}`}>Links</h2>
             <ul className="space-y-2">
-              <li>
-                <a href="/" className="text-gray-400 hover:text-white transition-colors">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/about" className="text-gray-400 hover:text-white transition-colors">
-                  Sobre
-                </a>
-              </li>
-              <li>
-                <a href="/learn" className="text-gray-400 hover:text-white transition-colors">
-                  Aprender
-                </a>
-              </li>
-              <li>
-                <a href="/practice" className="text-gray-400 hover:text-white transition-colors">
-                  Praticar
-                </a>
-              </li>
+              {[
+                { href: "/", label: "Home" },
+                { href: "/about", label: "Sobre" },
+                { href: "/learn", label: "Aprender" },
+                { href: "/practice", label: "Praticar" }
+              ].map((link) => (
+                <li key={link.href}>
+                  <a 
+                    href={link.href}
+                    className={`${baseStyles.subtext} ${baseStyles.hover} transition-colors`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-4">Siga-nos</h2>
+            <h2 className={`text-xl font-semibold mb-4 ${baseStyles.text}`}>Siga-nos</h2>
             <div className="flex space-x-4">
-              <a
-                href="https://github.com/gabrielfmck"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <FaGithub size={24} />
-              </a>
-              <a
-                href="https://twitter.com/gabrielfmck"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <FaTwitter size={24} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/gabrielfernandesj"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <FaLinkedin size={24} />
-              </a>
+              {[
+                { href: "https://github.com/gabrielfmck", icon: <FaGithub size={24} />, label: "GitHub" },
+                { href: "https://twitter.com/gabrielfmck", icon: <FaTwitter size={24} />, label: "Twitter" },
+                { href: "https://www.linkedin.com/in/gabrielfernandesj", icon: <FaLinkedin size={24} />, label: "LinkedIn" }
+              ].map((social) => (
+                <a
+                  key={social.href}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className={`${baseStyles.subtext} ${baseStyles.hover} transition-colors transform hover:scale-110`}
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-gray-700 pt-8 text-center text-gray-400">
+        <div className={`mt-8 border-t ${baseStyles.border} pt-8 text-center ${baseStyles.subtext}`}>
           &copy; {new Date().getFullYear()} Strukt. Todos os direitos reservados.
         </div>
       </div>

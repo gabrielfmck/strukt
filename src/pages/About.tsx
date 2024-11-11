@@ -1,174 +1,296 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { useTheme } from "../contexts/theme/ThemeContext";
+import {
+  FaDesktop,
+  FaRocket,
+  FaCode,
+  FaClock,
+  FaUsers,
+  FaBookOpen,
+  FaBullseye,
+  FaEnvelope,
+  FaLinkedin,
+  FaGithub,
+  FaGraduationCap,
+  FaLightbulb,
+  FaFileDownload,
+} from "react-icons/fa";
 
 const About = () => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const baseStyles = {
+    bg: isDark ? "bg-gray-900" : "bg-gray-50",
+    card: isDark ? "bg-gray-800" : "bg-white",
+    text: isDark ? "text-gray-300" : "text-gray-600",
+    heading: isDark ? "text-white" : "text-gray-900",
+  };
+
+  const achievements = [
+    {
+      icon: <FaCode className="text-primary-600 text-xl" />,
+      title: "Desenvolvedor Full-Stack",
+      description:
+        "Experiência com React.js, Node.js e outras tecnologias modernas",
+    },
+    {
+      icon: <FaGraduationCap className="text-primary-600 text-xl" />,
+      title: "Graduando em Eng. Software",
+      description: "UniCesumar - Conclusão em 2024",
+    },
+    {
+      icon: <FaLightbulb className="text-primary-600 text-xl" />,
+      title: "Criador do Strukt",
+      description: "Plataforma de ensino inovadora",
+    },
+  ];
+
+  const stats = [
+    {
+      value: "100+",
+      label: "Estudantes Ativos",
+      icon: <FaUsers className="w-10 h-10" />,
+      color: "text-primary-600",
+      iconBg: "bg-primary-100",
+    },
+    {
+      value: "25+",
+      label: "Exercícios Práticos",
+      icon: <FaBookOpen className="w-10 h-10" />,
+      color: "text-green-500",
+      iconBg: "bg-green-100",
+    },
+    {
+      value: "100%",
+      label: "Gratuito",
+      icon: <FaBullseye className="w-10 h-10" />,
+      color: "text-blue-500",
+      iconBg: "bg-blue-100",
+    },
+  ];
+
+  const benefits = [
+    {
+      icon: <FaDesktop className="w-8 h-8" />,
+      title: "Aprendizado Interativo",
+      bgColor: "bg-blue-100",
+      iconColor: "text-blue-600",
+    },
+    {
+      icon: <FaRocket className="w-8 h-8" />,
+      title: "Visualização de Conceitos",
+      bgColor: "bg-purple-100",
+      iconColor: "text-purple-600",
+    },
+    {
+      icon: <FaCode className="w-8 h-8" />,
+      title: "Prática em Tempo Real",
+      bgColor: "bg-green-100",
+      iconColor: "text-green-600",
+    },
+    {
+      icon: <FaClock className="w-8 h-8" />,
+      title: "Conteúdo Estruturado",
+      bgColor: "bg-orange-100",
+      iconColor: "text-orange-600",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <section className="text-center mb-16">
-          <motion.h1
+    <div className={`min-h-screen ${baseStyles.bg}`}>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        {/* Developer Profile */}
+        <section className="mb-16">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-gray-900 mb-4"
+            className={`${baseStyles.card} rounded-xl shadow-xl overflow-hidden`}
           >
-            Sobre o Strukt
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-gray-600"
-          >
-            Uma nova maneira de aprender programação
-          </motion.p>
-        </section>
-
-        {/* Mission Section */}
-        <section className="bg-white rounded-lg shadow-lg p-8 mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Nossa Missão</h2>
-            <p className="text-base text-gray-600 mb-6">
-              O Strukt nasceu da necessidade de tornar o aprendizado de programação mais
-              acessível e intuitivo. Nossa missão é transformar conceitos complexos em
-              visualizações interativas que facilitam a compreensão e o aprendizado.
-            </p>
-            <p className="text-base text-gray-600">
-              Acreditamos que todos podem aprender a programar, e nossa plataforma
-              foi desenvolvida para tornar essa jornada mais envolvente e eficaz.
-            </p>
-          </motion.div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="grid md:grid-cols-2 gap-8 mb-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-lg shadow-lg p-8"
-          >
-            <h3 className="text-lg font-bold text-gray-900 mb-4">
-              Aprendizado Visual
-            </h3>
-            <p className="text-base text-gray-600">
-              Nossas visualizações interativas tornam conceitos abstratos mais
-              tangíveis e fáceis de entender. Veja algoritmos em ação e compreenda
-              como as estruturas de dados funcionam na prática.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-lg shadow-lg p-8"
-          >
-            <h3 className="text-lg font-bold text-gray-900 mb-4">
-              Prática Guiada  
-            </h3>
-            <p className="text-base text-gray-600">
-              Aprenda no seu próprio ritmo com exercícios práticos e feedback
-              instantâneo. Nossa plataforma oferece um ambiente seguro para
-              experimentar e aprender com seus erros.  
-            </p>
-          </motion.div>
-        </section>
-
-        {/* Stats Section */}  
-        <section className="bg-white rounded-lg shadow-lg p-8 mb-12">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <div
+              className={`p-8 ${isDark ? "bg-gray-800/50" : "bg-gray-50/50"}`}
             >
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">1000+</h4>
-              <p className="text-base text-gray-600">Estudantes Ativos</p>
-            </motion.div>
+              <div className="flex flex-col md:flex-row gap-8">
+                <div className="flex-shrink-0">
+                  <img
+                    src="https://i.imgur.com/2JQn4Qf.jpeg"
+                    alt="Gabriel Fernandes"
+                    className={`w-48 h-48 rounded-xl object-cover border-4 ${
+                      isDark ? "border-gray-700" : "border-white"
+                    } shadow-lg mx-auto md:mx-0`}
+                  />
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">50+</h4>
-              <p className="text-base text-gray-600">Exercícios Práticos</p>
-            </motion.div>
+                <div className="flex-1 space-y-6">
+                  <h2 className={`text-2xl font-bold ${baseStyles.heading}`}>
+                    Gabriel Fernandes de Jesus
+                  </h2>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <h4 className="text-3xl font-bold text-primary-600 mb-2">100%</h4>
-              <p className="text-base text-gray-600">Gratuito</p>
-            </motion.div>
-          </div>
-        </section>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {achievements.map((achievement, index) => (
+                      <motion.div
+                        key={achievement.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        whileHover={{
+                          scale: 1.02,
+                          boxShadow: isDark
+                            ? "0 10px 30px -10px rgba(0, 0, 0, 0.5)"
+                            : "0 10px 30px -10px rgba(0, 0, 0, 0.2)",
+                        }}
+                        className={`p-4 rounded-xl ${
+                          isDark
+                            ? "bg-gray-800 hover:bg-gray-700"
+                            : "bg-white hover:bg-gray-50"
+                        } border ${
+                          isDark ? "border-gray-700" : "border-gray-100"
+                        } shadow-lg hover:shadow-2xl transition-all duration-300`}
+                      >
+                        <div
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${
+                            isDark
+                              ? "bg-gray-700 shadow-inner"
+                              : "bg-gray-50 shadow-sm"
+                          }`}
+                        >
+                          {achievement.icon}
+                        </div>
+                        <h3
+                          className={`font-medium ${baseStyles.heading} mb-1`}
+                        >
+                          {achievement.title}
+                        </h3>
+                        <p className={`text-sm ${baseStyles.text}`}>
+                          {achievement.description}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
 
-        {/* About Me Section */}
-        <section className="bg-white rounded-lg shadow-lg p-10 md:p-16">
-          <div className="md:flex md:items-center md:space-x-16">
-            <div className="md:w-1/3 mb-8 md:mb-0">
-              <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg mx-auto">
-                <motion.img 
-                  src="https://i.imgur.com/2JQn4Qf.jpeg"
-                  alt="Gabriel Fernandes"
-                  className="w-full h-full object-cover"
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                />
+                  <div className="flex flex-wrap gap-3">
+                    <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href="mailto:gabrielfernandes0625@gmail.com"
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                        isDark
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                          : "bg-gray-800 hover:bg-gray-900 text-white"
+                      }`}
+                    >
+                      <FaEnvelope className="text-lg" />
+                      <span>Email</span>
+                    </motion.a>
+                    <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href="https://linkedin.com/in/gabrielfernandesj"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0077B5] hover:bg-[#006399] text-white transition-colors"
+                    >
+                      <FaLinkedin className="text-lg" />
+                      <span>LinkedIn</span>
+                    </motion.a>
+                    <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href="https://github.com/gabrielfmck"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                        isDark
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                          : "bg-gray-800 hover:bg-gray-900 text-white"
+                      }`}
+                    >
+                      <FaGithub className="text-lg" />
+                      <span>GitHub</span>
+                    </motion.a>
+                    <motion.a
+                      href="/CV Gabriel.Fernandes.pdf" // Direct path from the public folder
+                      download="CV Gabriel.Fernandes.pdf"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                        isDark
+                          ? "bg-primary-600 hover:bg-primary-700 text-white"
+                          : "bg-primary-500 hover:bg-primary-600 text-white"
+                      }`}
+                    >
+                      <FaFileDownload className="text-lg" />
+                      <span>Baixar Currículo</span>
+                    </motion.a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="md:w-2/3">
-              <motion.h2
-                className="text-3xl md:text-4xl font-bold text-gray-900 mb-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                Gabriel Fernandes de Jesus
-              </motion.h2>
-              <motion.p 
-                className="text-lg md:text-xl text-gray-600 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                Graduando em Engenharia de Software<br />
-                <span className="text-black">UniCesumar</span>
-              </motion.p>
-              <motion.div
-                className="mb-8 text-gray-700"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <p className="mb-2">
-                  <strong>Email:</strong> <a href="mailto:gabrielfernandes0625@gmail.com" className="text-[#0284c7] hover:underline">gabrielfernandes0625@gmail.com</a>
-                </p>
-                <p>
-                  <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/gabrielfernandesj" target="_blank" rel="noopener noreferrer" className="text-[#0284c7] hover:underline">linkedin.com/in/gabrielfernandesj</a>
-                </p>
-              </motion.div>
-              <motion.a
-                href="https://www.linkedin.com/in/gabrielfernandesj/" target="_blank" rel="noopener noreferrer"
-                className="inline-block bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold py-3 px-8 rounded-lg text-lg shadow-md transition duration-300"
-                initial={{ opacity: 0, scale: 0.8 }} 
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                Baixar Currículo
-              </motion.a>
+          </motion.div>
+        </section>
+
+        {/* Nossa Missão */}
+        <section
+          className={`${baseStyles.card} rounded-lg shadow-lg p-8 mb-16`}
+        >
+          <h2 className={`text-2xl font-bold mb-6 ${baseStyles.heading}`}>
+            Nossa Missão
+          </h2>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="space-y-4">
+              <p className={baseStyles.text}>
+                O Strukt nasceu da necessidade de tornar o aprendizado de
+                programação mais acessível e intuitivo. Nossa missão é
+                transformar conceitos complexos em visualizações interativas que
+                facilitam a compreensão e o aprendizado.
+              </p>
+              <p className={baseStyles.text}>
+                Acreditamos que todos podem aprender a programar, e nossa
+                plataforma foi desenvolvida para tornar essa jornada mais
+                envolvente e eficaz.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              {benefits.map((benefit) => (
+                <div
+                  key={benefit.title}
+                  className="flex flex-col items-center text-center"
+                >
+                  <div className={`${benefit.bgColor} p-4 rounded-lg mb-3`}>
+                    <div className={benefit.iconColor}>{benefit.icon}</div>
+                  </div>
+                  <h3 className={`text-sm font-medium ${baseStyles.heading}`}>
+                    {benefit.title}
+                  </h3>
+                </div>
+              ))}
             </div>
           </div>
         </section>
-      </div>
+
+        {/* Stats */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {stats.map((stat) => (
+            <motion.div
+              key={stat.label}
+              whileHover={{ scale: 1.02 }}
+              className={`${baseStyles.card} rounded-lg shadow-lg p-8`}
+            >
+              <div className="flex flex-col items-center">
+                <div className={`${stat.iconBg} p-4 rounded-full mb-4`}>
+                  <div className={stat.color}>{stat.icon}</div>
+                </div>
+                <div className={`text-4xl font-bold mb-2 ${stat.color}`}>
+                  {stat.value}
+                </div>
+                <div className={`text-lg font-medium ${baseStyles.heading}`}>
+                  {stat.label}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </section>
+      </main>
     </div>
   );
 };

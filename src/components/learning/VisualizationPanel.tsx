@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 interface ArrayElement {
   value: number;
@@ -21,6 +22,7 @@ const VisualizationPanel = ({
   data = [],
   speed = 1000,
 }: VisualizationPanelProps) => {
+  const { theme } = useTheme();
   const [elements, setElements] = useState<ArrayElement[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -173,12 +175,12 @@ const VisualizationPanel = ({
           animate={{
             height: `${(element.value / Math.max(...data)) * 100}%`,
             backgroundColor: element.isSorted
-              ? '#10B981'
+              ? theme === 'dark' ? '#34D399' : '#10B981' // verde
               : element.isActive
-              ? '#FBBF24'
+              ? theme === 'dark' ? '#FCD34D' : '#FBBF24' // amarelo
               : element.isComparing
-              ? '#EF4444'
-              : '#0284c7',
+              ? theme === 'dark' ? '#F87171' : '#EF4444' // vermelho
+              : theme === 'dark' ? '#0EA5E9' : '#0284c7' // azul
           }}
           transition={{ duration: 0.3 }}
           className="rounded-t-lg flex items-center justify-center sm:w-4 md:w-6 lg:w-8"
@@ -186,7 +188,9 @@ const VisualizationPanel = ({
             minHeight: '24px',
           }}
         >
-          <span className="text-white text-xs text-center block mt-2 font-medium">
+          <span className={`text-xs text-center block mt-2 font-medium ${
+            theme === 'dark' ? 'text-gray-100' : 'text-white'
+          }`}>
             {element.value}
           </span>
         </motion.div>
@@ -209,14 +213,24 @@ const VisualizationPanel = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className={`rounded-lg shadow-lg p-6 ${
+      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    }`}>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-0">Visualização do Algoritmo</h3>
+        <h3 className={`text-lg font-semibold mb-4 sm:mb-0 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
+          Visualização do Algoritmo
+        </h3>
         <button
           onClick={handleSort}
           disabled={isAnimating}
           className={`px-4 py-2 rounded-lg text-white text-sm font-medium ${
-            isAnimating ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'
+            isAnimating 
+              ? theme === 'dark' 
+                ? 'bg-gray-600 cursor-not-allowed'
+                : 'bg-gray-400 cursor-not-allowed'
+              : 'bg-primary-600 hover:bg-primary-700'
           }`}
         >
           {isAnimating ? 'Ordenando...' : 'Ordenar'}
@@ -225,22 +239,42 @@ const VisualizationPanel = ({
 
       {renderArray()}
 
-      <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded bg-primary-600 mr-2"></div>
-          <span>Não visitado</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
-          <span>Comparando</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded bg-red-500 mr-2"></div>
-          <span>Trocando</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded bg-green-500 mr-2"></div>
-          <span>Ordenado</span>
+      <div className={`mt-6 pt-6 border-t ${
+        theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+      }`}>
+        <div className="flex flex-wrap justify-center gap-4 text-sm">
+          <div className="flex items-center">
+            <div className={`w-4 h-4 rounded mr-2 ${
+              theme === 'dark' ? 'bg-blue-500' : 'bg-primary-600'
+            }`}></div>
+            <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
+              Não visitado
+            </span>
+          </div>
+          <div className="flex items-center">
+            <div className={`w-4 h-4 rounded mr-2 ${
+              theme === 'dark' ? 'bg-yellow-400' : 'bg-yellow-400'
+            }`}></div>
+            <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
+              Comparando
+            </span>
+          </div>
+          <div className="flex items-center">
+            <div className={`w-4 h-4 rounded mr-2 ${
+              theme === 'dark' ? 'bg-red-400' : 'bg-red-500'
+            }`}></div>
+            <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
+              Trocando
+            </span>
+          </div>
+          <div className="flex items-center">
+            <div className={`w-4 h-4 rounded mr-2 ${
+              theme === 'dark' ? 'bg-green-400' : 'bg-green-500'
+            }`}></div>
+            <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>
+              Ordenado
+            </span>
+          </div>
         </div>
       </div>
     </div>
