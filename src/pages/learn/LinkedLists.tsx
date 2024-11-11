@@ -1,20 +1,33 @@
 // src/pages/learn/LinkedLists.tsx
 import ContentPage from '../../components/learning/ContentPage';
 import CodeEditor from '../../components/learning/CodeEditor';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 const LinkedLists = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const content = (
     <div>
-      <h2>O que são Listas Ligadas?</h2>
-      <p className="mb-6">
+      <h2 className={`text-2xl font-bold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        O que são Listas Ligadas?
+      </h2>
+      <p className={`mb-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
         Listas ligadas são estruturas de dados dinâmicas onde cada elemento (nó) 
         contém um valor e uma referência (ponteiro) para o próximo elemento da lista.
       </p>
 
-      {/* Estrutura Básica */}
-      <h3 className="text-xl font-semibold mb-4">Estrutura Básica</h3>
-      <div className="bg-gray-50 p-6 rounded-lg mb-8">
-        <h4 className="font-semibold text-primary-600 mb-3">Definição do Nó</h4>
+      <h3 className={`text-xl font-semibold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Estrutura Básica
+      </h3>
+      <div className={`p-6 rounded-lg mb-8 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
+        <h4 className="font-semibold text-primary-500 mb-3">Definição do Nó</h4>
         <CodeEditor
           initialCode={`struct Node {
     int data;           // Dado armazenado
@@ -24,9 +37,14 @@ const LinkedLists = () => {
         />
       </div>
 
-      {/* Implementação Completa */}
-      <h3 className="text-xl font-semibold mb-4">Implementação</h3>
-      <div className="bg-gray-50 p-6 rounded-lg mb-8">
+      <h3 className={`text-xl font-semibold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Implementação
+      </h3>
+      <div className={`p-6 rounded-lg mb-8 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
         <CodeEditor
           initialCode={`#include <stdio.h>
 #include <stdlib.h>
@@ -95,50 +113,65 @@ int main() {
         />
       </div>
 
-      {/* Complexidade */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div>
-          <h3 className="text-xl font-semibold mb-4">Complexidade das Operações</h3>
-          <div className="bg-white shadow overflow-hidden rounded-lg">
+          <h3 className={`text-xl font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            Complexidade das Operações
+          </h3>
+          <div className={`overflow-hidden rounded-lg ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          } shadow-lg`}>
             <table className="min-w-full">
-              <thead className="bg-gray-50">
+              <thead className={isDark ? 'bg-gray-900' : 'bg-gray-50'}>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Operação</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Complexidade</th>
+                  <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${
+                    isDark ? 'text-gray-300' : 'text-gray-500'
+                  }`}>Operação</th>
+                  <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${
+                    isDark ? 'text-gray-300' : 'text-gray-500'
+                  }`}>Complexidade</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr>
-                  <td className="px-4 py-3">Acesso a um elemento</td>
-                  <td className="px-4 py-3 font-mono text-primary-600">O(n)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3">Inserção no início</td>
-                  <td className="px-4 py-3 font-mono text-primary-600">O(1)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3">Inserção no final</td>
-                  <td className="px-4 py-3 font-mono text-primary-600">O(n)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3">Remoção</td>
-                  <td className="px-4 py-3 font-mono text-primary-600">O(n)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3">Busca</td>
-                  <td className="px-4 py-3 font-mono text-primary-600">O(n)</td>
-                </tr>
+              <tbody className={`divide-y ${
+                isDark ? 'divide-gray-700' : 'divide-gray-200'
+              }`}>
+                {[
+                  ['Acesso a um elemento', 'O(n)'],
+                  ['Inserção no início', 'O(1)'],
+                  ['Inserção no final', 'O(n)'],
+                  ['Remoção', 'O(n)'],
+                  ['Busca', 'O(n)']
+                ].map(([op, complex], index) => (
+                  <tr key={index}>
+                    <td className={`px-4 py-3 ${
+                      isDark ? 'text-gray-300' : 'text-gray-900'
+                    }`}>{op}</td>
+                    <td className="px-4 py-3 font-mono text-primary-500">{complex}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold mb-4">Comparação com Arrays</h3>
-          <div className="bg-gray-50 p-6 rounded-lg space-y-6">
+          <h3 className={`text-xl font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            Comparação com Arrays
+          </h3>
+          <div className={`p-6 rounded-lg space-y-6 transition-colors duration-200 ${
+            isDark ? 'bg-gray-800/50' : 'bg-gray-50'
+          }`}>
             <div>
-              <h4 className="font-semibold text-green-600 mb-2">Vantagens</h4>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700">
+              <h4 className={`font-semibold mb-2 ${
+                isDark ? 'text-green-400' : 'text-green-600'
+              }`}>Vantagens</h4>
+              <ul className={`list-disc pl-5 space-y-2 ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 <li>Tamanho dinâmico</li>
                 <li>Inserção e remoção eficientes no início</li>
                 <li>Não precisa realocar memória</li>
@@ -146,8 +179,12 @@ int main() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-red-600 mb-2">Desvantagens</h4>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700">
+              <h4 className={`font-semibold mb-2 ${
+                isDark ? 'text-red-400' : 'text-red-600'
+              }`}>Desvantagens</h4>
+              <ul className={`list-disc pl-5 space-y-2 ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 <li>Não possui acesso direto aos elementos</li>
                 <li>Usa mais memória por elemento (ponteiro adicional)</li>
                 <li>Não é cache-friendly</li>
@@ -158,26 +195,30 @@ int main() {
         </div>
       </div>
 
-      {/* Dicas e Observações */}
-      <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-        <h4 className="text-lg font-semibold text-blue-700 mb-4">Dicas Importantes</h4>
-        <ul className="space-y-3 text-blue-600">
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Sempre verifique se a lista está vazia antes de acessar elementos</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Cuidado com memory leaks - libere a memória quando remover nós</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Use listas ligadas quando precisar de inserções/remoções frequentes</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Considere usar arrays se precisar de acesso aleatório frequente</span>
-          </li>
+      <div className={`p-6 rounded-lg border-l-4 ${
+        isDark 
+          ? 'bg-blue-900/20 border-blue-500 text-blue-300' 
+          : 'bg-blue-50 border-blue-500 text-blue-600'
+      }`}>
+        <h4 className={`text-lg font-semibold mb-4 ${
+          isDark ? 'text-blue-300' : 'text-blue-700'
+        }`}>
+          Dicas Importantes
+        </h4>
+        <ul className="space-y-3">
+          {[
+            'Sempre verifique se a lista está vazia antes de acessar elementos',
+            'Cuidado com memory leaks - libere a memória quando remover nós',
+            'Use listas ligadas quando precisar de inserções/remoções frequentes',
+            'Considere usar arrays se precisar de acesso aleatório frequente'
+          ].map((tip, index) => (
+            <li key={index} className="flex items-start">
+              <span className={`font-bold mr-2 ${
+                isDark ? 'text-blue-400' : 'text-blue-600'
+              }`}>•</span>
+              <span>{tip}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

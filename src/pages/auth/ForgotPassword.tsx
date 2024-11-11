@@ -1,14 +1,18 @@
+// src/pages/auth/ForgotPassword.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const { resetPassword } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +24,6 @@ const ForgotPassword = () => {
       toast.success('Email de recuperação enviado! Verifique sua caixa de entrada.');
     } catch (error) {
       if (error instanceof Error) {
-        // Tratamento específico para diferentes erros
         if (error.message.includes('user-not-found')) {
           toast.error('Não existe uma conta com este email.');
         } else if (error.message.includes('invalid-email')) {
@@ -35,24 +38,32 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className={`min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${
+      isDark ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={`mt-6 text-center text-3xl font-extrabold ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             Recuperar Senha
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className={`mt-2 text-center text-sm ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             Digite seu email e enviaremos instruções para redefinir sua senha.
           </p>
         </motion.div>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className={`py-8 px-4 shadow sm:rounded-lg sm:px-10 ${
+          isDark ? 'bg-gray-800' : 'bg-white'
+        }`}>
           {emailSent ? (
             <motion.div
               initial={{ opacity: 0 }}
@@ -60,9 +71,11 @@ const ForgotPassword = () => {
               transition={{ duration: 0.5 }}
               className="text-center"
             >
-              <div className="rounded-full bg-green-100 p-3 mx-auto w-16 h-16 flex items-center justify-center mb-4">
+              <div className={`rounded-full mx-auto w-16 h-16 flex items-center justify-center mb-4 ${
+                isDark ? 'bg-green-900/50' : 'bg-green-100'
+              }`}>
                 <svg 
-                  className="w-8 h-8 text-green-600" 
+                  className={`w-8 h-8 ${isDark ? 'text-green-400' : 'text-green-600'}`}
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -75,10 +88,12 @@ const ForgotPassword = () => {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <h3 className={`text-xl font-medium mb-2 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>
                 Email Enviado!
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className={`mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
               </p>
               <Link
@@ -91,7 +106,9 @@ const ForgotPassword = () => {
           ) : (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className={`block text-sm font-medium ${
+                  isDark ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Email
                 </label>
                 <div className="mt-1">
@@ -105,7 +122,11 @@ const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="seu@email.com"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
+                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white disabled:bg-gray-800'
+                        : 'bg-white border-gray-300 text-gray-900 disabled:bg-gray-100'
+                    }`}
                   />
                 </div>
               </div>
@@ -135,7 +156,11 @@ const ForgotPassword = () => {
               <div className="text-center">
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-primary-600 hover:text-primary-500"
+                  className={`text-sm font-medium ${
+                    isDark 
+                      ? 'text-primary-400 hover:text-primary-300' 
+                      : 'text-primary-600 hover:text-primary-500'
+                  }`}
                 >
                   Voltar para Login
                 </Link>

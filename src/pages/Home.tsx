@@ -105,7 +105,7 @@ const Home = () => {
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
               {currentUser ? (
-                <>Bem-vindo de volta, <br className="sm:hidden" />{displayName}!</>
+                <>Bem-vindo(a) de volta, <br className="sm:hidden" />{displayName}!</>
               ) : (
                 <>Aprenda Programação <br className="sm:hidden" />de Forma Visual</>
               )}

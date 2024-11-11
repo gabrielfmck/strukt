@@ -1,22 +1,38 @@
 // src/pages/learn/ControlStructures.tsx
 import ContentPage from '../../components/learning/ContentPage';
 import CodeEditor from '../../components/learning/CodeEditor';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 const ControlStructures = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const content = (
     <div>
-      <h2>Estruturas de Controle</h2>
-      <p className="mb-6">
+      <h2 className={`text-2xl font-bold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Estruturas de Controle
+      </h2>
+      <p className={`mb-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
         Estruturas de controle permitem que seu programa tome decisões e execute 
         diferentes blocos de código baseados em condições.
       </p>
 
-      <h3 className="text-xl font-semibold mb-4">Estruturas Condicionais</h3>
+      <h3 className={`text-xl font-semibold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Estruturas Condicionais
+      </h3>
       
       {/* if/else */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-8">
-        <h4 className="font-semibold text-primary-600 mb-3">if/else</h4>
-        <p className="mb-4">Usado para executar código baseado em uma condição:</p>
+      <div className={`p-6 rounded-lg mb-8 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
+        <h4 className="font-semibold text-primary-500 mb-3">if/else</h4>
+        <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          Usado para executar código baseado em uma condição:
+        </p>
         <CodeEditor
           initialCode={`#include <stdio.h>
 
@@ -35,19 +51,25 @@ int main() {
     }
 
     return 0;
-}
-`}
+}`}
           language="c"
         />
       </div>
 
-      {/* Loops */}
-      <h3 className="text-xl font-semibold mb-4">Loops (Estruturas de Repetição)</h3>
+      <h3 className={`text-xl font-semibold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Loops (Estruturas de Repetição)
+      </h3>
       
       {/* for */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
-        <h4 className="font-semibold text-primary-600 mb-3">for</h4>
-        <p className="mb-4">Usado quando sabemos quantas vezes queremos repetir algo:</p>
+      <div className={`p-6 rounded-lg mb-6 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
+        <h4 className="font-semibold text-primary-500 mb-3">for</h4>
+        <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          Usado quando sabemos quantas vezes queremos repetir algo:
+        </p>
         <CodeEditor
           initialCode={`#include <stdio.h>
 
@@ -63,9 +85,13 @@ int main() {
       </div>
 
       {/* while */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
-        <h4 className="font-semibold text-primary-600 mb-3">while</h4>
-        <p className="mb-4">Usado quando queremos repetir algo enquanto uma condição for verdadeira:</p>
+      <div className={`p-6 rounded-lg mb-6 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
+        <h4 className="font-semibold text-primary-500 mb-3">while</h4>
+        <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          Usado quando queremos repetir algo enquanto uma condição for verdadeira:
+        </p>
         <CodeEditor
           initialCode={`#include <stdio.h>
 
@@ -86,9 +112,13 @@ int main() {
       </div>
 
       {/* switch/case */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-8">
-        <h4 className="font-semibold text-primary-600 mb-3">switch/case</h4>
-        <p className="mb-4">Usado para múltiplas condições sobre uma mesma variável:</p>
+      <div className={`p-6 rounded-lg mb-8 transition-colors duration-200 ${
+        isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+      }`}>
+        <h4 className="font-semibold text-primary-500 mb-3">switch/case</h4>
+        <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          Usado para múltiplas condições sobre uma mesma variável:
+        </p>
         <CodeEditor
           initialCode={`#include <stdio.h>
 
@@ -131,41 +161,48 @@ int main() {
       </div>
 
       {/* Dicas */}
-      <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-        <h4 className="text-lg font-semibold text-yellow-800 mb-4">Dicas Importantes</h4>
-        <ul className="space-y-3 text-yellow-700">
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Sempre use chaves {} para delimitar blocos de código, mesmo que seja apenas uma linha</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Indente seu código para melhor legibilidade</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Não esqueça do break no switch/case</span>
-          </li>
-          <li className="flex items-start">
-            <span className="font-bold mr-2">•</span>
-            <span>Cuidado com loops infinitos - sempre garanta que a condição de parada será alcançada</span>
-          </li>
+      <div className={`p-6 rounded-lg border-l-4 ${
+        isDark 
+          ? 'bg-yellow-900/20 border-yellow-500 text-yellow-200'
+          : 'bg-yellow-50 border-yellow-500 text-yellow-700'
+      }`}>
+        <h4 className={`text-lg font-semibold mb-4 ${
+          isDark ? 'text-yellow-300' : 'text-yellow-800'
+        }`}>
+          Dicas Importantes
+        </h4>
+        <ul className="space-y-3">
+          {[
+            'Sempre use chaves {} para delimitar blocos de código, mesmo que seja apenas uma linha',
+            'Indente seu código para melhor legibilidade',
+            'Não esqueça do break no switch/case',
+            'Cuidado com loops infinitos - sempre garanta que a condição de parada será alcançada'
+          ].map((tip, index) => (
+            <li key={index} className="flex items-start">
+              <span className={`font-bold mr-2 ${
+                isDark ? 'text-yellow-400' : 'text-yellow-600'
+              }`}>•</span>
+              <span>{tip}</span>
+            </li>
+          ))}
         </ul>
       </div>
 
       {/* Exercícios Práticos */}
-      <h3 className="text-xl font-semibold mt-8 mb-4">Exercícios Práticos</h3>
-      <div className="bg-green-50 p-6 rounded-lg">
+      <h3 className={`text-xl font-semibold mt-8 mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Exercícios Práticos
+      </h3>
+      <div className={`p-6 rounded-lg ${
+        isDark 
+          ? 'bg-green-900/20 text-green-200' 
+          : 'bg-green-50 text-green-800'
+      }`}>
         <ol className="list-decimal list-inside space-y-4">
-          <li className="text-green-800">
-            Escreva um programa que imprima todos os números pares de 0 a 10
-          </li>
-          <li className="text-green-800">
-            Crie um programa que determine se um número é positivo, negativo ou zero
-          </li>
-          <li className="text-green-800">
-            Faça um programa que calcule a média de 3 notas e imprima "Aprovado" se a média for maior ou igual a 7
-          </li>
+          <li>Escreva um programa que imprima todos os números pares de 0 a 10</li>
+          <li>Crie um programa que determine se um número é positivo, negativo ou zero</li>
+          <li>Faça um programa que calcule a média de 3 notas e imprima "Aprovado" se a média for maior ou igual a 7</li>
         </ol>
       </div>
     </div>

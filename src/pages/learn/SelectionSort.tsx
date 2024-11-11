@@ -3,9 +3,12 @@ import { useState } from 'react';
 import ContentPage from '../../components/learning/ContentPage';
 import CodeEditor from '../../components/learning/CodeEditor';
 import VisualizationPanel from '../../components/learning/VisualizationPanel';
+import { useTheme } from '../../contexts/theme/ThemeContext';
 
 const SelectionSort = () => {
   const [speed, setSpeed] = useState(1000);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   const getSpeedLabel = (value: number): string => {
     if (value < 500) return 'Muito Rápido';
@@ -17,8 +20,12 @@ const SelectionSort = () => {
 
   const content = (
     <div>
-      <h2>O que é Selection Sort?</h2>
-      <p className="mb-6">
+      <h2 className={`text-2xl font-bold mb-4 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        O que é Selection Sort?
+      </h2>
+      <p className={`mb-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
         Selection Sort é um algoritmo que divide o array em uma parte ordenada e outra não
         ordenada. A cada passo, encontra o menor elemento da parte não ordenada e o coloca
         na posição correta da parte ordenada.
@@ -26,52 +33,54 @@ const SelectionSort = () => {
 
       {/* Como Funciona */}
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Como Funciona</h3>
-        <div className="bg-blue-50 p-6 rounded-lg space-y-4">
-          <div className="flex items-start">
-            <span className="font-bold text-blue-600 mr-2">1.</span>
-            <p className="text-blue-700">
-              Divide o array em duas partes: ordenada (inicialmente vazia) e não ordenada
-            </p>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold text-blue-600 mr-2">2.</span>
-            <p className="text-blue-700">
-              Encontra o menor elemento na parte não ordenada
-            </p>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold text-blue-600 mr-2">3.</span>
-            <p className="text-blue-700">
-              Troca este elemento com o primeiro elemento da parte não ordenada
-            </p>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold text-blue-600 mr-2">4.</span>
-            <p className="text-blue-700">
-              Aumenta a parte ordenada e diminui a não ordenada
-            </p>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold text-blue-600 mr-2">5.</span>
-            <p className="text-blue-700">
-              Repete até todo o array estar ordenado
-            </p>
-          </div>
+        <h3 className={`text-xl font-semibold mb-4 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          Como Funciona
+        </h3>
+        <div className={`p-6 rounded-lg space-y-4 transition-colors duration-200 ${
+          isDark 
+            ? 'bg-blue-900/20 text-blue-300' 
+            : 'bg-blue-50 text-blue-700'
+        }`}>
+          {[
+            'Divide o array em duas partes: ordenada (inicialmente vazia) e não ordenada',
+            'Encontra o menor elemento na parte não ordenada',
+            'Troca este elemento com o primeiro elemento da parte não ordenada',
+            'Aumenta a parte ordenada e diminui a não ordenada',
+            'Repete até todo o array estar ordenado'
+          ].map((step, index) => (
+            <div key={index} className="flex items-start">
+              <span className={`font-bold mr-2 ${
+                isDark ? 'text-blue-400' : 'text-blue-600'
+              }`}>
+                {index + 1}.
+              </span>
+              <p>{step}</p>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Visualização */}
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Visualização</h3>
-        <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className={`text-xl font-semibold mb-4 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          Visualização
+        </h3>
+        <div className={`p-6 rounded-lg transition-colors duration-200 ${
+          isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+        }`}>
           <div className="mb-4">
             <label 
               htmlFor="speed" 
-              className="block text-sm font-medium text-gray-700 mb-2 flex justify-between"
+              className={`block text-sm font-medium mb-2 flex justify-between ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}
             >
               <span>Velocidade da Animação</span>
-              <span className="text-primary-600 font-semibold">
+              <span className="text-primary-500 font-semibold">
                 {getSpeedLabel(speed)}
               </span>
             </label>
@@ -84,10 +93,14 @@ const SelectionSort = () => {
                 step="100"
                 value={speed}
                 onChange={(e) => setSpeed(Number(e.target.value))}
-                className="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                className={`flex-grow h-2 rounded-lg appearance-none cursor-pointer ${
+                  isDark ? 'bg-gray-700' : 'bg-gray-200'
+                } accent-primary-500`}
               />
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className={`flex justify-between text-xs mt-1 ${
+              isDark ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               <span>Mais Rápido</span>
               <span>Mais Lento</span>
             </div>
@@ -102,8 +115,14 @@ const SelectionSort = () => {
 
       {/* Implementação */}
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Implementação</h3>
-        <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className={`text-xl font-semibold mb-4 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          Implementação
+        </h3>
+        <div className={`p-6 rounded-lg transition-colors duration-200 ${
+          isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+        }`}>
           <CodeEditor
             initialCode={`#include <stdio.h>
 
@@ -156,43 +175,59 @@ int main() {
           />
         </div>
       </div>
-
       {/* Análise de Complexidade */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Complexidade</h3>
+        <div className={`p-6 rounded-lg transition-colors duration-200 ${
+          isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+        }`}>
+          <h3 className={`text-xl font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            Complexidade
+          </h3>
           <table className="min-w-full">
             <tbody>
-              <tr>
-                <td className="py-2 font-medium">Melhor caso:</td>
-                <td className="py-2 font-mono text-primary-600">O(n²)</td>
-              </tr>
-              <tr>
-                <td className="py-2 font-medium">Caso médio:</td>
-                <td className="py-2 font-mono text-primary-600">O(n²)</td>
-              </tr>
-              <tr>
-                <td className="py-2 font-medium">Pior caso:</td>
-                <td className="py-2 font-mono text-primary-600">O(n²)</td>
-              </tr>
-              <tr>
-                <td className="py-2 font-medium">Espaço:</td>
-                <td className="py-2 font-mono text-primary-600">O(1)</td>
-              </tr>
+              {[
+                ['Melhor caso:', 'O(n²)'],
+                ['Caso médio:', 'O(n²)'],
+                ['Pior caso:', 'O(n²)'],
+                ['Espaço:', 'O(1)']
+              ].map(([label, value], index) => (
+                <tr key={index}>
+                  <td className={`py-2 font-medium ${
+                    isDark ? 'text-gray-300' : 'text-gray-900'
+                  }`}>
+                    {label}
+                  </td>
+                  <td className="py-2 font-mono text-primary-500">{value}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
-          <p className="mt-4 text-sm text-gray-600">
+          <p className={`mt-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
             Nota: Selection Sort sempre realiza O(n²) comparações, mas faz apenas O(n)
             trocas, o que pode ser vantajoso quando o custo de troca é alto.
           </p>
         </div>
 
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Características</h3>
+        <div className={`p-6 rounded-lg transition-colors duration-200 ${
+          isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+        }`}>
+          <h3 className={`text-xl font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            Características
+          </h3>
           <div className="space-y-4">
             <div>
-              <h4 className="font-semibold text-green-600 mb-2">Vantagens</h4>
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+              <h4 className={`font-semibold mb-2 ${
+                isDark ? 'text-green-400' : 'text-green-600'
+              }`}>
+                Vantagens
+              </h4>
+              <ul className={`list-disc pl-5 space-y-1 ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 <li>Simples de implementar</li>
                 <li>Bom para arrays pequenos</li>
                 <li>Número mínimo de trocas (O(n))</li>
@@ -200,8 +235,14 @@ int main() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-red-600 mb-2">Desvantagens</h4>
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+              <h4 className={`font-semibold mb-2 ${
+                isDark ? 'text-red-400' : 'text-red-600'
+              }`}>
+                Desvantagens
+              </h4>
+              <ul className={`list-disc pl-5 space-y-1 ${
+                isDark ? 'text-gray-300' : 'text-gray-700'
+              }`}>
                 <li>Ineficiente para arrays grandes</li>
                 <li>Tempo quadrático em todos os casos</li>
                 <li>Não é estável</li>
@@ -214,37 +255,45 @@ int main() {
 
       {/* Comparação com Outros Algoritmos */}
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Comparação com Bubble Sort</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
-            <thead className="bg-gray-50">
+        <h3 className={`text-xl font-semibold mb-4 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          Comparação com Bubble Sort
+        </h3>
+        <div className="overflow-x-auto rounded-lg">
+          <table className={`min-w-full overflow-hidden shadow-lg ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <thead className={isDark ? 'bg-gray-900' : 'bg-gray-50'}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aspecto</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Selection Sort</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bubble Sort</th>
+                {['Aspecto', 'Selection Sort', 'Bubble Sort'].map((header) => (
+                  <th key={header} className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDark ? 'text-gray-300' : 'text-gray-500'
+                  }`}>
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4">Complexidade</td>
-                <td className="px-6 py-4">Sempre O(n²)</td>
-                <td className="px-6 py-4">O(n) a O(n²)</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4">Número de Trocas</td>
-                <td className="px-6 py-4">O(n)</td>
-                <td className="px-6 py-4">O(n²)</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4">Estabilidade</td>
-                <td className="px-6 py-4">Não estável</td>
-                <td className="px-6 py-4">Estável</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4">Adaptativo</td>
-                <td className="px-6 py-4">Não</td>
-                <td className="px-6 py-4">Sim</td>
-              </tr>
+            <tbody className={`divide-y ${
+              isDark ? 'divide-gray-700' : 'divide-gray-200'
+            }`}>
+              {[
+                ['Complexidade', 'Sempre O(n²)', 'O(n) a O(n²)'],
+                ['Número de Trocas', 'O(n)', 'O(n²)'],
+                ['Estabilidade', 'Não estável', 'Estável'],
+                ['Adaptativo', 'Não', 'Sim']
+              ].map(([aspect, selection, bubble], index) => (
+                <tr key={index}>
+                  {[aspect, selection, bubble].map((cell, i) => (
+                    <td key={i} className={`px-6 py-4 ${
+                      isDark ? 'text-gray-300' : 'text-gray-900'
+                    }`}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -252,20 +301,28 @@ int main() {
 
       {/* Exercícios */}
       <div>
-        <h3 className="text-xl font-semibold mb-4">Exercícios</h3>
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <ol className="list-decimal list-inside space-y-4">
-            <li className="text-gray-700">
+        <h3 className={`text-xl font-semibold mb-4 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          Exercícios
+        </h3>
+        <div className={`p-6 rounded-lg transition-colors duration-200 ${
+          isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
+        }`}>
+          <ol className={`list-decimal list-inside space-y-4 ${
+            isDark ? 'text-gray-300' : 'text-gray-700'
+          }`}>
+            <li>
               Implemente uma versão do Selection Sort que ordene em ordem decrescente.
             </li>
-            <li className="text-gray-700">
+            <li>
               Modifique o algoritmo para contar o número de comparações e trocas realizadas.
             </li>
-            <li className="text-gray-700">
+            <li>
               Crie uma versão que encontre o maior elemento em vez do menor e o coloque
               no final do array.
             </li>
-            <li className="text-gray-700">
+            <li>
               Implemente uma versão que ordene apenas os números pares do array,
               mantendo os ímpares em suas posições originais.
             </li>
