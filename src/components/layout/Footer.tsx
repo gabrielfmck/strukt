@@ -1,7 +1,8 @@
 import React from 'react';
-import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaXTwitter, FaLinkedin, FaEnvelope } from 'react-icons/fa6';
 import { useTheme } from '../../contexts/theme/ThemeContext';
 import { useLocation } from 'react-router-dom';
+
 
 const Footer: React.FC = () => {
   const { theme } = useTheme();
@@ -52,12 +53,13 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h2 className={`text-xl font-semibold mb-4 ${baseStyles.text}`}>Siga-nos</h2>
+            <h2 className={`text-xl font-semibold mb-4 ${baseStyles.text}`}>Contato</h2>
             <div className="flex space-x-4">
               {[
+                { href: "mailto:gabrielfernandes0625@gmail.com", icon: <FaEnvelope size={24} />, label: "Email" },
+                { href: "https://www.linkedin.com/in/gabrielfernandesj", icon: <FaLinkedin size={24} />, label: "LinkedIn" },
                 { href: "https://github.com/gabrielfmck", icon: <FaGithub size={24} />, label: "GitHub" },
-                { href: "https://twitter.com/gabrielfmck", icon: <FaTwitter size={24} />, label: "Twitter" },
-                { href: "https://www.linkedin.com/in/gabrielfernandesj", icon: <FaLinkedin size={24} />, label: "LinkedIn" }
+                { href: "https://x.com/strukt", icon: <FaXTwitter size={24} />, label: "Twitter" }
               ].map((social) => (
                 <a
                   key={social.href}
