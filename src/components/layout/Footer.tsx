@@ -11,10 +11,10 @@ const Footer: React.FC = () => {
 
   const baseStyles = {
     bg: isHome 
-      ? 'bg-primary-900' 
+      ? 'bg-gray-900' 
       : isDark ? 'bg-gray-800' : 'bg-gray-900',
     border: isHome
-      ? 'border-primary-800'
+      ? 'border-gray-800'
       : isDark ? 'border-gray-700' : 'border-gray-800',
     text: isDark ? 'text-gray-300' : 'text-white',
     subtext: isDark ? 'text-gray-400' : 'text-gray-400',
