@@ -325,6 +325,7 @@ const Profile = () => {
                       <option value="python">Python</option>
                       <option value="java">Java</option>
                       <option value="cpp">C++</option>
+                      <option value="c">C</option>
                     </select>
                   </div>
 

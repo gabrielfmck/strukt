@@ -282,7 +282,7 @@ const DataStructures = () => {
                 </h3>
                 <CodeEditor
                   initialCode={selectedStructure.initialCode}
-                  language="javascript"
+                  language="c"
                   onCodeChange={(code: string) => {
                     console.log('Código atualizado:', code);
                   }}
