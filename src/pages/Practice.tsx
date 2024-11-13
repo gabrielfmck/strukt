@@ -1,5 +1,4 @@
-// src/pages/Practice.tsx
-// src/pages/Practice.tsx
+// src/pages/Practice.tsx - Part 1: Imports e Types
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/theme/ThemeContext";
@@ -21,7 +20,7 @@ type Difficulty = "Fácil" | "Médio" | "Difícil";
 interface Exercise {
   id: number;
   title: string;
-  difficulty: Difficulty; // Agora está explicitamente tipado
+  difficulty: Difficulty;
   category: string;
   description: string;
   template: string;
@@ -34,12 +33,22 @@ interface Exercise {
   }[];
 }
 
+interface CategoryInfo {
+  name: string;
+  icon: JSX.Element;
+  description: string;
+  color: {
+    light: string;
+    dark: string;
+    text: string;
+    darkText: string;
+  };
+}
+
 const getLanguageFromExercise = (exercise: Exercise): 'c' | 'javascript' => {
-  // Se o template contém #include <stdio.h>, é código C
   if (exercise.template.includes('#include <stdio.h>')) {
     return 'c';
   }
-  // Caso contrário, é JavaScript
   return 'javascript';
 };
 
@@ -55,6 +64,7 @@ interface CategoryInfo {
   };
 }
 
+// src/pages/Practice.tsx - Part 2: Categories
 const categories: Record<string, CategoryInfo> = {
   Introdução: {
     name: "Introdução",
@@ -111,7 +121,7 @@ const categories: Record<string, CategoryInfo> = {
       darkText: "text-red-400",
     },
   },
-  Strings: {
+  "Strings": {
     name: "Strings",
     icon: <HiCode className="w-5 h-5" />,
     description: "Manipulação de strings",
@@ -122,7 +132,7 @@ const categories: Record<string, CategoryInfo> = {
       darkText: "text-teal-400",
     },
   },
-  Matemática: {
+  "Matemática": {
     name: "Matemática",
     icon: <HiChip className="w-5 h-5" />,
     description: "Problemas matemáticos",
@@ -133,7 +143,7 @@ const categories: Record<string, CategoryInfo> = {
       darkText: "text-indigo-400",
     },
   },
-  Recursão: {
+  "Recursão": {
     name: "Recursão",
     icon: <HiLightningBolt className="w-5 h-5" />,
     description: "Problemas recursivos",
@@ -155,7 +165,7 @@ const categories: Record<string, CategoryInfo> = {
       darkText: "text-indigo-400",
     },
   },
-  Laços: {
+  "Laços": {
     name: "Laços",
     icon: <HiLightningBolt className="w-5 h-5" />,
     description: "Estruturas de repetição",
@@ -769,17 +779,13 @@ int main() {
 const Practice = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const [selectedExercise, setSelectedExercise] = useState<Exercise>(
-    exercises[0]
-  );
+  const [selectedExercise, setSelectedExercise] = useState<Exercise>(exercises[0]);
   const [userCode, setUserCode] = useState(selectedExercise.template);
   const [results, setResults] = useState<string[]>([]);
   const [showHints, setShowHints] = useState(false);
   const [isCompiling, setIsCompiling] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
-    null
-  );
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -790,9 +796,7 @@ const Practice = () => {
 
   const handleRunTests = async () => {
     if (!userCode.trim()) {
-      toast.error(
-        "Por favor, escreva algum código antes de executar os testes."
-      );
+      toast.error("Por favor, escreva algum código antes de executar os testes.");
       return;
     }
 
@@ -810,45 +814,27 @@ const Practice = () => {
               .replace(/\r\n/g, "\n");
 
             if (normalizedResult === normalizedExpected) {
-              return {
-                success: true,
-                message: `Teste para input ${testCase.input}: Passou ✅`,
-                input: testCase.input,
-                expected: normalizedExpected,
-                received: normalizedResult,
-              };
+              return `Teste para input: Passou`;
             } else {
-              return {
-                success: false,
-                message: `Teste para input ${testCase.input}: Falhou ❌`,
-                input: testCase.input,
-                expected: normalizedExpected,
-                received: normalizedResult,
-              };
+              return `Teste para input: Falhou`;
             }
-          } catch (error) {
-            return {
-              success: false,
-              message: `Erro ao executar o teste para input ${testCase.input}`,
-              input: testCase.input,
-              error:
-                error instanceof Error ? error.message : "Erro desconhecido",
-            };
+          } catch {
+            return `Erro ao executar o teste`;
           }
         })
       );
 
-      const allPassed = testResults.every((result) => result.success);
+      const allPassed = testResults.every((result) => result.includes('Passou'));
       if (allPassed) {
         toast.success("Todos os testes passaram! 🎉");
       } else {
         toast.error("Alguns testes falharam. Verifique os resultados.");
       }
 
-      setResults(testResults.map((result) => result.message));
-    } catch (error) {
+      setResults(testResults);
+    } catch (err) {
       toast.error("Erro ao executar os testes. Verifique seu código.");
-      console.error("Erro nos testes:", error);
+      console.error("Erro nos testes:", err);
     } finally {
       setIsCompiling(false);
     }
@@ -961,8 +947,8 @@ const Practice = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20"> {/* Adicionado pb-20 aqui */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Lista de Exercícios */}
           <div className="lg:col-span-1">
             <div
@@ -1033,13 +1019,13 @@ const Practice = () => {
 
           {/* Área Principal */}
           <div className="lg:col-span-3">
-          <motion.div
-            key={selectedExercise.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6"
-          >
+            <motion.div
+              key={selectedExercise.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
               {/* Detalhes do Exercício */}
               <div
                 className={`rounded-lg shadow-lg p-6 ${
@@ -1157,9 +1143,7 @@ const Practice = () => {
                             {testCase.input}
                           </div>
                           <div>
-                            <span className="font-semibold">
-                              Output Esperado:
-                            </span>{" "}
+                            <span className="font-semibold">Output Esperado:</span>{" "}
                             {testCase.expectedOutput}
                           </div>
                           {testCase.explanation && (
@@ -1175,105 +1159,15 @@ const Practice = () => {
                 </div>
               </div>
 
-              {/* Editor e Resultados */}
-<div className="space-y-8">
-  <div className={`rounded-lg shadow-lg ${isDark ? 'bg-gray-800' : 'bg-white'} p-6`}> {/* Adicionado p-6 aqui */}
-    {/* Header do Editor */}
-    <div className="flex justify-between items-center mb-6">
-      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-        Sua Solução
-      </h3>
-      <button
-        onClick={handleRunTests}
-        disabled={isCompiling}
-        className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-          isCompiling
-            ? 'bg-gray-500 cursor-not-allowed'
-            : 'bg-primary-600 hover:bg-primary-700'
-        } text-white`}
-      >
-        {isCompiling ? (
-          <>
-            <svg
-              className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
+              {/* Editor Section */}
+              <CodeEditor
+                initialCode={selectedExercise.template}
+                language={getLanguageFromExercise(selectedExercise)}
+                onCodeChange={setUserCode}
+                results={results}
+                onRunTests={handleRunTests}
+                isCompiling={isCompiling}
               />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            Executando...
-          </>
-        ) : (
-          'Executar Testes'
-        )}
-      </button>
-    </div>
-
-{/* Editor */}
-<div className="mb-6">
-      <CodeEditor
-        initialCode={selectedExercise.template}
-        language={getLanguageFromExercise(selectedExercise)}
-        onCodeChange={setUserCode}
-      />
-    </div>
-
-    {results.length > 0 && (
-      <div className="mt-6">
-        <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          Resultados
-        </h4>
-        <div className={`p-4 rounded-lg space-y-2 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
-          {results.map((result, index) => (
-            <div
-              key={index}
-              className={`p-3 rounded-lg ${
-                isDark ? 'bg-gray-800' : 'bg-white'
-              } ${
-                result.includes('Passou')
-                  ? isDark
-                    ? 'text-green-400'
-                    : 'text-green-600'
-                  : isDark
-                  ? 'text-red-400'
-                  : 'text-red-600'
-              }`}
-            >
-              {result}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    {selectedExercise.explanation && (
-      <div className="mt-6">
-        <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          Explicação da Solução
-        </h4>
-        <div
-          className={`p-4 rounded-lg ${
-            isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-600'
-          }`}
-        >
-          <p className="whitespace-pre-line">{selectedExercise.explanation}</p>
-        </div>
-      </div>
-                  )}
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>

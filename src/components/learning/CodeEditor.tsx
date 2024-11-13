@@ -11,6 +11,8 @@ interface CodeEditorProps {
   onCodeChange?: (code: string) => void;
   readOnly?: boolean;
   results?: string[];
+  onRunTests?: () => Promise<void> | void;
+  isCompiling?: boolean;
 }
 
 const CodeEditor = ({
