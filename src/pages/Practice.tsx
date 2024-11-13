@@ -34,6 +34,15 @@ interface Exercise {
   }[];
 }
 
+const getLanguageFromExercise = (exercise: Exercise): 'c' | 'javascript' => {
+  // Se o template contém #include <stdio.h>, é código C
+  if (exercise.template.includes('#include <stdio.h>')) {
+    return 'c';
+  }
+  // Caso contrário, é JavaScript
+  return 'javascript';
+};
+
 interface CategoryInfo {
   name: string;
   icon: JSX.Element;
@@ -952,8 +961,8 @@ const Practice = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20"> {/* Adicionado pb-20 aqui */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Lista de Exercícios */}
           <div className="lg:col-span-1">
             <div
@@ -1024,13 +1033,13 @@ const Practice = () => {
 
           {/* Área Principal */}
           <div className="lg:col-span-3">
-            <motion.div
-              key={selectedExercise.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
+          <motion.div
+            key={selectedExercise.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          >
               {/* Detalhes do Exercício */}
               <div
                 className={`rounded-lg shadow-lg p-6 ${
@@ -1167,121 +1176,101 @@ const Practice = () => {
               </div>
 
               {/* Editor e Resultados */}
-              <div
-                className={`rounded-lg shadow-lg ${
-                  isDark ? "bg-gray-800" : "bg-white"
-                }`}
-              >
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3
-                      className={`text-lg font-semibold ${
-                        isDark ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      Sua Solução
-                    </h3>
-                    <button
-                      onClick={handleRunTests}
-                      disabled={isCompiling}
-                      className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        isCompiling
-                          ? "bg-gray-500 cursor-not-allowed"
-                          : "bg-primary-600 hover:bg-primary-700"
-                      } text-white`}
-                    >
-                      {isCompiling ? (
-                        <>
-                          <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            />
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            />
-                          </svg>
-                          Executando...
-                        </>
-                      ) : (
-                        "Executar Testes"
-                      )}
-                    </button>
-                  </div>
+<div className="space-y-8">
+  <div className={`rounded-lg shadow-lg ${isDark ? 'bg-gray-800' : 'bg-white'} p-6`}> {/* Adicionado p-6 aqui */}
+    {/* Header do Editor */}
+    <div className="flex justify-between items-center mb-6">
+      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+        Sua Solução
+      </h3>
+      <button
+        onClick={handleRunTests}
+        disabled={isCompiling}
+        className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          isCompiling
+            ? 'bg-gray-500 cursor-not-allowed'
+            : 'bg-primary-600 hover:bg-primary-700'
+        } text-white`}
+      >
+        {isCompiling ? (
+          <>
+            <svg
+              className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            Executando...
+          </>
+        ) : (
+          'Executar Testes'
+        )}
+      </button>
+    </div>
 
-                  <CodeEditor
-                    initialCode={selectedExercise.template}
-                    language={selectedExercise.id >= 11 ? "c" : "c"}
-                    onCodeChange={setUserCode} // Mudou de onChange para onCodeChange
-                  />
+{/* Editor */}
+<div className="mb-6">
+      <CodeEditor
+        initialCode={selectedExercise.template}
+        language={getLanguageFromExercise(selectedExercise)}
+        onCodeChange={setUserCode}
+      />
+    </div>
 
-                  {results.length > 0 && (
-                    <div className="mt-6">
-                      <h4
-                        className={`text-lg font-semibold mb-3 ${
-                          isDark ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        Resultados
-                      </h4>
-                      <div
-                        className={`p-4 rounded-lg space-y-2 ${
-                          isDark ? "bg-gray-700" : "bg-gray-50"
-                        }`}
-                      >
-                        {results.map((result, index) => (
-                          <div
-                            key={index}
-                            className={`p-3 rounded-lg ${
-                              isDark ? "bg-gray-800" : "bg-white"
-                            } ${
-                              result.includes("Passou")
-                                ? isDark
-                                  ? "text-green-400"
-                                  : "text-green-600"
-                                : isDark
-                                ? "text-red-400"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {result}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+    {results.length > 0 && (
+      <div className="mt-6">
+        <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          Resultados
+        </h4>
+        <div className={`p-4 rounded-lg space-y-2 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+          {results.map((result, index) => (
+            <div
+              key={index}
+              className={`p-3 rounded-lg ${
+                isDark ? 'bg-gray-800' : 'bg-white'
+              } ${
+                result.includes('Passou')
+                  ? isDark
+                    ? 'text-green-400'
+                    : 'text-green-600'
+                  : isDark
+                  ? 'text-red-400'
+                  : 'text-red-600'
+              }`}
+            >
+              {result}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
 
-                  {selectedExercise.explanation && (
-                    <div className="mt-6">
-                      <h4
-                        className={`text-lg font-semibold mb-3 ${
-                          isDark ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        Explicação da Solução
-                      </h4>
-                      <div
-                        className={`p-4 rounded-lg ${
-                          isDark
-                            ? "bg-gray-700 text-gray-300"
-                            : "bg-gray-50 text-gray-600"
-                        }`}
-                      >
-                        <p className="whitespace-pre-line">
-                          {selectedExercise.explanation}
-                        </p>
-                      </div>
-                    </div>
+    {selectedExercise.explanation && (
+      <div className="mt-6">
+        <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          Explicação da Solução
+        </h4>
+        <div
+          className={`p-4 rounded-lg ${
+            isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-600'
+          }`}
+        >
+          <p className="whitespace-pre-line">{selectedExercise.explanation}</p>
+        </div>
+      </div>
                   )}
                 </div>
               </div>

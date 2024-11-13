@@ -1,6 +1,7 @@
+// src/components/learning/MonacoEditor.tsx
 import { useRef, useEffect } from 'react';
 import Editor, { OnMount, OnChange } from '@monaco-editor/react';
-import { editor, Range } from 'monaco-editor';
+import { editor } from 'monaco-editor';
 import { useTheme } from '../../contexts/theme/ThemeContext';
 
 interface MonacoEditorProps {
@@ -10,7 +11,6 @@ interface MonacoEditorProps {
   onChange?: (value: string | undefined) => void;
   height?: string;
   className?: string;
-  showLineNumbers?: boolean;
 }
 
 const MonacoEditor = ({
@@ -20,7 +20,6 @@ const MonacoEditor = ({
   onChange,
   height = '400px',
   className = '',
-  showLineNumbers = true,
 }: MonacoEditorProps) => {
   const { theme } = useTheme();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
@@ -29,7 +28,6 @@ const MonacoEditor = ({
   const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
     
-    // Configurar tema personalizado
     editor.updateOptions({
       theme: isDark ? 'vs-dark' : 'vs-light',
       fontSize: 14,
@@ -39,27 +37,16 @@ const MonacoEditor = ({
         vertical: 'auto',
         horizontal: 'auto',
       },
-      lineNumbers: showLineNumbers ? 'on' : 'off',
+      lineNumbers: 'on',
       readOnly: readOnly,
       wordWrap: 'on',
       automaticLayout: true,
       tabSize: 2,
-      rulers: [],
       renderWhitespace: 'none',
       roundedSelection: true,
-      selectOnLineNumbers: true,
       cursorBlinking: 'smooth',
       cursorSmoothCaretAnimation: 'on',
       scrollBeyondLastLine: false,
-      quickSuggestions: {
-        other: !readOnly,
-        comments: !readOnly,
-        strings: !readOnly
-      },
-      folding: true,
-      dragAndDrop: true,
-      formatOnPaste: true,
-      formatOnType: true,
     });
   };
 
@@ -69,7 +56,6 @@ const MonacoEditor = ({
     }
   };
 
-  // Atualizar tema quando o tema global mudar
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.updateOptions({
@@ -95,64 +81,6 @@ const MonacoEditor = ({
           contextmenu: true,
           scrollBeyondLastLine: false,
           smoothScrolling: true,
-          cursorBlinking: 'smooth',
-          cursorSmoothCaretAnimation: 'on',
-          dragAndDrop: true,
-          formatOnPaste: true,
-          formatOnType: true,
-        }}
-        beforeMount={(monaco) => {
-          // Configurar linguagens suportadas
-          monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-            noSemanticValidation: false,
-            noSyntaxValidation: false,
-          });
-          
-          // Configurar snippets e autocompleção
-          monaco.languages.registerCompletionItemProvider('c', {
-            provideCompletionItems: (model, position) => {
-              const word = model.getWordUntilPosition(position);
-              const range = new Range(
-                position.lineNumber,
-                word.startColumn,
-                position.lineNumber,
-                word.endColumn
-              );
-
-              const suggestions = [
-                {
-                  label: 'printf',
-                  kind: monaco.languages.CompletionItemKind.Function,
-                  insertText: 'printf("${1:format}"${2:, args});',
-                  insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                  detail: 'Print formatted output to stdout',
-                  range
-                },
-                {
-                  label: 'scanf',
-                  kind: monaco.languages.CompletionItemKind.Function,
-                  insertText: 'scanf("${1:format}", ${2:&var});',
-                  insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                  detail: 'Read formatted input from stdin',
-                  range
-                },
-                {
-                  label: 'main',
-                  kind: monaco.languages.CompletionItemKind.Function,
-                  insertText: [
-                    'int main() {',
-                    '\t${1}',
-                    '\treturn 0;',
-                    '}'
-                  ].join('\n'),
-                  insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                  detail: 'Main function',
-                  range
-                },
-              ];
-              return { suggestions };
-            },
-          });
         }}
       />
     </div>
