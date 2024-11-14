@@ -13,45 +13,58 @@ const algorithms = [
       time: 'O(n²)',
       space: 'O(1)',
     },
-    initialCode: `#include <stdio.h>
+    initialCode: `#include <stdio.h>  // Inclui a biblioteca padrão de entrada e saída
 
+// Função de ordenação Bubble Sort
 void bubbleSort(int arr[], int n) {
-    int i, j, temp;
-    int swapped;
+    int i, j, temp;      // Declara variáveis auxiliares para o loop e troca de elementos
+    int swapped;         // Variável para indicar se uma troca foi feita
 
+    // Loop externo que percorre o array, controlando o número de passagens
     for (i = 0; i < n - 1; i++) {
-        swapped = 0;
+        swapped = 0;  // Define 'swapped' como 0 antes de cada passagem
+
+        // Loop interno para comparar e trocar elementos adjacentes
         for (j = 0; j < n - i - 1; j++) {
+            // Se o elemento atual é maior que o próximo, troca-os
             if (arr[j] > arr[j + 1]) {
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-                swapped = 1;
+                temp = arr[j];           // Armazena o valor atual em 'temp'
+                arr[j] = arr[j + 1];     // Coloca o próximo valor na posição atual
+                arr[j + 1] = temp;       // Coloca o valor armazenado na próxima posição
+                swapped = 1;             // Indica que uma troca foi realizada
             }
         }
+        
+        // Se nenhuma troca foi feita, o array já está ordenado
         if (swapped == 0) break;
     }
 }
 
+// Função para imprimir os elementos do array
 void printArray(int arr[], int n) {
     for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+        printf("%d ", arr[i]);  // Imprime o elemento atual seguido de um espaço
     }
+    printf("");  // Pula uma linha após imprimir o array
 }
 
 int main() {
-    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    
+    // Define um array de inteiros com alguns valores
+    int arr[] = {100, 10, 80, 30, 50, 60, 40, 70, 20, 90};
+    int n = sizeof(arr) / sizeof(arr[0]);  // Calcula o tamanho do array
+
+    // Imprime o array original
     printf("Array original: ");
     printArray(arr, n);
-    
+
+    // Chama a função bubbleSort para ordenar o array
     bubbleSort(arr, n);
-    
-    printf("\\nArray ordenado: ");
+
+    // Imprime o array ordenado
+    printf("| Array ordenado: ");
     printArray(arr, n);
-    
-    return 0;
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
 }`
   },
   {
@@ -62,44 +75,56 @@ int main() {
       time: 'O(n²)',
       space: 'O(1)',
     },
-    initialCode: `#include <stdio.h>
+    initialCode: `#include <stdio.h>  // Inclui a biblioteca padrão de entrada e saída
 
+// Função de ordenação Selection Sort
 void selectionSort(int arr[], int n) {
-    int i, j, min_idx;
-    
-    for (i = 0; i < n-1; i++) {
-        min_idx = i;
-        for (j = i+1; j < n; j++) {
-            if (arr[j] < arr[min_idx])
+    int i, j, min_idx;  // Declara variáveis auxiliares para o loop e o índice do menor elemento
+
+    // Loop que percorre todo o array, posição por posição
+    for (i = 0; i < n - 1; i++) {
+        min_idx = i;  // Define o índice do menor elemento como o atual
+
+        // Loop para encontrar o menor elemento no restante do array
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx])  // Se encontrar um elemento menor, atualiza min_idx
                 min_idx = j;
         }
-        if(min_idx != i) {
-            int temp = arr[min_idx];
-            arr[min_idx] = arr[i];
-            arr[i] = temp;
+
+        // Troca o menor elemento encontrado com o elemento atual se necessário
+        if (min_idx != i) {
+            int temp = arr[min_idx];  // Armazena o valor do menor elemento
+            arr[min_idx] = arr[i];    // Coloca o elemento atual na posição do menor elemento
+            arr[i] = temp;            // Coloca o menor elemento na posição atual
         }
     }
 }
 
+// Função para imprimir os elementos do array
 void printArray(int arr[], int n) {
     for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+        printf("%d ", arr[i]);  // Imprime o elemento atual seguido de um espaço
     }
+    printf("");  // Pula uma linha após imprimir o array
 }
 
 int main() {
-    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    
+    // Define um array de inteiros com alguns valores
+    int arr[] = {100, 10, 80, 30, 50, 60, 40, 70, 20, 90};
+    int n = sizeof(arr) / sizeof(arr[0]);  // Calcula o tamanho do array
+
+    // Imprime o array original
     printf("Array original: ");
     printArray(arr, n);
-    
+
+    // Chama a função selectionSort para ordenar o array
     selectionSort(arr, n);
-    
-    printf("\\nArray ordenado: ");
+
+    // Imprime o array ordenado
+    printf("| Array ordenado: ");
     printArray(arr, n);
-    
-    return 0;
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
 }`
   },
   {
@@ -110,73 +135,76 @@ int main() {
       time: 'O(n log n)',
       space: 'O(log n)',
     },
-    initialCode: `#include <stdio.h>
+    initialCode: `#include <stdio.h>  // Inclui a biblioteca padrão de entrada e saída
 
-// Função para trocar dois elementos
+// Função para trocar dois elementos do array
 void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Função que encontra o pivô e o coloca na posição correta
+// Função que organiza o array em torno de um pivô e retorna a posição correta do pivô
 int partition(int arr[], int low, int high) {
     int pivot = arr[high];  // Escolhe o último elemento como pivô
     int i = (low - 1);      // Índice do menor elemento
-    
+
+    // Loop para reorganizar elementos em relação ao pivô
     for (int j = low; j <= high - 1; j++) {
         // Se o elemento atual é menor que o pivô
         if (arr[j] < pivot) {
             i++;    // Incrementa o índice do menor elemento
-            swap(&arr[i], &arr[j]);
+            swap(&arr[i], &arr[j]);  // Troca o elemento menor para a esquerda do pivô
         }
     }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+    swap(&arr[i + 1], &arr[high]);  // Coloca o pivô na posição correta
+    return (i + 1);  // Retorna o índice do pivô
 }
 
-// Função principal do Quick Sort
+// Função principal do Quick Sort que chama recursivamente o algoritmo para ordenar o array
 void quickSort(int arr[], int low, int high) {
     if (low < high) {
-        // pi é o índice de particionamento
+        // Encontra o índice de particionamento e organiza o pivô na posição correta
         int pi = partition(arr, low, high);
-        
-        // Ordena os elementos separadamente antes
-        // e depois do particionamento
+
+        // Ordena os elementos à esquerda e à direita do pivô separadamente
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
     }
 }
 
-// Função auxiliar para imprimir o array
+// Função auxiliar para imprimir os elementos do array
 void printArray(int arr[], int size) {
     for (int i = 0; i < size; i++)
         printf("%d ", arr[i]);
+    printf("");  // Pula uma linha após imprimir o array
 }
 
-// Função principal para teste
+// Função principal para teste do Quick Sort
 int main() {
-    int arr[] = {64, 34, 89, 12, 45, 10, 56, 35, 48 , 98};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    
+    int arr[] = {100, 10, 80, 30, 50, 60, 40, 70, 20, 90};  // Define o array de inteiros
+    int n = sizeof(arr) / sizeof(arr[0]);  // Calcula o tamanho do array
+
+    // Imprime o array original
     printf("Array original: ");
     printArray(arr, n);
-    
-    quickSort(arr, 0, n-1);
-    
-    printf("Array ordenado: ");
+
+    // Chama a função quickSort para ordenar o array
+    quickSort(arr, 0, n - 1);
+
+    // Imprime o array ordenado
+    printf("| Array ordenado: ");
     printArray(arr, n);
-    
-    return 0;
-}
-`
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
+}`
   }
 ];
 
 const Algorithms = () => {
   const { theme } = useTheme();
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[0]);
-  const [array, setArray] = useState([64, 34, 89, 12, 45, 10, 56, 35, 48, 98]);
+  const [array, setArray] = useState([100, 10, 80, 30, 50, 60, 40, 70, 20 , 90]);
   const [speed, setSpeed] = useState(1000);
 
   const getSpeedLabel = (value: number) => {

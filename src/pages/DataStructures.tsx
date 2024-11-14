@@ -15,22 +15,29 @@ const dataStructures = [
       { name: 'Remoção', complexity: 'O(n)' },
       { name: 'Busca', complexity: 'O(n)' },
     ],
-    initialCode: `// Exemplo de operações com Array
-const array = [];
+    initialCode: `#include <stdio.h>  // Inclui a biblioteca padrão de entrada e saída
 
-// Inserção
-array.push(1);     // Adiciona ao final
-array.unshift(0);  // Adiciona ao início
+int main() {
+    // Declaração e inicialização de um array de inteiros com 5 elementos
+    int arr[5] = {10, 20, 30, 40, 50};
 
-// Acesso
-const elemento = array[0];
+    // Acesso e impressão dos elementos do array
+    printf("Elementos do array: ");
+    for (int i = 0; i < 5; i++) {
+        printf("arr[%d] = %d", i, arr[i]);  // Acessa e imprime cada elemento do array
+    }
 
-// Remoção
-array.pop();       // Remove do final
-array.shift();     // Remove do início
+    // Modificando um elemento do array
+    arr[2] = 100;  // Altera o valor do terceiro elemento (índice 2) para 100
 
-// Busca
-const indice = array.indexOf(1);`,
+    // Imprime o array após a modificação
+    printf("| Array após modificação: ");
+    for (int i = 0; i < 5; i++) {
+        printf("arr[%d] = %d", i, arr[i]);  // Acessa e imprime cada elemento do array
+    }
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
+}`,
   },
   {
     id: 'linkedList',
@@ -42,32 +49,69 @@ const indice = array.indexOf(1);`,
       { name: 'Remoção do início', complexity: 'O(1)' },
       { name: 'Busca', complexity: 'O(n)' },
     ],
-    initialCode: `class Node {
-  constructor(data) {
-    this.data = data;
-    this.next = null;
-  }
+    initialCode: `#include <stdio.h>
+#include <stdlib.h>  // Inclui a biblioteca para alocação dinâmica de memória
+
+// Definição da estrutura de um nó para a lista ligada
+struct Node {
+    int data;              // Armazena o valor do nó
+    struct Node* next;     // Ponteiro para o próximo nó na lista
+};
+
+// Função para adicionar um nó no início da lista
+void insertAtBeginning(struct Node** head, int newData) {
+    // Aloca memória para um novo nó
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = newData;    // Define o valor do novo nó
+    newNode->next = *head;      // Aponta o próximo do novo nó para o nó atual da cabeça
+    *head = newNode;            // Atualiza a cabeça da lista para o novo nó
 }
 
-class LinkedList {
-  constructor() {
-    this.head = null;
-  }
+// Função para adicionar um nó no final da lista
+void insertAtEnd(struct Node** head, int newData) {
+    // Aloca memória para um novo nó
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = newData;    // Define o valor do novo nó
+    newNode->next = NULL;       // Define o próximo do novo nó como NULL, pois será o último
 
-  // Inserir no início
-  insertFirst(data) {
-    const newNode = new Node(data);
-    newNode.next = this.head;
-    this.head = newNode;
-  }
+    // Se a lista estiver vazia, o novo nó se torna o primeiro nó
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
 
-  // Remover do início
-  removeFirst() {
-    if (!this.head) return null;
-    const removed = this.head;
-    this.head = this.head.next;
-    return removed.data;
-  }
+    // Caso contrário, percorre até o último nó
+    struct Node* last = *head;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+
+    last->next = newNode;  // Aponta o próximo do último nó para o novo nó
+}
+
+// Função para imprimir todos os elementos da lista
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);  // Imprime o valor do nó atual
+        node = node->next;             // Move para o próximo nó
+    }
+    printf("NULL");  // Indica o final da lista
+}
+
+int main() {
+    struct Node* head = NULL;  // Inicializa a lista como vazia
+
+    // Insere elementos na lista
+    insertAtEnd(&head, 10);
+    insertAtBeginning(&head, 20);
+    insertAtEnd(&head, 30);
+    insertAtBeginning(&head, 40);
+
+    // Imprime a lista
+    printf("Lista ligada: ");
+    printList(head);
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
 }`,
   },
   {
@@ -80,28 +124,98 @@ class LinkedList {
       { name: 'Peek (Visualizar Topo)', complexity: 'O(1)' },
       { name: 'Busca', complexity: 'O(n)' },
     ],
-    initialCode: `class Stack {
-  constructor() {
-    this.items = [];
-  }
+    initialCode: `#include <stdio.h>
+#include <stdlib.h>  // Inclui a biblioteca para alocação dinâmica de memória
 
-  push(element) {
-    this.items.push(element);
-  }
+// Estrutura do nó (Node)
+struct Node {
+    int data;               // Armazena o valor do nó
+    struct Node* next;      // Ponteiro para o próximo nó na pilha
+};
 
-  pop() {
-    if (this.isEmpty()) return null;
-    return this.items.pop();
-  }
+// Estrutura da pilha (Stack)
+struct Stack {
+    struct Node* top;       // Ponteiro para o topo da pilha
+};
 
-  peek() {
-    if (this.isEmpty()) return null;
-    return this.items[this.items.length - 1];
-  }
+// Criar uma pilha vazia
+struct Stack* createStack() {
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));  // Aloca memória para a pilha
+    stack->top = NULL;      // Inicializa o topo da pilha como NULL (vazia)
+    return stack;           // Retorna o ponteiro para a pilha criada
+}
 
-  isEmpty() {
-    return this.items.length === 0;
-  }
+// Verificar se a pilha está vazia
+int isEmpty(struct Stack* stack) {
+    return stack->top == NULL;  // Retorna 1 (true) se a pilha estiver vazia, 0 caso contrário
+}
+
+// Empilhar (push) - Adiciona um elemento ao topo da pilha
+void push(struct Stack* stack, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));  // Aloca memória para um novo nó
+    newNode->data = data;            // Define o valor do novo nó
+    newNode->next = stack->top;      // Faz o novo nó apontar para o nó atual do topo
+    stack->top = newNode;            // Atualiza o topo da pilha para o novo nó
+    printf("%d empilhado | ", data);  // Mensagem de confirmação
+}
+
+// Desempilhar (pop) - Remove e retorna o elemento do topo da pilha
+int pop(struct Stack* stack) {
+    if (isEmpty(stack)) {            // Verifica se a pilha está vazia
+        printf("Pilha vazia");     // Mensagem de erro se estiver vazia
+        return -1;                   // Retorna -1 para indicar que não há elementos
+    }
+    struct Node* temp = stack->top;  // Guarda o nó atual do topo em 'temp'
+    int popped = temp->data;         // Armazena o valor do nó a ser removido
+    stack->top = stack->top->next;   // Move o topo para o próximo nó
+    free(temp);                      // Libera a memória do nó removido
+    return popped;                   // Retorna o valor desempilhado
+}
+
+// Visualizar o elemento no topo (peek) - Apenas verifica o valor no topo sem removê-lo
+int peek(struct Stack* stack) {
+    if (isEmpty(stack)) {            // Verifica se a pilha está vazia
+        printf("Pilha vazia");     // Mensagem de erro se estiver vazia
+        return -1;                   // Retorna -1 para indicar pilha vazia
+    }
+    return stack->top->data;         // Retorna o valor do nó no topo
+}
+
+// Imprimir todos os elementos da pilha
+void printStack(struct Stack* stack) {
+    if (isEmpty(stack)) {            // Verifica se a pilha está vazia
+        printf("Pilha vazia");     // Mensagem se a pilha estiver vazia
+        return;
+    }
+    struct Node* temp = stack->top;  // Inicia do topo da pilha
+    printf("Pilha: ");
+    while (temp != NULL) {           // Percorre todos os nós até o final
+        printf("%d ", temp->data);   // Imprime o valor do nó atual
+        temp = temp->next;           // Move para o próximo nó
+    }
+    printf("");
+}
+
+// Função principal para testar as operações da pilha
+int main() {
+    struct Stack* stack = createStack();  // Cria uma nova pilha vazia
+
+    // Testa a função push
+    push(stack, 10);  // Empilha o valor 10
+    push(stack, 20);  // Empilha o valor 20
+    push(stack, 30);  // Empilha o valor 30
+
+    // Imprime a pilha
+    printStack(stack);
+
+    // Testa a função pop
+    printf("| Elemento desempilhado: %d | ", pop(stack));  // Remove o elemento do topo (30)
+    printStack(stack);  // Imprime a pilha atualizada
+
+    // Testa a função peek
+    printf("| Topo da pilha: %d", peek(stack));  // Visualiza o elemento atual do topo
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
 }`,
   },
   {
@@ -114,28 +228,109 @@ class LinkedList {
       { name: 'Front (Primeiro)', complexity: 'O(1)' },
       { name: 'Busca', complexity: 'O(n)' },
     ],
-    initialCode: `class Queue {
-  constructor() {
-    this.items = [];
-  }
+    initialCode: `#include <stdio.h>
+#include <stdlib.h>  // Inclui a biblioteca para alocação dinâmica de memória
 
-  enqueue(element) {
-    this.items.push(element);
-  }
+// Estrutura do nó (Node)
+struct Node {
+    int data;               // Armazena o valor do nó
+    struct Node* next;      // Ponteiro para o próximo nó na fila
+};
 
-  dequeue() {
-    if (this.isEmpty()) return null;
-    return this.items.shift();
-  }
+// Estrutura da fila (Queue)
+struct Queue {
+    struct Node *front, *rear;  // Ponteiros para o primeiro e o último nó da fila
+};
 
-  front() {
-    if (this.isEmpty()) return null;
-    return this.items[0];
-  }
+// Criar uma fila vazia
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));  // Aloca memória para a fila
+    queue->front = queue->rear = NULL;  // Inicializa 'front' e 'rear' como NULL, indicando fila vazia
+    return queue;                       // Retorna o ponteiro para a fila criada
+}
 
-  isEmpty() {
-    return this.items.length === 0;
-  }
+// Verificar se a fila está vazia
+int isEmpty(struct Queue* queue) {
+    return queue->front == NULL;  // Retorna 1 (true) se a fila estiver vazia, 0 caso contrário
+}
+
+// Enfileirar (enqueue) - Adiciona um elemento ao final da fila
+void enqueue(struct Queue* queue, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));  // Aloca memória para um novo nó
+    newNode->data = data;            // Define o valor do novo nó
+    newNode->next = NULL;            // Define o 'next' como NULL, pois será o último nó
+
+    if (isEmpty(queue)) {            // Se a fila está vazia
+        queue->front = queue->rear = newNode;  // O novo nó é o primeiro e o último
+    } else {                         // Se a fila não está vazia
+        queue->rear->next = newNode; // Aponta o 'next' do último nó atual para o novo nó
+        queue->rear = newNode;       // Atualiza o último nó da fila
+    }
+    printf("%d enfileirado | ", data);  // Mensagem de confirmação
+}
+
+// Desenfileirar (dequeue) - Remove e retorna o primeiro elemento da fila
+int dequeue(struct Queue* queue) {
+    if (isEmpty(queue)) {            // Verifica se a fila está vazia
+        printf("Fila vazia");      // Mensagem de erro se estiver vazia
+        return -1;                   // Retorna -1 para indicar que não há elementos
+    }
+
+    struct Node* temp = queue->front;  // Guarda o nó atual do início em 'temp'
+    int item = temp->data;             // Armazena o valor do nó a ser removido
+    queue->front = queue->front->next; // Move o início da fila para o próximo nó
+
+    if (queue->front == NULL)          // Se a fila ficou vazia após o dequeue
+        queue->rear = NULL;            // Define o 'rear' como NULL também
+
+    free(temp);                        // Libera a memória do nó removido
+    return item;                       // Retorna o valor desenfileirado
+}
+
+// Visualizar o primeiro elemento (peek) - Apenas verifica o valor no início sem removê-lo
+int peek(struct Queue* queue) {
+    if (isEmpty(queue)) {            // Verifica se a fila está vazia
+        printf("Fila vazia");      // Mensagem de erro se estiver vazia
+        return -1;                   // Retorna -1 para indicar fila vazia
+    }
+    return queue->front->data;       // Retorna o valor do nó no início
+}
+
+// Imprimir todos os elementos da fila
+void printQueue(struct Queue* queue) {
+    if (isEmpty(queue)) {            // Verifica se a fila está vazia
+        printf("Fila vazia");      // Mensagem se a fila estiver vazia
+        return;
+    }
+    struct Node* temp = queue->front;  // Inicia do início da fila
+    printf("Fila: ");
+    while (temp != NULL) {             // Percorre todos os nós até o final
+        printf("%d ", temp->data);     // Imprime o valor do nó atual
+        temp = temp->next;             // Move para o próximo nó
+    }
+    printf("| ");
+}
+
+// Função principal para testar as operações da fila
+int main() {
+    struct Queue* queue = createQueue();  // Cria uma nova fila vazia
+
+    // Testa a função enqueue
+    enqueue(queue, 10);  // Enfileira o valor 10
+    enqueue(queue, 20);  // Enfileira o valor 20
+    enqueue(queue, 30);  // Enfileira o valor 30
+
+    // Imprime a fila
+    printQueue(queue);
+
+    // Testa a função dequeue
+    printf("Elemento desenfileirado: %d | ", dequeue(queue));  // Remove o primeiro elemento (10)
+    printQueue(queue);  // Imprime a fila atualizada
+
+    // Testa a função peek
+    printf("Primeiro elemento da fila: %d", peek(queue));  // Visualiza o primeiro elemento da fila
+
+    return 0;  // Retorna 0 para indicar que o programa terminou com sucesso
 }`,
   },
 ];

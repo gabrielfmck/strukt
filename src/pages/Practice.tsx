@@ -215,10 +215,13 @@ int main() {
     category: "Arrays",
     description:
       "Encontre o primeiro elemento duplicado em um array de números.",
-    template: `function encontrarDuplicado(arr) {
-  // Seu código aqui
-  return -1; // Retorna -1 se não encontrar duplicados
-}`,
+    template: `#include <stdio.h>
+
+int main() {
+    // Seu código aqui
+    return 0;
+}
+`,
     testCases: [
       { input: "[1, 3, 4, 2, 2]", expectedOutput: "2" },
       { input: "[3, 1, 3, 4, 2]", expectedOutput: "3" },
@@ -231,27 +234,13 @@ int main() {
     category: "Estruturas de Dados",
     description:
       "Implemente uma pilha (stack) com as operações push, pop e peek.",
-    template: `class Stack {
-  constructor() {
-    // Inicialização da pilha
-  }
+    template: `#include <stdio.h>
 
-  push(element) {
-    // Adicionar elemento
-  }
-
-  pop() {
-    // Remover e retornar o elemento do topo
-  }
-
-  peek() {
-    // Retornar o elemento do topo sem remover
-  }
-
-  isEmpty() {
-    // Verificar se a pilha está vazia
-  }
-}`,
+int main() {
+    // Seu código aqui
+    return 0;
+}
+`,
     testCases: [
       {
         input: "push(1), push(2), pop(), peek()",
@@ -298,10 +287,13 @@ int main() {
     category: "Strings",
     description:
       "Escreva uma função que verifique se uma string é um palíndromo, ignorando espaços e capitalização.",
-    template: `function ehPalindromo(str) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
-    return false;
-  }`,
+    return 0;
+}
+`,
     testCases: [
       { input: "'A man a plan a canal Panama'", expectedOutput: "true" },
       { input: "'Hello World'", expectedOutput: "false" },
@@ -314,10 +306,13 @@ int main() {
     category: "Recursão",
     description:
       "Implemente uma função recursiva que retorne o n-ésimo número de Fibonacci.",
-    template: `function fibonacci(n) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
     return 0;
-  }`,
+}
+`,
     testCases: [
       { input: "5", expectedOutput: "5" },
       { input: "10", expectedOutput: "55" },
@@ -330,10 +325,13 @@ int main() {
     category: "Algoritmos de Ordenação",
     description:
       "Implemente o algoritmo de ordenação por seleção (Selection Sort).",
-    template: `function selectionSort(arr) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
-    return arr;
-  }`,
+    return 0;
+}
+`,
     testCases: [
       { input: "[29, 10, 14, 37, 13]", expectedOutput: "[10, 13, 14, 29, 37]" },
       { input: "[1, 5, 3, 2, 4]", expectedOutput: "[1, 2, 3, 4, 5]" },
@@ -346,10 +344,13 @@ int main() {
     category: "Arrays",
     description:
       "Escreva uma função que remova os elementos duplicados de um array.",
-    template: `function removerDuplicados(arr) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
-    return arr;
-  }`,
+    return 0;
+}
+`,
     testCases: [
       { input: "[1, 2, 2, 3, 4, 4, 5]", expectedOutput: "[1, 2, 3, 4, 5]" },
       { input: "[10, 10, 20, 30, 30, 30]", expectedOutput: "[10, 20, 30]" },
@@ -362,10 +363,13 @@ int main() {
     category: "Matemática",
     description:
       "Crie uma função que calcule a potência de um número dado um expoente, sem usar operadores de potência.",
-    template: `function potencia(base, expoente) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
-    return 1;
-  }`,
+    return 0;
+}
+`,
     testCases: [
       { input: "2, 3", expectedOutput: "8" },
       { input: "5, 0", expectedOutput: "1" },
@@ -378,10 +382,13 @@ int main() {
     category: "Strings",
     description:
       "Escreva uma função que verifique se duas strings são anagramas uma da outra.",
-    template: `function saoAnagramas(str1, str2) {
+    template: `#include <stdio.h>
+
+int main() {
     // Seu código aqui
-    return false;
-  }`,
+    return 0;
+}
+`,
     testCases: [
       { input: "'listen', 'silent'", expectedOutput: "true" },
       { input: "'hello', 'world'", expectedOutput: "false" },
