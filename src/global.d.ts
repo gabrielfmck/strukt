@@ -1,4 +1,4 @@
-// src/global.d.ts
+//src/global.d.ts
 /// <reference types="vite/client" />
 
 declare module '*.css' {
