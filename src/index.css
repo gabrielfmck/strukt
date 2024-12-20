@@ -1,0 +1,110 @@
+/* src/index.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  color-scheme: light dark;
+}
+
+/* Estilos base */
+.page-content {
+  @apply text-gray-900 bg-gray-50 dark:text-gray-100 dark:bg-dark-bg transition-colors duration-200;
+}
+
+/* Elementos comuns */
+.card {
+  @apply bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border shadow-lg rounded-lg transition-colors duration-200;
+}
+
+.input {
+  @apply bg-white dark:bg-dark-card border-gray-300 dark:border-dark-border text-gray-900 dark:text-gray-100 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-primary-500 dark:focus:border-primary-400 transition-colors duration-200;
+}
+
+.button-primary {
+  @apply bg-primary-600 hover:bg-primary-700 text-white transition-colors duration-200;
+}
+
+.button-secondary {
+  @apply bg-gray-200 dark:bg-dark-card hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-200;
+}
+
+/* Transições suaves para modo escuro */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-dark-card;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Seleção de texto */
+::selection {
+  @apply bg-primary-500/30 dark:bg-primary-400/30;
+}
+
+/* Classes de utilidade para modo escuro */
+.dark .prose {
+  @apply text-gray-300;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  @apply text-gray-100;
+}
+
+.dark .prose strong {
+  @apply text-gray-200;
+}
+
+.dark .prose a {
+  @apply text-primary-400 hover:text-primary-300;
+}
+
+.dark .prose code {
+  @apply bg-dark-card text-gray-200;
+}
+
+.dark .prose blockquote {
+  @apply border-gray-700 text-gray-400;
+}
+
+/* Toast personalizado para modo escuro */
+.dark .Toastify__toast {
+  @apply bg-dark-card text-gray-100;
+}
+
+.dark .Toastify__close-button {
+  @apply text-gray-400;
+}
+
+/* Animações */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-in-out;
+}
