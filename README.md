@@ -1,8 +1,8 @@
 <h1 align="center">Strukt - Plataforma de Aprendizado Interativo de Programação</h1>
 
-O **Strukt** é uma plataforma web educacional inovadora, focada no ensino de algoritmos e estruturas de dados. 🌟
+O **Strukt** é uma plataforma web educacional inovadora, focada no ensino de algoritmos e estruturas de dados.
 
-Desenvolvido com tecnologias modernas como **React**, **TypeScript** e **Firebase**, o Strukt oferece uma experiência imersiva de aprendizado por meio de visualizações interativas, gamificação e um ambiente de prática em tempo real. 🎯
+Desenvolvido com tecnologias modernas como **React**, **TypeScript** e **Firebase**, o Strukt oferece uma experiência imersiva de aprendizado por meio de visualizações interativas, gamificação e um ambiente de prática em tempo real.
 
 ---
 
@@ -128,6 +128,5 @@ Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` p
 
 ## 📬 Contato
 
-- **GitHub:** [gabrielfmck](https://github.com/gabrielfmck)
 - **LinkedIn:** [Gabriel Fernandes](https://www.linkedin.com/in/gabrielfernandesj/)
 - **Email:** gabrielfernandes0625@gmail.com
