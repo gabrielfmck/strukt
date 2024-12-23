@@ -1,5 +1,6 @@
-// src/contexts/theme/ThemeContext.tsx
+// src\contexts\theme\ThemeContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getInitialTheme, updateThemeClass } from './themeUtils';
 
 type Theme = 'light' | 'dark';
 
@@ -12,29 +13,12 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Verifica se há um tema salvo no localStorage ou usa o tema do sistema
-  const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) return savedTheme;
-    
-    // Verifica preferência do sistema
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
-  });
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
-    // Atualiza a classe no documento HTML
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    
-    // Salva no localStorage
-    localStorage.setItem('theme', theme);
+    updateThemeClass(theme);
   }, [theme]);
 
-  // Adiciona listener para mudanças na preferência do sistema
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
@@ -48,7 +32,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
   return (

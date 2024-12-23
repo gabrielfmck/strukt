@@ -1,5 +1,5 @@
 // src/pages/Profile.tsx
-import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback, FormEvent, ChangeEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../contexts/theme/ThemeContext';
 import { toast } from 'react-toastify';
@@ -44,7 +44,7 @@ const Profile = () => {
   const [preferences, setPreferences] = useState<UserPreferences>(defaultPreferences);
   const db = getFirestore();
 
-  const fetchUserStats = async (userId: string) => {
+  const fetchUserStats = useCallback(async (userId: string) => {
     try {
       const userStatsRef = doc(db, 'users', userId, 'stats', 'progress');
       const statsDoc = await getDoc(userStatsRef);
@@ -52,20 +52,19 @@ const Profile = () => {
       if (statsDoc.exists()) {
         setStats(statsDoc.data() as UserStats);
       } else {
-        // Se não existir, inicializa com os valores padrão
         await setDoc(userStatsRef, defaultStats);
       }
     } catch (error) {
       console.error('Erro ao buscar estatísticas:', error);
       toast.error('Erro ao carregar estatísticas');
     }
-  };
+  }, [db]); // Adicionar `db` como dependência  
 
   useEffect(() => {
     if (currentUser) {
       fetchUserStats(currentUser.uid);
     }
-  }, [currentUser]);
+  }, [currentUser, fetchUserStats]); // Adicionar `fetchUserStats` como dependência  
 
   const handleProfileUpdate = async (e: FormEvent) => {
     e.preventDefault();
