@@ -1,5 +1,9 @@
 <h1 align="center">Strukt - Plataforma de Aprendizado Interativo de Programação</h1>
 
+<p align="center">
+  <img src="https://i.imgur.com/laBlJkf.png" alt="Strukt" />
+</p>
+
 O **Strukt** é uma plataforma web educacional inovadora, focada no ensino de algoritmos e estruturas de dados.
 
 Desenvolvido com tecnologias modernas como **React**, **TypeScript** e **Firebase**, o Strukt oferece uma experiência imersiva de aprendizado por meio de visualizações interativas, gamificação e um ambiente de prática em tempo real.
