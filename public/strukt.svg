@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@900&display=swap');
-    </style>
-  </defs>
-  <rect width="32" height="32" rx="4" fill="rgb(2,132,199)" />
-  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Fira Sans', sans-serif" font-size="24" font-weight="900" fill="white">S</text>
-</svg>
