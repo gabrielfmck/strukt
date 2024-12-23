@@ -1,34 +1,37 @@
+<h1 align="center">Strukt - Plataforma de Aprendizado Interativo de Programação</h1>
 
-# 🚀 Strukt - Plataforma de Aprendizado Interativo de Programação
+O **Strukt** é uma plataforma web educacional inovadora, focada no ensino de algoritmos e estruturas de dados. 🌟
 
-O **Strukt** é uma plataforma web educacional que visa revolucionar o ensino de programação, com foco em algoritmos e estruturas de dados. 🌟
+Desenvolvido com tecnologias modernas como **React**, **TypeScript** e **Firebase**, o Strukt oferece uma experiência imersiva de aprendizado por meio de visualizações interativas, gamificação e um ambiente de prática em tempo real. 🎯
 
-Desenvolvido com tecnologias modernas, como **React**, **TypeScript** e **Firebase**, o Strukt combina **visualizações interativas**, **gamificação** e um **ambiente de prática em tempo real** para criar uma experiência de aprendizado envolvente e eficaz. 🎯
+---
 
-## 🌟 Recursos Principais
+## ✨ Características
 
-- **🔍 Visualizações Interativas:** Representações visuais dinâmicas de algoritmos e estruturas de dados, permitindo compreender o funcionamento interno desses conceitos.
-- **💻 Editor de Código Integrado:** Ambiente de desenvolvimento com execução em tempo real, feedback imediato e testes automatizados.
-- **🏆 Sistema de Gamificação:** Progresso em níveis, conquistas e recompensas para aumentar engajamento e motivação.
-- **📚 Ambiente de Prática:** Exercícios progressivos e desafiadores para consolidar os conhecimentos adquiridos.
-- **📱 Suporte Multiplataforma:** Acesso responsivo e adaptativo em diversos dispositivos.
+- **Visualizações Interativas**: Compreenda algoritmos e estruturas de dados com representações visuais dinâmicas.
+- **Editor de Código em Tempo Real**: Ambiente integrado com execução de código e feedback imediato.
+- **Sistema de Gamificação**: Alcance conquistas, progrida em níveis e mantenha a motivação.
+- **Exercícios Personalizados**: Conquiste desafios e fortaleça seus conhecimentos.
+- **Acessível em Diversos Dispositivos**: Experiência responsiva e adaptativa em qualquer tela.
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
-**Frontend:**
+### **Frontend**
 - React
 - TypeScript
 - Tailwind CSS
-- Framer Motion
 - Monaco Editor
+- Framer Motion
 - Recharts
 
-**Backend e Infraestrutura:**
+### **Backend**
 - Firebase (Authentication, Firestore, Storage)
 - Piston API
 - Netlify
 
-**Ferramentas de Desenvolvimento:**
+### **Ferramentas de Desenvolvimento**
 - Git, GitHub
 - ESLint, Prettier
 - Jest
@@ -36,15 +39,18 @@ Desenvolvido com tecnologias modernas, como **React**, **TypeScript** e **Fireba
 
 ---
 
-## ⚙️ Instalação e Configuração
+## 🔧 Primeiros Passos
 
 ### Pré-requisitos
-Antes de começar, certifique-se de ter instalado:
-- **Node.js** (versão 16 ou superior): [Download Node.js](https://nodejs.org/)
-- **npm** (gerenciado com o Node.js)
-- **Git**: [Download Git](https://git-scm.com/)
 
-### Configuração do Ambiente
+Certifique-se de ter instalado:
+- **Node.js** (versão 16 ou superior): [Baixar Node.js](https://nodejs.org/)
+- **npm** (ou gerenciadores alternativos como pnpm ou yarn)
+- **Git**: [Baixar Git](https://git-scm.com/)
+
+---
+
+### Instalação e Configuração
 
 1. **Clone o repositório**:
    ```bash
@@ -59,12 +65,12 @@ Antes de começar, certifique-se de ter instalado:
 
 3. **Configuração do Firebase**:
    - Crie um projeto no [Firebase Console](https://console.firebase.google.com/).
-   - Ative **Authentication**, **Firestore** e **Storage** no Firebase.
-   - Baixe o arquivo `firebase-config.json` e insira as informações no arquivo `.env`.
+   - Habilite os serviços **Authentication**, **Firestore** e **Storage**.
+   - Baixe o arquivo de configuração do Firebase e configure as variáveis no arquivo `.env`.
 
-4. **Crie o arquivo `.env`**:
-   Crie um arquivo `.env` na raiz do projeto e configure as variáveis necessárias:
-   ```
+4. **Configuração do arquivo `.env`**:
+   Crie o arquivo `.env` na raiz do projeto:
+   ```env
    VITE_FIREBASE_API_KEY=<sua-api-key>
    VITE_FIREBASE_AUTH_DOMAIN=<seu-auth-domain>
    VITE_FIREBASE_PROJECT_ID=<seu-project-id>
@@ -78,37 +84,37 @@ Antes de começar, certifique-se de ter instalado:
    npm run dev
    ```
 
-6. **Acesse no navegador**:
-   [http://localhost:3000](http://localhost:3000)
+6. **Acesse o projeto**:
+   Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
 ---
 
 ## 🚀 Comandos Disponíveis
 
 - `npm run dev`: Inicia o servidor de desenvolvimento.
-- `npm run build`: Cria uma versão otimizada para produção.
-- `npm run lint`: Executa o linter para verificar problemas no código.
+- `npm run build`: Gera os arquivos otimizados para produção.
+- `npm run lint`: Verifica a qualidade do código.
 - `npm run test`: Executa os testes unitários.
 
 ---
 
-## 🤝 Contribuição
+## 🤝 Contribuições
 
-Contribuições são super bem-vindas! 🎉 Se você encontrar algum problema ou tiver uma sugestão de melhoria, sinta-se à vontade para abrir uma _issue_ ou enviar um _pull request_. 🚀
+Contribuições são bem-vindas! 🎉 
 
-### Passo a passo para contribuir:
-1. Faça um _fork_ do repositório.
-2. Crie sua _branch_ de feature:
+### Como Contribuir:
+1. Faça um _fork_ do projeto.
+2. Crie uma nova _branch_ para sua funcionalidade:
    ```bash
-   git checkout -b feature/AmazingFeature
+   git checkout -b feature/SuaFuncionalidade
    ```
-3. _Commit_ suas mudanças:
+3. Adicione suas mudanças:
    ```bash
-   git commit -m 'Add some AmazingFeature'
+   git commit -m "Add nova funcionalidade"
    ```
-4. Faça o _push_ para a sua _branch_:
+4. Envie para o repositório:
    ```bash
-   git push origin feature/AmazingFeature
+   git push origin feature/SuaFuncionalidade
    ```
 5. Abra um _Pull Request_.
 
@@ -116,7 +122,7 @@ Contribuições são super bem-vindas! 🎉 Se você encontrar algum problema ou
 
 ## 📝 Licença
 
-Este projeto está licenciado sob a Licença MIT. 📜
+Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para mais detalhes.
 
 ---
 
