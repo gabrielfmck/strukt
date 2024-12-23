@@ -1,3 +1,4 @@
+// src\components\learning\CodeEditor.tsx
 import { useState } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { useTheme } from '../../contexts/theme/ThemeContext';

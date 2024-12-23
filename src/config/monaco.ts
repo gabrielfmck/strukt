@@ -1,5 +1,4 @@
 // src/config/monaco.ts
-
 export const MONACO_CONFIG = {
     themes: {
       light: 'vs-light',

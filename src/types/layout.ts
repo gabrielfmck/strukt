@@ -1,3 +1,4 @@
+// src\types\layout.ts
 import { ReactNode } from 'react';
 import { NavigationIcon } from './icon';
 

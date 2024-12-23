@@ -1,4 +1,4 @@
-// src/pages/Profile.tsx - Part 1
+// src/pages/Profile.tsx
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../contexts/theme/ThemeContext';
@@ -148,8 +148,7 @@ const Profile = () => {
       setLoading(false);
     }
   };
-
-  // src/pages/Profile.tsx - Part 2
+  
   return (
     <div className={`min-h-screen py-12 ${
       theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'

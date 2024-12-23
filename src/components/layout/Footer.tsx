@@ -1,3 +1,4 @@
+// src\components\layout\Footer.tsx
 import React from 'react';
 import { FaGithub, FaXTwitter, FaLinkedin, FaEnvelope } from 'react-icons/fa6';
 import { useTheme } from '../../contexts/theme/ThemeContext';

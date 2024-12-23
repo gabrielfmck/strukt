@@ -1,3 +1,4 @@
+// src\pages\About.tsx
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/theme/ThemeContext";
 import {
@@ -30,13 +31,13 @@ const About = () => {
   const achievements = [
     {
       icon: <FaCode className="w-6 h-6" />,
-      title: "Desenvolvedor Full-Stack",
+      title: "Desenvolvedor Front-end",
       description:
         "Experiência com React.js, Node.js e outras tecnologias modernas",
     },
     {
       icon: <FaGraduationCap className="w-6 h-6" />,
-      title: "Graduando em Eng. Software",
+      title: "Graduado em Eng. Software",
       description: "UniCesumar - Conclusão em 2024",
     },
     {

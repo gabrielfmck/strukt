@@ -48,6 +48,6 @@ export interface UserProgress {
   attempts: number;
   lastAttemptAt?: Date;
   completedAt?: Date;
-  timeSpent: number; // em segundos
+  timeSpent: number;
   score?: number;
 }

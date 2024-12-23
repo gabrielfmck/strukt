@@ -1,4 +1,4 @@
-// src/pages/Practice.tsx - Part 1: Imports e Types
+// src/pages/Practice.tsx
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/theme/ThemeContext";
@@ -64,7 +64,6 @@ interface CategoryInfo {
   };
 }
 
-// src/pages/Practice.tsx - Part 2: Categories
 const categories: Record<string, CategoryInfo> = {
   Introdução: {
     name: "Introdução",

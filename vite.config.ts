@@ -13,7 +13,10 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': {}
+    // Apenas exporte variáveis seguras com prefixo VITE_
+    'process.env': Object.fromEntries(
+      Object.entries(process.env).filter(([key]) => key.startsWith('VITE_'))
+    ),
   },
   server: {
     port: 3000,

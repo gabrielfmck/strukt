@@ -1,3 +1,4 @@
+// src\components\learning\ProgressCard.tsx
 import React from 'react';
 import { Trophy, Clock, Award, Code } from 'lucide-react';
 import { motion } from 'framer-motion';

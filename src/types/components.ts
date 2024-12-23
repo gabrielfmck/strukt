@@ -1,3 +1,4 @@
+// src\types\components.ts
 import { ComponentType, FC, ReactNode, SVGProps } from 'react';
 
 export interface Feature {

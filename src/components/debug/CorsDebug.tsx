@@ -1,3 +1,4 @@
+// src\components\debug\CorsDebug.tsx
 import { useState, useEffect } from 'react';
 import { storage } from '../../config/firebase';
 

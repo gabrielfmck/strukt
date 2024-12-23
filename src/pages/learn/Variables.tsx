@@ -1,3 +1,4 @@
+// src\pages\learn\Variables.tsx
 import { motion } from 'framer-motion';
 import ContentPage from '../../components/learning/ContentPage';
 import CodeEditor from '../../components/learning/CodeEditor';

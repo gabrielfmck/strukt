@@ -1,3 +1,4 @@
+// src\pages\Algorithms.tsx
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/theme/ThemeContext';

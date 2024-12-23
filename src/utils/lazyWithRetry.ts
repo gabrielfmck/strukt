@@ -1,3 +1,4 @@
+// src\utils\lazyWithRetry.ts
 import { lazy } from 'react';
 import type { LazyImport } from '../types/components';
 
