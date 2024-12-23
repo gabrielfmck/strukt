@@ -44,27 +44,38 @@ const Profile = () => {
   const [preferences, setPreferences] = useState<UserPreferences>(defaultPreferences);
   const db = getFirestore();
 
-  const fetchUserStats = useCallback(async (userId: string) => {
+  const fetchUserStatsAndPreferences = useCallback(async (userId: string) => {
     try {
+      // Fetch stats
       const userStatsRef = doc(db, 'users', userId, 'stats', 'progress');
       const statsDoc = await getDoc(userStatsRef);
-      
+
       if (statsDoc.exists()) {
         setStats(statsDoc.data() as UserStats);
       } else {
         await setDoc(userStatsRef, defaultStats);
       }
+
+      // Fetch preferences
+      const userPreferencesRef = doc(db, 'users', userId, 'preferences', 'settings');
+      const preferencesDoc = await getDoc(userPreferencesRef);
+
+      if (preferencesDoc.exists()) {
+        setPreferences(preferencesDoc.data() as UserPreferences);
+      } else {
+        await setDoc(userPreferencesRef, defaultPreferences);
+      }
     } catch (error) {
-      console.error('Erro ao buscar estatísticas:', error);
-      toast.error('Erro ao carregar estatísticas');
+      console.error('Erro ao buscar dados do usuário:', error);
+      toast.error('Erro ao carregar dados do usuário');
     }
-  }, [db]); // Adicionar `db` como dependência  
+  }, [db]);
 
   useEffect(() => {
     if (currentUser) {
-      fetchUserStats(currentUser.uid);
+      fetchUserStatsAndPreferences(currentUser.uid);
     }
-  }, [currentUser, fetchUserStats]); // Adicionar `fetchUserStats` como dependência  
+  }, [currentUser, fetchUserStatsAndPreferences]);
 
   const handleProfileUpdate = async (e: FormEvent) => {
     e.preventDefault();
@@ -72,6 +83,7 @@ const Profile = () => {
 
     try {
       const profileData: ProfileData = {};
+      const userPreferencesRef = doc(db, 'users', currentUser?.uid || '', 'preferences', 'settings');
 
       if (displayName !== currentUser?.displayName) {
         profileData.displayName = displayName;
@@ -80,6 +92,9 @@ const Profile = () => {
       if (photoURL && photoURL !== currentUser?.photoURL) {
         profileData.photoURL = photoURL;
       }
+
+      // Salvar as preferências no Firestore
+      await setDoc(userPreferencesRef, preferences, { merge: true });
 
       if (Object.keys(profileData).length > 0) {
         await updateUserProfile(profileData);
@@ -133,10 +148,10 @@ const Profile = () => {
       setLoading(true);
       const storage = getStorage();
       const fileRef = ref(storage, `profile_pictures/${currentUser.uid}/${file.name}`);
-      
+
       await uploadBytes(fileRef, file);
       const url = await getDownloadURL(fileRef);
-      
+
       setPhotoURL(url);
       await updateUserProfile({ photoURL: url });
       toast.success('Foto atualizada com sucesso!');
@@ -147,7 +162,7 @@ const Profile = () => {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className={`min-h-screen py-12 ${
       theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
